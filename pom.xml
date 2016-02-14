@@ -1,0 +1,139 @@
+<!--
+	Copyright 2016
+	Language Technology Lab
+	University of Duisburg-Essen
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de.unidue.ltl.flextag</groupId>
+	<artifactId>de.unidue.ltl.flextag</artifactId>
+	<packaging>pom</packaging>
+	<version>0.1.0-SNAPSHOT</version>
+	<name>FlexTag</name>
+	<description>FlexTag is a highly flexible part of speech tagger based on DKPro TC</description> <!-- The description tag must be present for antrun to work!! -->
+	<url>https://github.com/Horsmann/FlexTag.git</url>
+	<organization>
+    	<name>Language Technology Lab, University of Duisburg-Essen, Germany</name>
+    	<url>http://www.ltl.uni-due.de</url>
+	</organization>
+	<inceptionYear>2016</inceptionYear>	
+	<prerequisites>
+		<maven>3.0.4</maven>
+	</prerequisites>
+	<repositories>
+		<repository>
+			<id>ukp-oss-model-releases</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-model-releases-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jcenter</id>
+			<url>http://jcenter.bintray.com</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ukp-oss-snapshots</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ltl-snapshots</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ltl-releases</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	<repository>
+			<id>ltl-models</id>
+			<url>http://basa.ltl.uni-due.de:34001/artifactory/models</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>		
+	</repositories>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<modules>
+	<module>flextag-core</module>
+	<module>flextag-examples</module>
+	<module>flextag-features</module>
+	
+	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.dkpro.tc</groupId>
+				<artifactId>dkpro-tc</artifactId>
+				<version>${dkpro.tc.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/Horsmann/FlexTag/issues</url>
+	</issueManagement>
+	<scm>
+		<developerConnection>scm:git:git@github.com:horsmann/flextag.git</developerConnection>
+		<url>https://github.com/horsmann/flextag</url>
+		<connection>scm:git:git://github.com/horsmann/flextag</connection>
+	</scm>
+	<properties>
+		<dkpro.tc.version>0.8.0-SNAPSHOT</dkpro.tc.version>
+		<dkpro.core.version>1.9.0-SNAPSHOT</dkpro.core.version>
+	</properties>
+</project>

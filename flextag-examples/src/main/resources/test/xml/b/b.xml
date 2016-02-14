@@ -1,0 +1,120 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Sample F10 from Jack Kaplan, "The Health Machine Menace:
+					Therapy by Witchcraft"
+					Today's Health, 39:2 (February, 1961), 28-31,81-82
+				</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>A part of the XML version of the Brown Corpus</edition>
+			</editionStmt>
+			<extent>2,006 words 211 (10.5%) quotes 10 symbols</extent>
+			<publicationStmt>
+				<idno>F10</idno>
+				<availability>
+					<p>Used by permission of Today's Health, published by the </p>
+				</availability>
+			</publicationStmt>
+			<sourceDesc>
+				<bibl> Jack Kaplan, "The Health Machine Menace: Therapy by
+					Witchcraft"
+					Today's Health, 39:2 (February, 1961), 28-31,81-82
+				</bibl>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<p />
+		</encodingDesc>
+		<revisionDesc>
+			<change when="2008-04-27">Header auto-generated for TEI version</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:id="F10" decls="F">
+		<body>
+			<p>
+				<s n="1">
+					<w type="NP">Franklin</w>
+					<w type="NP">D.</w>
+					<w type="NP">Lee</w>
+					<w type="VBD">proved</w>
+					<w type="AT">a</w>
+					<w type="NN">man</w>
+					<w type="IN">of</w>
+					<w type="JJ">prompt</w>
+					<w type="NN">action</w>
+					<w type="WRB">when</w>
+					<w type="NP">Mrs.</w>
+					<w type="NP">Claire</w>
+					<w type="NP">Shaefer</w>
+					<c type="pct">,</c>
+					<w type="VBN">accompanied</w>
+					<w type="IN">by</w>
+					<w type="AT">a</w>
+					<w type="NN">friend</w>
+					<c type="pct">,</c>
+					<w type="VBD">visited</w>
+					<w type="PPO">him</w>
+					<w type="IN">in</w>
+					<w type="NP">Bakersfield</w>
+					<c type="pct">,</c>
+					<w type="NP">California</w>
+					<c type="pct">,</c>
+					<w type="AP">several</w>
+					<w type="NNS">months</w>
+					<w type="RB">ago</w>
+					<w type="CS">as</w>
+					<w type="AT">a</w>
+					<w type="JJ">prospective</w>
+					<w type="NN">patient</w>
+					<c type="pct">.</c>
+				</s>
+				<s n="2">
+					<c type="pct">``</c>
+					<w type="NN" subtype="TL">Doctor</w>
+					<c type="pct">''</c>
+					<w type="NP">Lee</w>
+					<w type="VBD">asked</w>
+					<w type="PPO">her</w>
+					<w type="TO">to</w>
+					<w type="VB">lie</w>
+					<w type="RP">down</w>
+					<w type="IN">on</w>
+					<w type="AT">a</w>
+					<w type="NN">bed</w>
+					<w type="CC">and</w>
+					<w type="VB">remove</w>
+					<w type="PPg">her</w>
+					<w type="NNS">shoes</w>
+					<c type="pct">.</c>
+				</s>
+				<s n="3">
+					<w type="RB">Then</w>
+					<c type="pct">,</c>
+					<w type="IN">by</w>
+					<w type="VBG">squeezing</w>
+					<w type="PPg">her</w>
+					<w type="NN">foot</w>
+					<w type="CD">three</w>
+					<w type="NNS">times</w>
+					<c type="pct">,</c>
+					<w type="PPS">he</w>
+					<w type="VBD">came</w>
+					<w type="RP">up</w>
+					<c type="pct">--</c>
+					<w type="UH">presto</w>
+					<c type="pct">--</c>
+					<w type="IN">with</w>
+					<w type="AT">a</w>
+					<w type="JJ">different</w>
+					<w type="NN">diagnosis</w>
+					<w type="IN">with</w>
+					<w type="DT">each</w>
+					<w type="NN">squeeze</w>
+					<c type="pct">.</c>
+				</s>
+			</p>
+		</body>
+	</text>
+</TEI>

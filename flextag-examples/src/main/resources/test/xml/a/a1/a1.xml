@@ -1,0 +1,118 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Sample A01 from The Atlanta Constitution</title>
+				<title type="sub"> November 4, 1961, p.1 "Atlanta Primary ..."
+					"Hartsfield Files"
+					August 17, 1961, "Urged strongly ..."
+					"Sam Caldwell Joins"
+					March 6,1961, p.1 "Legislators Are Moving" by Reg Murphy
+					"Legislator to fight" by Richard Ashworth
+					"House Due Bid..."
+					p.18 "Harry Miller Wins..."
+				</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>A part of the XML version of the Brown Corpus</edition>
+			</editionStmt>
+			<extent>1,988 words 431 (21.7%) quotes 2 symbols</extent>
+			<publicationStmt>
+				<idno>A01</idno>
+				<availability>
+					<p>Used by permission of The Atlanta ConstitutionState News Service
+						(H), and Reg Murphy (E).</p>
+				</availability>
+			</publicationStmt>
+			<sourceDesc>
+				<bibl> The Atlanta Constitution</bibl>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<p>Arbitrary Hyphen: multi-million [0520]</p>
+		</encodingDesc>
+		<revisionDesc>
+			<change when="2008-04-27">Header auto-generated for TEI version</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:id="A01" decls="A">
+		<body>
+			<p>
+				<s n="1">
+					<w type="AT">The</w>
+					<w type="NP" subtype="TL">Fulton</w>
+					<w type="NN" subtype="TL">County</w>
+					<w type="JJ" subtype="TL">Grand</w>
+					<w type="NN" subtype="TL">Jury</w>
+					<w type="VBD">said</w>
+					<w type="NR">Friday</w>
+					<w type="AT">an</w>
+					<w type="NN">investigation</w>
+					<w type="IN">of</w>
+					<w type="NPg">Atlanta's</w>
+					<w type="JJ">recent</w>
+					<w type="NN">primary</w>
+					<w type="NN">election</w>
+					<w type="VBD">produced</w>
+					<c type="pct">``</c>
+					<w type="AT">no</w>
+					<w type="NN">evidence</w>
+					<c type="pct">''</c>
+					<w type="CS">that</w>
+					<w type="DTI">any</w>
+					<w type="NNS">irregularities</w>
+					<w type="VBD">took</w>
+					<w type="NN">place</w>
+					<c type="pct">.</c>
+				</s>
+			</p>
+			<p>
+				<s n="2">
+					<w type="AT">The</w>
+					<w type="NN">jury</w>
+					<w type="RBR">further</w>
+					<w type="VBD">said</w>
+					<w type="IN">in</w>
+					<w type="NN">term-end</w>
+					<w type="NNS">presentments</w>
+					<w type="CS">that</w>
+					<w type="AT">the</w>
+					<w type="NN" subtype="TL">City</w>
+					<w type="JJ" subtype="TL">Executive</w>
+					<w type="NN" subtype="TL">Committee</w>
+					<c type="pct">,</c>
+					<w type="WDT">which</w>
+					<w type="HVD">had</w>
+					<w type="JJ">over-all</w>
+					<w type="NN">charge</w>
+					<w type="IN">of</w>
+					<w type="AT">the</w>
+					<w type="NN">election</w>
+					<c type="pct">,</c>
+					<c type="pct">``</c>
+					<w type="VBZ">deserves</w>
+					<w type="AT">the</w>
+					<w type="NN">praise</w>
+					<w type="CC">and</w>
+					<w type="NNS">thanks</w>
+					<w type="IN">of</w>
+					<w type="AT">the</w>
+					<w type="NN" subtype="TL">City</w>
+					<w type="IN" subtype="TL">of</w>
+					<w type="NP" subtype="TL">Atlanta</w>
+					<c type="pct">''</c>
+					<w type="IN">for</w>
+					<w type="AT">the</w>
+					<w type="NN">manner</w>
+					<w type="IN">in</w>
+					<w type="WDT">which</w>
+					<w type="AT">the</w>
+					<w type="NN">election</w>
+					<w type="BEDZ">was</w>
+					<w type="VBN">conducted</w>
+					<c type="pct">.</c>
+				</s>
+			</p>
+		</body>
+	</text>
+</TEI>

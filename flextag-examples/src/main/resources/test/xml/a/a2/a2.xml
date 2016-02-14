@@ -1,0 +1,94 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Sample F23 from Barry Goldwater, "A Foreign Policy for
+					America"
+					National Review, X:11 (March 25, 1961), 177-179
+				</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>A part of the XML version of the Brown Corpus</edition>
+			</editionStmt>
+			<extent>2,018 words 72 (3.6%) quotes</extent>
+			<publicationStmt>
+				<idno>F23</idno>
+				<availability>
+					<p>Used by permission0010-1840</p>
+				</availability>
+			</publicationStmt>
+			<sourceDesc>
+				<bibl> Barry Goldwater, "A Foreign Policy for America"
+					National
+					Review, X:11 (March 25, 1961), 177-179
+				</bibl>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<p>Typographical Errors: imperfectability [0140]troubie
+				[1420]consisently [0420]
+			</p>
+		</encodingDesc>
+		<revisionDesc>
+			<change when="2008-04-27">Header auto-generated for TEI version</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:id="F23" decls="F">
+		<body>
+			<p>
+				<s n="1">
+					<w type="PPSS">I</w>
+					<w type="DO">do</w>
+					<w type="NEG">not</w>
+					<w type="VB">mean</w>
+					<w type="TO">to</w>
+					<w type="VB">suggest</w>
+					<w type="CS">that</w>
+					<w type="DTS">these</w>
+					<w type="NNS">assumptions</w>
+					<w type="BER">are</w>
+					<w type="JJ">self-evident</w>
+					<c type="pct">,</c>
+					<w type="IN">in</w>
+					<w type="AT">the</w>
+					<w type="NN">sense</w>
+					<w type="CS">that</w>
+					<w type="PN">everyone</w>
+					<w type="VBZ">agrees</w>
+					<w type="IN">with</w>
+					<w type="PPO">them</w>
+					<c type="pct">.</c>
+				</s>
+				<s n="2">
+					<w type="CS">If</w>
+					<w type="PPSS">they</w>
+					<w type="BED">were</w>
+					<c type="pct">,</c>
+					<w type="NP">Walter</w>
+					<w type="NP">Lippmann</w>
+					<w type="MD">would</w>
+					<w type="BE">be</w>
+					<w type="VBG">writing</w>
+					<w type="AT">the</w>
+					<w type="AP">same</w>
+					<w type="NNS">columns</w>
+					<w type="CS">as</w>
+					<w type="NP">George</w>
+					<w type="NP">Sokolsky</w>
+					<c type="pct">,</c>
+					<w type="CC">and</w>
+					<w type="NP">Herb</w>
+					<w type="NP">Lock</w>
+					<w type="MD">would</w>
+					<w type="HV">have</w>
+					<w type="PN">nothing</w>
+					<w type="TO">to</w>
+					<w type="VB">draw</w>
+					<w type="NNS">cartoons</w>
+					<w type="IN">about</w>
+					<c type="pct">.</c>
+				</s>
+			</p>
+		</body>
+	</text>
+</TEI>

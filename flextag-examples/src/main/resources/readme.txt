@@ -1,0 +1,2 @@
+The annotated data are take from Alan Ritter et al.: Named Entity Recognition in Tweets: An Experimental Study (2011), http://www.aclweb.org/anthology/D11-1141 
+The full data is available at https://github.com/aritter/twitter_nlp (retrieved, 22. Feb 2016) 
