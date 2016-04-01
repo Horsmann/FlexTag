@@ -7,6 +7,7 @@ Models that perform satisfiyling are furthermore easily persisted and can be use
 
 *Publication:*
 FlexTag is described in detail here:
+
 Zesch, Torsten; Horsmann, Tobias, FlexTag: A Highly Flexible Pos Tagging Framework (Inproceeding), 10th edition of the Language Resources and Evaluation Conference, European Language Resources Association (ELRA), Porovoz, Slovenia, 2016. 
 
 *Quickstart:*
