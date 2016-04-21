@@ -133,7 +133,7 @@
 		<connection>scm:git:git://github.com/horsmann/flextag</connection>
 	</scm>
 	<properties>
-		<dkpro.tc.version>0.8.0-SNAPSHOT</dkpro.tc.version>
+		<dkpro.tc.version>0.8.0</dkpro.tc.version>
 		<dkpro.core.version>1.9.0-SNAPSHOT</dkpro.core.version>
 	</properties>
 </project>
