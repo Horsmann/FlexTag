@@ -18,6 +18,8 @@ In the `example` project you find a runnable demonstration of using train/test, 
 
 FlexTag uses DKPro TextClassification in the background and provides additionally file format readers for many formats commonly used in NLP, see `ExampleReaders` for a pointer to learn more about the supported file formats. Furthermore, the machine learning algorithm used for training a model is exchangeable, too. Users can choose from `CrfSuite, SvmHmm and the classifier provided by Weka` for training and evaluating their model, see package `de.unidue.ltl.flextag.examples.config` for changing the classifier.
 
+*FlexTag in a Nutshell*
+![FlexTag](https://github.com/Horsmann/FlexTag/blob/master/flextag-doc/src/main/java/FlexTag.png)
 **Features**
 
 [Adding of user-defined features](https://github.com/Horsmann/FlexTag/wiki/Adding-user-defined-features)
