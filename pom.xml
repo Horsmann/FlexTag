@@ -111,6 +111,7 @@
 	<module>flextag-examples</module>
 	<module>flextag-features</module>
 	
+	<module>flextag-doc</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
