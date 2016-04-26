@@ -1,14 +1,8 @@
 # FlexTag
 FlexTag: A Highly Flexible PoS Tagging Framework
 
-FlexTag is a PoS tagger which exposes the feature space to the researcher enabling him/her to fully customize the feature space to be used for training a model.
-FlexTag ships with a built-in functionality to perform train/test and cross-validation on a given set of training data, enabling it to easily evaluate new feature configurations.
+FlexTag is a PoS tagger which exposes the feature space to the user enabling him/her to fully customize the feature space.
 Models that perform satisfiyling are furthermore easily persisted and can be used as standalone component.
-
-*Publication:*
-FlexTag is described in detail here:
-
-Zesch, Torsten; Horsmann, Tobias, FlexTag: A Highly Flexible Pos Tagging Framework (Inproceeding), 10th edition of the Language Resources and Evaluation Conference, European Language Resources Association (ELRA), Porovoz, Slovenia, 2016. 
 
 *Target Audience:*
 Everyone who feels that the existing, re-trainable PoS taggers such as Stanford or TreeTagger do not provide the needed flexiblity i.e. allow modifiyng the feature space but neither feels like implementing an own PoS tagger should consider `FlexTag`.
