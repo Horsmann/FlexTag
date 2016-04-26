@@ -8,10 +8,8 @@ Models that perform satisfiyling are furthermore easily persisted and can be use
 Everyone who feels that the existing, re-trainable PoS taggers such as Stanford or TreeTagger do not provide the needed flexiblity i.e. allow modifiyng the feature space but neither feels like implementing an own PoS tagger should consider `FlexTag`.
 
 *Quickstart:*
-FlexTag offers everything for creating and own PoS tagger model and evaluating it on any input data format. Additional to training, persisting of own models the trained model is easily evaluate by using out-of-the-box available evaluation methods such as `Train-Test` or `N-fold CrossValidation` on any data set.
-
-All functionalities are provided in the example project for an easy start:
-In the `example` project you find a runnable demonstration of using train/test, cross-validation and model persisting with FlexTag if you take a look into the following demos:
+FlexTag offers everything for creating and own PoS tagger model and evaluating it on any input data format. Additional to training and `persisting of trained models` each model is easily evaluate by using out-of-the-box available evaluation methods such as `Train-Test` or `N-fold CrossValidation` on any data set.
+In the `example` project you find a runnable example for each of those functionalities if you take a look at those demos:
   * ExampleCrossValidation
   * ExampleTrainTest
   * ExampleTrainStore
