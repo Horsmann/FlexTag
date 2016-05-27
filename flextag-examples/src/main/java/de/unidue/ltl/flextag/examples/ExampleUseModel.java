@@ -26,6 +26,10 @@ import de.unidue.ltl.flextag.core.FlexTagUseModel;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
+/**
+ * Performs a prediction task with an already trained model. The model is trained as part of this
+ * demo.
+ */
 public class ExampleUseModel
 {
     public static void main(String[] args)
@@ -69,9 +73,10 @@ public class ExampleUseModel
         FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
                 fileSuffix, new File(folder));
 
-        flex.setFeatures(new String[] { BrownCluster.class.getName() }, new Object[] {
-                BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                "src/main/resources/res/dummyBrownCluster.txt.gz" }, false);
+        flex.setFeatures(new String[] { BrownCluster.class.getName() },
+                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
+                false);
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");

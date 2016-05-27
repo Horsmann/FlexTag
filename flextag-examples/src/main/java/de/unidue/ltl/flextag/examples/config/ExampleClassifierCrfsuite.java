@@ -55,7 +55,7 @@ public class ExampleClassifierCrfsuite
         flex.setFeatures(new String[] { NrOfCharsUFE.class.getName(), }, new String[] {}, true);
 
         // CRFSuite defines various algorithm to use for training which are defined over the
-        // CRFSuiteAdapter constant.
+        // CRFSuiteAdapter constant. Some are slow on large data sets
         flex.setCrfsuiteClassifier(CRFSuiteAdapter.ALGORITHM_L2_STOCHASTIC_GRADIENT_DESCENT);
 
         flex.execute(false);

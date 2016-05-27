@@ -23,6 +23,9 @@ import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
+/**
+ * An example that shows how to train a model and store the model for later usage
+ */
 public class ExampleTrainStore
 {
     public static void main(String[] args)
@@ -30,8 +33,10 @@ public class ExampleTrainStore
     {
         new ExampleTrainStore().run();
     }
-    
-    public void run() throws Exception{
+
+    public void run()
+        throws Exception
+    {
         String language = "en";
 
         Class<?> reader = LineTokenTagReader.class;
@@ -50,9 +55,10 @@ public class ExampleTrainStore
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(new String[] { BrownCluster.class.getName() }, new Object[] {
-                BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                "src/main/resources/res/dummyBrownCluster.txt.gz" }, false);
+        flex.setFeatures(new String[] { BrownCluster.class.getName() },
+                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
+                false);
 
         flex.execute(false);
     }

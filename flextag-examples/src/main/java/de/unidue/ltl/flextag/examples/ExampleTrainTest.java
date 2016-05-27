@@ -21,6 +21,10 @@ import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
+/**
+ * An example which trains a model on the provided data and evaluates the trained model on provided
+ * test data
+ */
 public class ExampleTrainTest
 {
     public static void main(String[] args)
@@ -28,8 +32,10 @@ public class ExampleTrainTest
     {
         new ExampleTrainTest().run();
     }
-    
-    public void run() throws Exception {
+
+    public void run()
+        throws Exception
+    {
         String language = "en";
 
         Class<?> reader = LineTokenTagReader.class;
@@ -51,9 +57,10 @@ public class ExampleTrainTest
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(new String[] { BrownCluster.class.getName() }, new Object[] {
-                BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                "src/main/resources/res/dummyBrownCluster.txt.gz" }, false);
+        flex.setFeatures(new String[] { BrownCluster.class.getName() },
+                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
+                false);
 
         flex.execute(false);
     }

@@ -33,7 +33,8 @@ public class ExampleClassifierWeka
     public static void main(String[] args)
         throws Exception
     {
-        // Weka's classifier offer various configuration parameters this demo shows how to use Weka classifier in their plain mode and with provided configuration parameters
+        // Weka's classifier offer various configuration parameters this demo shows how to use Weka
+        // classifier in their plain mode and with provided configuration parameters
         new ExampleClassifierWeka().runSimple();
         new ExampleClassifierWeka().runComplex();
     }
@@ -59,14 +60,15 @@ public class ExampleClassifierWeka
         }
         flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() }, new Object[] {
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 }, false);
+        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
+                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
+                false);
 
         List<String> configuration = asList(new String[] { SMO.class.getName() });
         flex.setWekaClassifier(configuration);
-        
+
         flex.execute(false);
     }
 
@@ -91,10 +93,11 @@ public class ExampleClassifierWeka
         }
         flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() }, new Object[] {
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 }, false);
+        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
+                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
+                false);
 
         List<String> configuration = asList(new String[] { SMO.class.getName(), "-C", "1.0", "-K",
                 PolyKernel.class.getName() + " " + "-C -1 -E 2" });
