@@ -202,6 +202,7 @@
 				<file><exists>LICENSE.txt</exists></file>
 			</activation>
 			<build>
+			<pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.gmaven</groupId>
@@ -292,6 +293,7 @@
 						</executions>
 					</plugin>
 				</plugins>
+				</pluginManagement>
 			</build>
 		</profile>
 		     <profile>
