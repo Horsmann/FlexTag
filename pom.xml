@@ -1,20 +1,11 @@
-<!--
-	Copyright 2016
-	Language Technology Lab
-	University of Duisburg-Essen
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
--->
+<!-- Copyright 2016 Language Technology Lab University of Duisburg-Essen 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
@@ -28,69 +19,20 @@
 	<description>FlexTag is a highly flexible part of speech tagger based on DKPro TC</description> <!-- The description tag must be present for antrun to work!! -->
 	<url>https://github.com/Horsmann/FlexTag.git</url>
 	<organization>
-    	<name>Language Technology Lab, University of Duisburg-Essen, Germany</name>
-    	<url>http://www.ltl.uni-due.de</url>
+		<name>Language Technology Lab, University of Duisburg-Essen, Germany</name>
+		<url>http://www.ltl.uni-due.de</url>
 	</organization>
-	<inceptionYear>2016</inceptionYear>	
+	<inceptionYear>2016</inceptionYear>
 	<prerequisites>
 		<maven>3.0.4</maven>
 	</prerequisites>
-	<repositories>
-		<repository>
-			<id>ukp-oss-model-releases</id>
-			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-model-releases-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jcenter</id>
-			<url>http://jcenter.bintray.com</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ukp-oss-snapshots</id>
-			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ltl-snapshots</id>
-			<url>http://basa.ltl.uni-due.de:34001/artifactory/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ltl-releases</id>
-			<url>http://basa.ltl.uni-due.de:34001/artifactory/releases</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	<repository>
-			<id>ltl-models</id>
-			<url>http://basa.ltl.uni-due.de:34001/artifactory/models</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>		
-	</repositories>
+	<licenses>
+		<license>
+			<name>Apache License Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -105,13 +47,315 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
+	<profiles>
+		<profile>
+			<id>license-check</id>
+			<activation>
+				<file>
+					<exists>.activate_license-check</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<inherited>true</inherited>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>2.5</version>
+						<configuration>
+							<header>${basedir}/.activate_license-check</header>
+							<failIfMissing>true</failIfMissing>
+							<strictCheck>true</strictCheck>
+							<properties>
+								<inceptionYear>${project.inceptionYear}</inceptionYear>
+								<currentYear>2016</currentYear>
+							</properties>
+							<excludes>
+								<exclude>release.properties</exclude>
+								<exclude>CHANGES.txt</exclude>
+								<exclude>NOTICE.txt</exclude>
+								<exclude>README.txt</exclude>
+								<exclude>LICENSE.txt</exclude>
+								<exclude>src/main/resources/**/*</exclude>
+								<exclude>src/test/resources/**/*</exclude>
+								<exclude>.activate_rat-check</exclude>
+								<exclude>.activate_license-check</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>check-headers</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>rat-check</id>
+			<activation>
+				<file>
+					<exists>.activate_rat-check</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.rat</groupId>
+						<artifactId>apache-rat-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>default</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+								<configuration>
+									<excludes>
+										<!-- release generated artifact -->
+										<exclude>release.properties</exclude>
+										<!-- informational files -->
+										<exclude>CHANGES.txt</exclude>
+										<exclude>NOTICE.txt</exclude>
+										<exclude>README.txt</exclude>
+										<exclude>README.md</exclude>
+										<!-- build artifacts -->
+										<exclude>.activate_rat-check</exclude>
+										<exclude>target.db</exclude>
+										<!-- resources which may not be able to carry headers -->
+										<exclude>src/main/resources/**/*</exclude>
+										<exclude>src/test/resources/**/*</exclude>
+									</excludes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>findbugs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>findbugs-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>findbugs</goal>
+								</goals>
+								<configuration>
+									<findbugsXmlOutput>true</findbugsXmlOutput>
+									<xmlOutput>true</xmlOutput>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>check-license.txt</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>check-license.txt</id>
+								<phase>package</phase>
+								<goals><goal>run</goal></goals>
+								<inherited>true</inherited>
+								<configuration>
+									<target>
+										<fail message="LICENSE.txt file is missing.">
+										    <condition>
+										        <not>
+										            <resourcecount count="1">
+										                <fileset dir="." includes="LICENSE.txt" />
+										            </resourcecount>
+										        </not>
+										    </condition>
+										</fail>									
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- 
+			 - This profile takes care of copying the NOTICE, LICENSE, etc. files to the proper
+			 - locations.
+			 -->
+			<id>add-license</id>
+			<activation>
+				<file><exists>LICENSE.txt</exists></file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.gmaven</groupId>
+						<artifactId>gmaven-plugin</artifactId>
+						<version>1.5</version>
+						<inherited>true</inherited>
+						<executions>
+							<execution>
+								<!-- Load postNoticeText from NOTICE file -->
+								<id>read-notice</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<source>
+										def noticeFile = new File(project.basedir.path +
+										"/NOTICE.txt");
+										if (noticeFile.exists()) {
+										project.properties.postNoticeText = noticeFile.text;
+										}
+									</source>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+						    <!-- 
+						      - Workaround for potential conflict between Groovy version used here
+						      - and in projects inheriting from this POM.
+						      -->
+							<dependency>
+								<groupId>org.codehaus.groovy</groupId>
+								<artifactId>groovy-all</artifactId>
+								<version>1.8.8</version>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant</artifactId>
+								<version>1.7.0</version>
+							</dependency>
+						</dependencies>
+					</plugin>							
+					<!-- The DEPENDENCIES and NOTICE templates are read here -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-remote-resources-plugin</artifactId>
+						<inherited>true</inherited>
+						<executions>
+							<execution>
+								<id>process-remote-resources</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process</goal>
+								</goals>
+								<configuration>
+									<resourceBundles>
+										<resourceBundle>de.tudarmstadt.ukp.dkpro.core:build-resources:1</resourceBundle>
+									</resourceBundles>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<inherited>true</inherited>
+						<executions>
+							<execution>
+								<id>copy-license</id>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+									<resources>
+										<resource>
+											<filtering>false</filtering>
+											<directory>${basedir}</directory>
+											<includes>
+												<include>README.txt</include>
+												<include>LICENSE.txt</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		     <profile>
+            <id>flextag-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <inherited>true</inherited>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <updateReleaseInfo>true</updateReleaseInfo>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                            <useAgent>${gpg.useagent}</useAgent>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
 	<modules>
-	<module>flextag-core</module>
-	<module>flextag-examples</module>
-	<module>flextag-features</module>
-	
-	<module>flextag-doc</module>
+		<module>flextag-core</module>
+		<module>flextag-examples</module>
+		<module>flextag-features</module>
+		<module>flextag-doc</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -135,6 +379,15 @@
 	</scm>
 	<properties>
 		<dkpro.tc.version>0.8.0</dkpro.tc.version>
-		<dkpro.core.version>1.9.0-SNAPSHOT</dkpro.core.version>
+		<dkpro.core.version>1.8.0</dkpro.core.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.surefire.heap>512m</maven.surefire.heap>
+		<maven.surefire.argLine />
+		<gpg.useagent>true</gpg.useagent>
 	</properties>
+	<ciManagement>
+		<url>https://github.com/Horsmann/FlexTag.git</url>
+	</ciManagement>
 </project>
