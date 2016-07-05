@@ -18,13 +18,20 @@
  */
 package de.unidue.ltl.flextag.examples;
 
-import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
-import de.unidue.ltl.flextag.features.resources.BrownCluster;
+import java.io.File;
+
+import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.dkpro.tc.features.ngram.LuceneCharacterNGramUFE;
+
+import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
+import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
+import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
+import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 
 /**
- * An example which trains a model on the provided data and evaluates the trained model on provided
- * test data
+ * An example which demonstrates the use of the preprocessing. We will trains a model on a raw text
+ * file which is first segemented and than tagged with the Stanford tagger during preprocessing. The
+ * Stanford prediction are used as gold labels for training our own model
  */
 public class ExampleTrainTestWithPreprocessing
 {
@@ -39,29 +46,29 @@ public class ExampleTrainTestWithPreprocessing
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<?> reader = TextReader.class;
 
-        String trainCorpora = "src/main/resources/train/";
-        String trainFileSuffix = "*.txt";
+        String corpora = "src/main/resources/raw/";
+        String fileSuffix = "*.txt";
 
-        String testDataFolder = "src/main/resources/test/";
-        String testFileSuffix = "*.txt";
-
-        FlexTagTrainTest flex = new FlexTagTrainTest(language, reader, trainCorpora,
-                trainFileSuffix, testDataFolder, testFileSuffix);
+        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
+                fileSuffix, new File(System.getProperty("user.home") + "/Desktop/flexOut"));
 
         if (System.getProperty("DKPRO_HOME") == null) {
-            flex.setDKProHomeFolder("target/home");
+            flex.setDKProHomeFolder(System.getProperty("user.home") + "/Desktop/");
         }
-        flex.setExperimentName("TrainTestDemo");
+        flex.setExperimentName("FlexTest");
 
-        // we additionally add a brown cluster and specify that we want to keep using the default
-        // feature set, setting the last parameter to "false" will remove the default feature set
-        // and only use the here specified features will be used.
-        flex.setFeatures(new String[] { BrownCluster.class.getName() },
-                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
+        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
+                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
                 false);
+
+        flex.setPreprocessing(
+                AnalysisEngineFactory.createEngineDescription(BreakIteratorSegmenter.class),
+                AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class,
+                        StanfordPosTagger.PARAM_LANGUAGE, "en"));
 
         flex.execute(false);
     }
