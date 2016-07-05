@@ -25,3 +25,12 @@ FlexTag uses DKPro TextClassification in the background and provides additionall
 
 [Limitations of user-defined features](https://github.com/Horsmann/FlexTag/wiki/Limitations-of-user-defined-features)
 
+### Maven Artifacts
+FlexTag can be found on Maven
+```
+<dependency>
+    <groupId>de.unidue.ltl.flextag</groupId>
+    <artifactId>FlexTag</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
