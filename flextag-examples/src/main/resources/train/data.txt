@@ -100,40 +100,6 @@ brooms NNS
 @RUQuidditch USR
 #Rams HT
 
-RT RT
-@ZodiacFacts USR
-: :
-#ZodiacFacts HT
-As IN
-an DT
-#Aries HT
-romance NN
-is VBZ
-n't RB
-about IN
-what WP
-you PRP
-'re VBP
-after IN
--- :
-it PRP
-'s VBZ
-about IN
-taking VBG
-chances NNS
-, ,
-exploring VBG
-and CC
-keeping VBG
-an DT
-... :
-
-ThAnK VB
-gOd NNP
-ItS PRP
-fRiDaY NNP
-!! .
-
 I PRP
 think VBP
 that DT
@@ -170,29 +136,6 @@ party VB
 in IN
 style NN
 ! .
-
-@rattleknackers USR
-amusing JJ
-? .
-This DT
-is VBZ
-some DT
-of IN
-the DT
-greatest JJS
-music NN
-of IN
-all DT
-time NN
-, ,
-my PRP$
-foot NN
-has VBZ
-n't RB
-stopped VBN
-tapping VBG
-all DT
-night NN
 
 @aplusk USR
 http://www.youtube.com/watch?v=eLMui7zBiXo URL
