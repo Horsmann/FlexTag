@@ -272,13 +272,13 @@ public abstract class FlexTagSetUp
         throws ResourceInitializationException
     {
         List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
-        //
-        preprocessing.add(AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
-                TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
-
+        
         if (userPreprocessing != null) {
             preprocessing.addAll(Arrays.asList(userPreprocessing));
         }
+        
+        preprocessing.add(AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
+                TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
 
         return AnalysisEngineFactory
                 .createEngineDescription(preprocessing.toArray(new AnalysisEngineDescription[0]));
