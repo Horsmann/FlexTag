@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.tc.core.Constants;
@@ -33,6 +36,7 @@ import org.dkpro.tc.svmhmm.SVMHMMAdapter;
 import org.dkpro.tc.weka.WekaClassificationAdapter;
 
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
+import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public abstract class FlexTagSetUp
     implements Constants
@@ -47,6 +51,7 @@ public abstract class FlexTagSetUp
     protected String fileSuffix;
 
     protected String posMappingLocation;
+    protected AnalysisEngineDescription[] userPreprocessing;
 
     protected FlexTagMachineLearningAdapter classifier;
     protected List<Dimension<?>> classificationArgs;
@@ -71,9 +76,8 @@ public abstract class FlexTagSetUp
     {
         List<Dimension<?>> dims = new ArrayList<>();
 
-        dims.add(Dimension
-                .create(DIM_CLASSIFICATION_ARGS,
-                        asList(new String[] { CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR })));
+        dims.add(Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
+                CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR })));
 
         return dims;
     }
@@ -113,8 +117,8 @@ public abstract class FlexTagSetUp
 
     private void addNewFeatureParameterToTheDefaultFeatures(Object[] featureParameters)
     {
-        List<Object> param = new ArrayList<Object>(Arrays.asList(DefaultFeatures
-                .getDefaultFeatureParameter()));
+        List<Object> param = new ArrayList<Object>(
+                Arrays.asList(DefaultFeatures.getDefaultFeatureParameter()));
         ArrayList<Object> newParameters = new ArrayList<Object>(Arrays.asList(featureParameters));
         param.addAll(newParameters);
         this.featureParameters = param.toArray(new Object[0]);
@@ -122,8 +126,8 @@ public abstract class FlexTagSetUp
 
     private void addNewFeaturesToTheDefaultFeatures(String[] features)
     {
-        List<String> feat = new ArrayList<String>(Arrays.asList(DefaultFeatures
-                .getDefaultFeatures()));
+        List<String> feat = new ArrayList<String>(
+                Arrays.asList(DefaultFeatures.getDefaultFeatures()));
         List<String> newFeatures = new ArrayList<String>(Arrays.asList(features));
         feat.addAll(newFeatures);
         this.featureNames = feat.toArray(new String[0]);
@@ -215,7 +219,8 @@ public abstract class FlexTagSetUp
         case WEKA:
             return WekaClassificationAdapter.class;
         default:
-            throw new IllegalArgumentException("Classifier ["+classifier.toString()+"] is unknown");
+            throw new IllegalArgumentException(
+                    "Classifier [" + classifier.toString() + "] is unknown");
         }
 
     }
@@ -243,8 +248,8 @@ public abstract class FlexTagSetUp
         classifier = FlexTagMachineLearningAdapter.CRFSUITE;
 
         classificationArgs = new ArrayList<>();
-        classificationArgs.add(Dimension.create(DIM_CLASSIFICATION_ARGS,
-                asList(new String[] { algorithm })));
+        classificationArgs
+                .add(Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] { algorithm })));
     }
 
     @SuppressWarnings("unchecked")
@@ -254,6 +259,34 @@ public abstract class FlexTagSetUp
         classificationArgs = new ArrayList<>();
         classificationArgs.add(Dimension.create(DIM_CLASSIFICATION_ARGS, args));
 
+    }
+
+    /**
+     * @param useCoarse
+     *            The POS tags are automatically mapped to their coarse value if this is set to true
+     * @return Preprocessing pipeline
+     * @throws ResourceInitializationException
+     *             for erroneous configurations
+     */
+    protected AnalysisEngineDescription getPreprocessing(boolean useCoarse)
+        throws ResourceInitializationException
+    {
+        List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
+        //
+        preprocessing.add(AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
+                TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+
+        if (userPreprocessing != null) {
+            preprocessing.addAll(Arrays.asList(userPreprocessing));
+        }
+
+        return AnalysisEngineFactory
+                .createEngineDescription(preprocessing.toArray(new AnalysisEngineDescription[0]));
+    }
+
+    public void setPreprocessing(AnalysisEngineDescription... createEngineDescription)
+    {
+        userPreprocessing = createEngineDescription;
     }
 
     public abstract void execute(boolean useCoarse)

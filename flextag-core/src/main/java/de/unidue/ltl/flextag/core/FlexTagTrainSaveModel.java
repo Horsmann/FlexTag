@@ -22,14 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.tc.ml.ExperimentSaveModel;
-
-import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public class FlexTagTrainSaveModel
     extends FlexTagSetUp
@@ -61,9 +58,9 @@ public class FlexTagTrainSaveModel
                 modelOutputFolder);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(AnalysisEngineFactory.createEngineDescription(
-                TcPosTaggingWrapper.class, TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+        batch.setPreprocessing(getPreprocessing(useCoarse));
 
         Lab.getInstance().run(batch);
     }
+
 }

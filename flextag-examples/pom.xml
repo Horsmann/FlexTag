@@ -74,6 +74,12 @@
 			<groupId>org.dkpro.tc</groupId>
 			<artifactId>dkpro-tc-ml-weka</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.tokit-asl
+			</artifactId>
+		</dependency>
 	</dependencies>
 	<properties>
 		<!-- This module should not be deployed to the repository -->
