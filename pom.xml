@@ -107,6 +107,7 @@
 					<plugin>
 						<groupId>org.apache.rat</groupId>
 						<artifactId>apache-rat-plugin</artifactId>
+						<version>${apacheRatPluginVersion}</version>
 						<executions>
 							<execution>
 								<id>default</id>
@@ -388,6 +389,7 @@
 		<maven.surefire.heap>512m</maven.surefire.heap>
 		<maven.surefire.argLine />
 		<gpg.useagent>true</gpg.useagent>
+		<apacheRatPluginVersion>0.12</apacheRatPluginVersion>
 	</properties>
 	<ciManagement>
 		<url>https://github.com/Horsmann/FlexTag.git</url>
