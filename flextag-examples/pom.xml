@@ -23,7 +23,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.unidue.ltl.flextag</groupId>
-		<artifactId>de.unidue.ltl.flextag</artifactId>
+		<artifactId>FlexTag</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>de.unidue.ltl.flextag.examples</artifactId>
@@ -127,12 +127,18 @@
 		</dependency>
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
-			<artifactId>de.uniduel.ltl.flextag.features</artifactId>
+			<artifactId>de.unidue.ltl.flextag.features</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.meka</groupId>
 			<artifactId>meka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl
+			</artifactId>
 		</dependency>
 	</dependencies>
 	<properties>

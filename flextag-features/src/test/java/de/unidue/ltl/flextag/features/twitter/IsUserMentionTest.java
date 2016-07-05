@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features;
+package de.unidue.ltl.flextag.features.twitter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,9 +31,9 @@ import org.dkpro.tc.api.type.TextClassificationUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.features.IsAllCapitalized;
+import de.unidue.ltl.flextag.features.twitter.IsUserMention;
 
-public class IsAllCapitalizedTest
+public class IsUserMentionTest
 {
     JCas jcas;
     TextClassificationUnit tokOne;
@@ -45,12 +45,12 @@ public class IsAllCapitalizedTest
     {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("Hi PETER");
+        jcas.setDocumentText("hi @Trixi");
 
         tokOne = new TextClassificationUnit(jcas, 0, 2);
         tokOne.addToIndexes();
 
-        tokTwo = new TextClassificationUnit(jcas, 3, 8);
+        tokTwo = new TextClassificationUnit(jcas, 3, 9);
         tokTwo.addToIndexes();
     }
 
@@ -58,7 +58,7 @@ public class IsAllCapitalizedTest
     public void testFirstToken()
         throws Exception
     {
-        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
+        IsUserMention featureExtractor = FeatureUtil.createResource(IsUserMention.class,
                 new Object[] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
 
@@ -66,7 +66,7 @@ public class IsAllCapitalizedTest
 
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsAllCapitalized.FEATURE_NAME, featureName);
+        assertEquals(IsUserMention.FEATURE_NAME, featureName);
         assertEquals(0, featureValue);
     }
 
@@ -74,7 +74,7 @@ public class IsAllCapitalizedTest
     public void testSecondToken()
         throws Exception
     {
-        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
+        IsUserMention featureExtractor = FeatureUtil.createResource(IsUserMention.class,
                 new Object[] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
 
@@ -82,7 +82,7 @@ public class IsAllCapitalizedTest
 
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsAllCapitalized.FEATURE_NAME, featureName);
+        assertEquals(IsUserMention.FEATURE_NAME, featureName);
         assertEquals(1, featureValue);
     }
 }

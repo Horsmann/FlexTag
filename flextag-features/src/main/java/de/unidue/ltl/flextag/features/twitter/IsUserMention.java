@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features.twitter;
+package de.unidue.ltl.flextag.features.twitter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,11 +27,11 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.type.TextClassificationUnit;
 
-public class IsRetweet
+public class IsUserMention
     extends FeatureExtractorResource_ImplBase
     implements ClassificationUnitFeatureExtractor
 {
-    public static final String FEATURE_NAME = "isRetweet";
+    public static final String FEATURE_NAME = "isUserMention";
 
     public Set<Feature> extract(JCas aView, TextClassificationUnit aClassificationUnit)
         throws TextClassificationException
@@ -39,17 +39,17 @@ public class IsRetweet
 
         String text = aClassificationUnit.getCoveredText();
 
-        boolean isRetweet = isRetweet(text);
+        boolean isUserMention = isUserMention(text);
 
-        Feature feature = new Feature(FEATURE_NAME, isRetweet ? 1 : 0);
+        Feature feature = new Feature(FEATURE_NAME, isUserMention ? 1 : 0);
         Set<Feature> features = new HashSet<Feature>();
         features.add(feature);
         return features;
     }
 
-    public static boolean isRetweet(String text)
+    public static boolean isUserMention(String text)
     {
-        return text.equals("RT");
+        return text.startsWith("@");
     }
 
 }

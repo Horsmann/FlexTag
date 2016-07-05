@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features;
+package de.unidue.ltl.flextag.features;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,58 +31,53 @@ import org.dkpro.tc.api.type.TextClassificationUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.features.IsFirstLetterCapitalized;
+import de.unidue.ltl.flextag.features.ContainsPeriod;
 
-public class IsFirstLetterCapitalizedTest
+public class ContainsPeriodTest
 {
     JCas jcas;
     TextClassificationUnit tokOne;
     TextClassificationUnit tokTwo;
-
     @Before
-    public void setUp()
-        throws UIMAException
-    {
+    public void setUp() throws UIMAException {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("Hi @Trixi");
-
-        tokOne = new TextClassificationUnit(jcas, 0, 2);
+        jcas.setDocumentText("hi @T.ixi");
+        
+        tokOne = new TextClassificationUnit(jcas,0,2);
         tokOne.addToIndexes();
-
-        tokTwo = new TextClassificationUnit(jcas, 3, 9);
+        
+        tokTwo = new TextClassificationUnit(jcas,3,9);
         tokTwo.addToIndexes();
     }
-
+    
     @Test
     public void testFirstToken()
         throws Exception
     {
-        IsFirstLetterCapitalized featureExtractor = FeatureUtil.createResource(
-                IsFirstLetterCapitalized.class, new Object[] {});
+        ContainsPeriod featureExtractor = FeatureUtil.createResource(ContainsPeriod.class, new Object [] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
-
+        
         assertEquals(1, features.size());
-
+        
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsFirstLetterCapitalized.FEATURE_NAME, featureName);
-        assertEquals(1, featureValue);
+        assertEquals(ContainsPeriod.FEATURE_NAME, featureName);
+        assertEquals(0, featureValue);
     }
-
+    
     @Test
     public void testSecondToken()
         throws Exception
     {
-        IsFirstLetterCapitalized featureExtractor = FeatureUtil.createResource(
-                IsFirstLetterCapitalized.class, new Object[] {});
+        ContainsPeriod featureExtractor = FeatureUtil.createResource(ContainsPeriod.class, new Object [] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
-
+        
         assertEquals(1, features.size());
-
+        
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsFirstLetterCapitalized.FEATURE_NAME, featureName);
-        assertEquals(0, featureValue);
+        assertEquals(ContainsPeriod.FEATURE_NAME, featureName);
+        assertEquals(1, featureValue);
     }
 }

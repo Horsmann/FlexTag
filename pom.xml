@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.unidue.ltl.flextag</groupId>
-	<artifactId>de.unidue.ltl.flextag</artifactId>
+	<artifactId>FlexTag</artifactId>
 	<packaging>pom</packaging>
 	<version>0.1.0-SNAPSHOT</version>
 	<name>FlexTag</name>
@@ -26,6 +26,12 @@
 	<prerequisites>
 		<maven>3.0.4</maven>
 	</prerequisites>
+	<developers>
+        <developer>
+            <organization>FlexTag Team</organization>
+            <organizationUrl>https://github.com/Horsmann/FlexTag</organizationUrl>
+        </developer>
+    </developers>
 	<licenses>
 		<license>
 			<name>Apache License Version 2.0</name>
@@ -33,16 +39,96 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.5</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
+					<version>3.5.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.10</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+                    <configuration>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <arguments>${arguments} -Pflextag-release</arguments>
+                    </configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.10</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>3.6</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -172,19 +258,21 @@
 							<execution>
 								<id>check-license.txt</id>
 								<phase>package</phase>
-								<goals><goal>run</goal></goals>
+								<goals>
+									<goal>run</goal>
+								</goals>
 								<inherited>true</inherited>
 								<configuration>
 									<target>
 										<fail message="LICENSE.txt file is missing.">
-										    <condition>
-										        <not>
-										            <resourcecount count="1">
-										                <fileset dir="." includes="LICENSE.txt" />
-										            </resourcecount>
-										        </not>
-										    </condition>
-										</fail>									
+											<condition>
+												<not>
+													<resourcecount count="1">
+														<fileset dir="." includes="LICENSE.txt" />
+													</resourcecount>
+												</not>
+											</condition>
+										</fail>
 									</target>
 								</configuration>
 							</execution>
@@ -194,165 +282,163 @@
 			</build>
 		</profile>
 		<profile>
-			<!-- 
-			 - This profile takes care of copying the NOTICE, LICENSE, etc. files to the proper
-			 - locations.
-			 -->
+			<!-- - This profile takes care of copying the NOTICE, LICENSE, etc. files 
+				to the proper - locations. -->
 			<id>add-license</id>
 			<activation>
-				<file><exists>LICENSE.txt</exists></file>
+				<file>
+					<exists>LICENSE.txt</exists>
+				</file>
 			</activation>
 			<build>
-			<pluginManagement>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.codehaus.gmaven</groupId>
+							<artifactId>gmaven-plugin</artifactId>
+							<version>1.5</version>
+							<inherited>true</inherited>
+							<executions>
+								<execution>
+									<!-- Load postNoticeText from NOTICE file -->
+									<id>read-notice</id>
+									<phase>generate-sources</phase>
+									<goals>
+										<goal>execute</goal>
+									</goals>
+									<configuration>
+										<source>
+											def noticeFile = new File(project.basedir.path +
+											"/NOTICE.txt");
+											if (noticeFile.exists()) {
+											project.properties.postNoticeText = noticeFile.text;
+											}
+										</source>
+									</configuration>
+								</execution>
+							</executions>
+							<dependencies>
+								<!-- - Workaround for potential conflict between Groovy version used 
+									here - and in projects inheriting from this POM. -->
+								<dependency>
+									<groupId>org.codehaus.groovy</groupId>
+									<artifactId>groovy-all</artifactId>
+									<version>1.8.8</version>
+								</dependency>
+								<dependency>
+									<groupId>org.apache.ant</groupId>
+									<artifactId>ant</artifactId>
+									<version>1.7.0</version>
+								</dependency>
+							</dependencies>
+						</plugin>
+						<!-- The DEPENDENCIES and NOTICE templates are read here -->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-remote-resources-plugin</artifactId>
+							<inherited>true</inherited>
+							<executions>
+								<execution>
+									<id>process-remote-resources</id>
+									<phase>generate-resources</phase>
+									<goals>
+										<goal>process</goal>
+									</goals>
+									<configuration>
+										<resourceBundles>
+											<resourceBundle>de.tudarmstadt.ukp.dkpro.core:build-resources:1</resourceBundle>
+										</resourceBundles>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-resources-plugin</artifactId>
+							<inherited>true</inherited>
+							<executions>
+								<execution>
+									<id>copy-license</id>
+									<goals>
+										<goal>copy-resources</goal>
+									</goals>
+									<phase>generate-resources</phase>
+									<configuration>
+										<outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+										<resources>
+											<resource>
+												<filtering>false</filtering>
+												<directory>${basedir}</directory>
+												<includes>
+													<include>README.txt</include>
+													<include>LICENSE.txt</include>
+												</includes>
+											</resource>
+										</resources>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>flextag-release</id>
+			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.codehaus.gmaven</groupId>
-						<artifactId>gmaven-plugin</artifactId>
-						<version>1.5</version>
 						<inherited>true</inherited>
-						<executions>
-							<execution>
-								<!-- Load postNoticeText from NOTICE file -->
-								<id>read-notice</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<source>
-										def noticeFile = new File(project.basedir.path +
-										"/NOTICE.txt");
-										if (noticeFile.exists()) {
-										project.properties.postNoticeText = noticeFile.text;
-										}
-									</source>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-						    <!-- 
-						      - Workaround for potential conflict between Groovy version used here
-						      - and in projects inheriting from this POM.
-						      -->
-							<dependency>
-								<groupId>org.codehaus.groovy</groupId>
-								<artifactId>groovy-all</artifactId>
-								<version>1.8.8</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.ant</groupId>
-								<artifactId>ant</artifactId>
-								<version>1.7.0</version>
-							</dependency>
-						</dependencies>
-					</plugin>							
-					<!-- The DEPENDENCIES and NOTICE templates are read here -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<updateReleaseInfo>true</updateReleaseInfo>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-remote-resources-plugin</artifactId>
-						<inherited>true</inherited>
+						<artifactId>maven-source-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>process-remote-resources</id>
-								<phase>generate-resources</phase>
+								<id>attach-sources</id>
 								<goals>
-									<goal>process</goal>
+									<goal>jar-no-fork</goal>
 								</goals>
-								<configuration>
-									<resourceBundles>
-										<resourceBundle>de.tudarmstadt.ukp.dkpro.core:build-resources:1</resourceBundle>
-									</resourceBundles>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<inherited>true</inherited>
+						<artifactId>maven-javadoc-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>copy-license</id>
+								<id>attach-javadocs</id>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>jar</goal>
 								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
-									<resources>
-										<resource>
-											<filtering>false</filtering>
-											<directory>${basedir}</directory>
-											<includes>
-												<include>README.txt</include>
-												<include>LICENSE.txt</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<configuration>
+							<passphrase>${gpg.passphrase}</passphrase>
+							<useAgent>${gpg.useagent}</useAgent>
+						</configuration>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
 				</plugins>
-				</pluginManagement>
 			</build>
 		</profile>
-		     <profile>
-            <id>flextag-release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <inherited>true</inherited>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <configuration>
-                            <updateReleaseInfo>true</updateReleaseInfo>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <configuration>
-                            <passphrase>${gpg.passphrase}</passphrase>
-                            <useAgent>${gpg.useagent}</useAgent>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 	</profiles>
 	<modules>
 		<module>flextag-core</module>

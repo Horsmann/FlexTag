@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features.twitter;
+package de.unidue.ltl.flextag.features.twitter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,6 +30,8 @@ import org.dkpro.tc.api.features.util.FeatureUtil;
 import org.dkpro.tc.api.type.TextClassificationUnit;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.unidue.ltl.flextag.features.twitter.IsRetweet;
 
 public class IsRetweetTest
 {

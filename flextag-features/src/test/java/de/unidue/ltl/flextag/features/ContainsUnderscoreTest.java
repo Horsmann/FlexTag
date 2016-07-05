@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features;
+package de.unidue.ltl.flextag.features;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,9 +31,9 @@ import org.dkpro.tc.api.type.TextClassificationUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.features.ContainsComma;
+import de.unidue.ltl.flextag.features.ContainsUnderScore;
 
-public class ContainsCommaTest
+public class ContainsUnderscoreTest
 {
     JCas jcas;
     TextClassificationUnit tokOne;
@@ -42,7 +42,7 @@ public class ContainsCommaTest
     public void setUp() throws UIMAException {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("hi @T,ixi");
+        jcas.setDocumentText("hi @T_ixi");
         
         tokOne = new TextClassificationUnit(jcas,0,2);
         tokOne.addToIndexes();
@@ -55,14 +55,14 @@ public class ContainsCommaTest
     public void testFirstToken()
         throws Exception
     {
-        ContainsComma featureExtractor = FeatureUtil.createResource(ContainsComma.class, new Object [] {});
+        ContainsUnderScore featureExtractor = FeatureUtil.createResource(ContainsUnderScore.class, new Object [] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
         
         assertEquals(1, features.size());
         
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(ContainsComma.FEATURE_NAME, featureName);
+        assertEquals(ContainsUnderScore.FEATURE_NAME, featureName);
         assertEquals(0, featureValue);
     }
     
@@ -70,14 +70,14 @@ public class ContainsCommaTest
     public void testSecondToken()
         throws Exception
     {
-        ContainsComma featureExtractor = FeatureUtil.createResource(ContainsComma.class, new Object [] {});
+        ContainsUnderScore featureExtractor = FeatureUtil.createResource(ContainsUnderScore.class, new Object [] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
         
         assertEquals(1, features.size());
         
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(ContainsComma.FEATURE_NAME, featureName);
+        assertEquals(ContainsUnderScore.FEATURE_NAME, featureName);
         assertEquals(1, featureValue);
     }
 }

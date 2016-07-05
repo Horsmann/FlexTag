@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features.twitter;
+package de.unidue.ltl.flextag.features;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,7 +31,9 @@ import org.dkpro.tc.api.type.TextClassificationUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-public class IsUserMentionTest
+import de.unidue.ltl.flextag.features.IsAllCapitalized;
+
+public class IsAllCapitalizedTest
 {
     JCas jcas;
     TextClassificationUnit tokOne;
@@ -43,12 +45,12 @@ public class IsUserMentionTest
     {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("hi @Trixi");
+        jcas.setDocumentText("Hi PETER");
 
         tokOne = new TextClassificationUnit(jcas, 0, 2);
         tokOne.addToIndexes();
 
-        tokTwo = new TextClassificationUnit(jcas, 3, 9);
+        tokTwo = new TextClassificationUnit(jcas, 3, 8);
         tokTwo.addToIndexes();
     }
 
@@ -56,7 +58,7 @@ public class IsUserMentionTest
     public void testFirstToken()
         throws Exception
     {
-        IsUserMention featureExtractor = FeatureUtil.createResource(IsUserMention.class,
+        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
                 new Object[] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
 
@@ -64,7 +66,7 @@ public class IsUserMentionTest
 
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsUserMention.FEATURE_NAME, featureName);
+        assertEquals(IsAllCapitalized.FEATURE_NAME, featureName);
         assertEquals(0, featureValue);
     }
 
@@ -72,7 +74,7 @@ public class IsUserMentionTest
     public void testSecondToken()
         throws Exception
     {
-        IsUserMention featureExtractor = FeatureUtil.createResource(IsUserMention.class,
+        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
                 new Object[] {});
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
 
@@ -80,7 +82,7 @@ public class IsUserMentionTest
 
         String featureName = features.get(0).getName();
         Object featureValue = features.get(0).getValue();
-        assertEquals(IsUserMention.FEATURE_NAME, featureName);
+        assertEquals(IsAllCapitalized.FEATURE_NAME, featureName);
         assertEquals(1, featureValue);
     }
 }

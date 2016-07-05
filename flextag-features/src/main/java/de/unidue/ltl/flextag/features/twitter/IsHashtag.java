@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.uniduel.ltl.flextag.features.twitter;
+package de.unidue.ltl.flextag.features.twitter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,29 +27,22 @@ import org.dkpro.tc.api.features.Feature;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.type.TextClassificationUnit;
 
-public class IsUserMention
+public class IsHashtag
     extends FeatureExtractorResource_ImplBase
     implements ClassificationUnitFeatureExtractor
 {
-    public static final String FEATURE_NAME = "isUserMention";
+
+    public final static String FEATURE_NAME = "isHashtag";
 
     public Set<Feature> extract(JCas aView, TextClassificationUnit aClassificationUnit)
         throws TextClassificationException
     {
+        String tokenText = aClassificationUnit.getCoveredText();
+        boolean isHashtag = tokenText.startsWith("#");
+        Feature feature = new Feature(FEATURE_NAME, isHashtag ? 1 : 0);
 
-        String text = aClassificationUnit.getCoveredText();
-
-        boolean isUserMention = isUserMention(text);
-
-        Feature feature = new Feature(FEATURE_NAME, isUserMention ? 1 : 0);
         Set<Feature> features = new HashSet<Feature>();
         features.add(feature);
         return features;
     }
-
-    public static boolean isUserMention(String text)
-    {
-        return text.startsWith("@");
-    }
-
 }

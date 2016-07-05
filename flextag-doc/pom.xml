@@ -22,7 +22,7 @@
 	<artifactId>de.unidue.ltl.flextag.doc</artifactId>
 	<parent>
 		<groupId>de.unidue.ltl.flextag</groupId>
-		<artifactId>de.unidue.ltl.flextag</artifactId>
+		<artifactId>FlexTag</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 		<licenses>
