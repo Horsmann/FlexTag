@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>de.unidue.ltl.flextag</groupId>
 		<artifactId>FlexTag</artifactId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.1.0</version>
 	</parent>
 	<artifactId>de.unidue.ltl.flextag.examples</artifactId>
 	<name>FlexTag - Examples</name>
@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
 			<artifactId>de.unidue.ltl.flextag.core</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
@@ -127,7 +127,7 @@
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
 			<artifactId>de.unidue.ltl.flextag.features</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.meka</groupId>
