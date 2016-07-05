@@ -73,5 +73,43 @@
   	  		<groupId>org.dkpro.tc</groupId>
   	  		<artifactId>dkpro-tc-api</artifactId>
   	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+  	  		<artifactId>
+  	  			de.tudarmstadt.ukp.dkpro.core.api.resources-asl
+  	  		</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>commons-io</groupId>
+  	  		<artifactId>commons-io</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>org.dkpro.tc</groupId>
+  	  		<artifactId>dkpro-tc-ml</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+  	  		<artifactId>
+  	  			de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl
+  	  		</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+  	  		<artifactId>
+  	  			de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl
+  	  		</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>org.apache.uima</groupId>
+  	  		<artifactId>uimafit-core</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>org.apache.uima</groupId>
+  	  		<artifactId>uimaj-core</artifactId>
+  	  	</dependency>
+  	  	<dependency>
+  	  		<groupId>org.dkpro.tc</groupId>
+  	  		<artifactId>dkpro-tc-core</artifactId>
+  	  	</dependency>
     </dependencies>
 </project>

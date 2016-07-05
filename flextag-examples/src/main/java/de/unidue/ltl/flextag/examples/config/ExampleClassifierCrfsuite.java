@@ -57,7 +57,7 @@ public class ExampleClassifierCrfsuite
 
         // CRFSuite defines various algorithm to use for training which are defined over the
         // CRFSuiteAdapter constant. Some are slow on large data sets
-        flex.setCrfsuiteClassifier(CRFSuiteAdapter.ALGORITHM_L2_STOCHASTIC_GRADIENT_DESCENT);
+        flex.setCrfsuiteClassifier(CRFSuiteAdapter.ALGORITHM_AVERAGED_PERCEPTRON);
 
         flex.execute(false);
     }
