@@ -19,14 +19,14 @@
 package de.unidue.ltl.flextag.examples.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.uima.collection.CollectionReader;
-import org.dkpro.lab.task.Dimension;
 import org.dkpro.tc.api.features.TcFeatureFactory;
-import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.features.ngram.LuceneNGram;
 import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
 
+import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -65,8 +65,8 @@ public class ExampleClassifierSvmHmm
         flex.setFeatures(true, TcFeatureFactory.create(LuceneNGram.class), TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
 
         
-        Dimension<Object> dimClassificationArgs = Dimension.create(Constants.DIM_CLASSIFICATION_ARGS, Arrays.asList("-c", "5.0", "-t", "2"));
-        flex.setSvmHmmClassifier(dimClassificationArgs);
+        List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
+        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.SVMHMM, classificationArgs);
 
         flex.execute(false);
     }

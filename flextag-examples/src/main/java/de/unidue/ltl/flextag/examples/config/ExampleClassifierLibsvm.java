@@ -24,23 +24,24 @@ import java.util.List;
 
 import org.apache.uima.collection.CollectionReader;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
+import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
 import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
-import weka.classifiers.functions.SMO;
-import weka.classifiers.functions.supportVector.PolyKernel;
 
-public class ExampleClassifierWeka
+public class ExampleClassifierLibsvm
 {
     public static void main(String[] args)
         throws Exception
     {
-        // Weka's classifier offer various configuration parameters this demo shows how to use Weka
+        // Weka's classifier offer various configuration parameters this demo shows how to use
+        // Liblinear
         // classifier in their plain mode and with provided configuration parameters
-        new ExampleClassifierWeka().runSimple();
-        new ExampleClassifierWeka().runComplex();
+        new ExampleClassifierLibsvm().runSimple();
+        new ExampleClassifierLibsvm().runComplex();
     }
 
     public void runSimple()
@@ -62,14 +63,18 @@ public class ExampleClassifierWeka
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("WekaConfiguration");
+        flex.setExperimentName("LiblinearConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
-                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
-                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
+                TcFeatureFactory.create(LuceneCharacterNGram.class,
+                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
-        List<Object> configuration = asList(new Object[] { SMO.class.getName() });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
+        List<Object> configuration = asList(
+                new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS });
+
+        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
 
         flex.execute(false);
     }
@@ -93,15 +98,18 @@ public class ExampleClassifierWeka
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("WekaConfiguration");
+        flex.setExperimentName("LiblinearConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
-                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
-                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
+                TcFeatureFactory.create(LuceneCharacterNGram.class,
+                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
-        List<Object> configuration = asList(new Object[] { SMO.class.getName(), "-C", "1.0", "-K",
-                PolyKernel.class.getName() + " " + "-C -1 -E 2" });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
+        List<Object> configuration = asList(
+                new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS, "-c", "1000",
+                        "-t", LibsvmAdapter.PARAM_KERNEL_RADIAL_BASED });
+        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
 
         flex.execute(false);
     }

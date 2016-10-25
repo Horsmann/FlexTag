@@ -37,6 +37,8 @@ import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
 import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
+import org.dkpro.tc.ml.liblinear.LiblinearAdapter;
+import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 import org.dkpro.tc.ml.svmhmm.SVMHMMAdapter;
 import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
 
@@ -172,6 +174,10 @@ public abstract class FlexTagSetUp
             return SVMHMMAdapter.class;
         case WEKA:
             return WekaClassificationAdapter.class;
+        case LIBLINEAR:
+            return LiblinearAdapter.class;
+        case LIBSVM:
+            return LibsvmAdapter.class;            
         default:
             throw new IllegalArgumentException(
                     "Classifier [" + classifier.toString() + "] is unknown");
@@ -179,30 +185,12 @@ public abstract class FlexTagSetUp
 
     }
 
+    @SuppressWarnings("unchecked")
     public void setMachineLearningClassifier(FlexTagMachineLearningAdapter classifier,
-            Dimension<Double> dimClassificationArgsC)
+            List<Object> dimClassificationArgs)
     {
         this.classifier = classifier;
-    }
-
-    public void setSvmHmmClassifier(Dimension<Object> dimClassificationArgs)
-    {
-        classifier = FlexTagMachineLearningAdapter.SVMHMM;
-        this.dimClassificationArgs = dimClassificationArgs;
-    }
-
-    @SuppressWarnings("unchecked")
-    public void setCrfsuiteClassifier(String algorithm)
-    {
-        classifier = FlexTagMachineLearningAdapter.CRFSUITE;
-        dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] { algorithm }));
-    }
-
-    @SuppressWarnings("unchecked")
-    public void setWekaClassifier(List<String> args)
-    {
-        classifier = FlexTagMachineLearningAdapter.WEKA;
-        dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, args);
+        this.dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, dimClassificationArgs);
     }
 
     /**
