@@ -18,7 +18,7 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>de.unidue.ltl.flextag.doc</artifactId>
+	<artifactId>flextag-doc</artifactId>
 	<parent>
 		<groupId>de.unidue.ltl.flextag</groupId>
 		<artifactId>FlexTag</artifactId>
@@ -35,4 +35,5 @@
 		<!-- This module should not be deployed to the repository -->
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
+	<name>FlexTag - Doc</name>
 </project>

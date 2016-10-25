@@ -1,12 +1,23 @@
-<!-- Copyright 2016 Language Technology Lab University of Duisburg-Essen 
-	This program is free software: you can redistribute it and/or modify it under 
-	the terms of the GNU General Public License as published by the Free Software 
-	Foundation, either version 3 of the License, or (at your option) any later 
-	version. This program is distributed in the hope that it will be useful, 
-	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
-	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for 
-	more details. You should have received a copy of the GNU General Public License 
-	along with this program. If not, see http://www.gnu.org/licenses/. -->
+<!--
+
+    Copyright 2016
+    Language Technology Lab
+    University of Duisburg-Essen
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see http://www.gnu.org/licenses/.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -15,7 +26,7 @@
 		<artifactId>FlexTag</artifactId>
 		<version>0.2.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>de.unidue.ltl.flextag.examples</artifactId>
+	<artifactId>flextag-examples</artifactId>
 	<name>FlexTag - Examples</name>
 	<dependencies>
 		<dependency>
@@ -31,18 +42,6 @@
 			<artifactId>dkpro-lab-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.dkpro.tc</groupId>
-			<artifactId>dkpro-tc-ml-svmhmm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.tc</groupId>
-			<artifactId>dkpro-tc-ml-libsvm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.tc</groupId>
-			<artifactId>dkpro-tc-ml-liblinear</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
   			de.tudarmstadt.ukp.dkpro.core.api.parameter-asl
@@ -50,7 +49,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
-			<artifactId>de.unidue.ltl.flextag.core</artifactId>
+			<artifactId>flextag-core</artifactId>
 			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -125,7 +124,7 @@
 		</dependency>
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
-			<artifactId>de.unidue.ltl.flextag.features</artifactId>
+			<artifactId>flextag-features</artifactId>
 			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>

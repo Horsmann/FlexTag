@@ -30,7 +30,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	<artifactId>de.unidue.ltl.flextag.features</artifactId>
+	<artifactId>flextag-features</artifactId>
 	<name>FlexTag - Features</name>
 	<dependencies>
 		<dependency>
