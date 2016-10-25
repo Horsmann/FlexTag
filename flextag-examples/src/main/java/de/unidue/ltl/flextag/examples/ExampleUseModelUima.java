@@ -21,6 +21,7 @@ package de.unidue.ltl.flextag.examples;
 import java.io.File;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
@@ -74,7 +75,7 @@ public class ExampleUseModelUima
         throws Exception
     {
         String language = "en";
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String corpora = "src/main/resources/train/";
         String fileSuffix = "*.txt";

@@ -18,8 +18,10 @@
  */
 package de.unidue.ltl.flextag.examples.config;
 
-import org.dkpro.tc.crfsuite.CRFSuiteAdapter;
-import org.dkpro.tc.features.length.NrOfCharsUFE;
+import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
+import org.apache.uima.collection.CollectionReader;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.length.NrOfChars;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -37,7 +39,7 @@ public class ExampleClassifierCrfsuite
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";
@@ -53,7 +55,7 @@ public class ExampleClassifierCrfsuite
         }
         flex.setExperimentName("CrfsuiteConfiguration");
 
-        flex.setFeatures(new String[] { NrOfCharsUFE.class.getName(), }, new String[] {}, true);
+        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class));
 
         // CRFSuite defines various algorithm to use for training which are defined over the
         // CRFSuiteAdapter constant. Some are slow on large data sets

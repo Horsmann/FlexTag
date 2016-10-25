@@ -19,13 +19,14 @@ package de.unidue.ltl.flextag.core;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.uima.collection.CollectionReader;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentSaveModel;
 
 public class FlexTagTrainSaveModel
@@ -33,7 +34,7 @@ public class FlexTagTrainSaveModel
 {
     private File modelOutputFolder;
 
-    public FlexTagTrainSaveModel(String language, Class<?> reader, String dataFolder,
+    public FlexTagTrainSaveModel(String language, Class<? extends CollectionReader> reader, String dataFolder,
             String fileSuffix, File modelOutputFolder)
     {
         super(language, reader, dataFolder, fileSuffix);
@@ -45,14 +46,11 @@ public class FlexTagTrainSaveModel
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<String, Object>();
-        dimReaders = wrapReader(dimReaders, DIM_READER_TRAIN, reader, DIM_READER_TRAIN_PARAMS,
-                dataFolder, fileSuffix, posMappingLocation);
+        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
 
-        Dimension<List<String>> dimFeatureSets = wrapFeatures();
-        Dimension<List<Object>> dimPipelineParameters = wrapFeatureParameters();
+        Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
-        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets,
-                dimPipelineParameters);
+        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
         ExperimentSaveModel batch = new ExperimentSaveModel(experimentName, getClassifier(),
                 modelOutputFolder);

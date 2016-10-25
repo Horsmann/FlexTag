@@ -22,21 +22,21 @@ import java.util.Set;
 
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.exception.TextClassificationException;
-import org.dkpro.tc.api.features.ClassificationUnitFeatureExtractor;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.FeatureExtractor;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 
 public class IsAllCapitalized
     extends FeatureExtractorResource_ImplBase
-    implements ClassificationUnitFeatureExtractor
+    implements FeatureExtractor
 {
     public static final String FEATURE_NAME = "allCapitalized";
 
-    public Set<Feature> extract(JCas aView, TextClassificationUnit aClassificationUnit)
+    public Set<Feature> extract(JCas aView, TextClassificationTarget aTarget)
         throws TextClassificationException
     {
-        String token = aClassificationUnit.getCoveredText();
+        String token = aTarget.getCoveredText();
         Feature feature = new Feature(FEATURE_NAME, isAllCapitalized(token) ? 1 : 0);
 
         Set<Feature> features = new HashSet<Feature>();

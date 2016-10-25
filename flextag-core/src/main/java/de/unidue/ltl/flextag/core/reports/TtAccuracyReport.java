@@ -18,17 +18,21 @@
 package de.unidue.ltl.flextag.core.reports;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.util.Map;
 
 import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
+import org.dkpro.lab.storage.impl.PropertiesAdapter;
+import org.dkpro.lab.task.Task;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
-import org.dkpro.tc.core.util.ReportConstants;
-import org.dkpro.tc.crfsuite.CRFSuiteAdapter;
-import org.dkpro.tc.crfsuite.task.CRFSuiteTestTask;
+import org.dkpro.tc.core.task.ExtractFeaturesTask;
+import org.dkpro.tc.evaluation.Id2Outcome;
+import org.dkpro.tc.evaluation.evaluator.EvaluatorBase;
+import org.dkpro.tc.evaluation.evaluator.EvaluatorFactory;
+import org.dkpro.tc.evaluation.measures.label.Accuracy;
+import org.dkpro.tc.ml.crfsuite.task.CRFSuiteTestTask;
+import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 
 public class TtAccuracyReport
     extends BatchReportBase
@@ -45,23 +49,19 @@ public class TtAccuracyReport
          * experiment e.g. initialization, meta , training data feature extraction, test data
          * feature extraction
          */
+        StorageService store = getContext().getStorageService();
         for (TaskContextMetadata subcontext : getSubtasks()) {
-            if (subcontext.getType().contains(CRFSuiteTestTask.class.getName())) {
-                StorageService storageService = getContext().getStorageService();
+            if (TcTaskTypeUtil.isMachineLearningAdapterTask(store, subcontext.getId())) {
 
-                String crfFolderName = subcontext.getId();
-
-                File storageFolder = storageService.locateKey(subcontext.getId(), "");
-                File evaluation = new File(storageFolder,
-                        new CRFSuiteAdapter()
-                                .getFrameworkFilename(AdapterNameEntries.evaluationFile));
-
+                File id2outcomeFile = store.locateKey(subcontext.getId(),
+                        Constants.ID_OUTCOME_KEY);
                 
-                Properties p = new Properties();
-                p.load(new FileInputStream(evaluation));
-                String property = p.getProperty(ReportConstants.PCT_CORRECT);
-                String value = property.replaceAll(",", ".");
-                double accuracy = Double.valueOf(value) * 100;
+                String learningMode =getLearningMode(subcontext.getId(), store);
+                Id2Outcome o = new Id2Outcome(id2outcomeFile, learningMode);
+                EvaluatorBase createEvaluator = EvaluatorFactory.createEvaluator(o, true, false);
+                
+                Map<String, Double> results = createEvaluator.calculateEvaluationMeasures();
+                Double accuracy = results.get(Accuracy.class.getSimpleName());
 
                 System.out.println("\n\nAccuracy: " + String.format("%.1f percent\n", accuracy));
                 System.out
@@ -72,11 +72,19 @@ public class TtAccuracyReport
                                 + System.getProperty("DKPRO_HOME")
                                 + "\n"
                                 + "i.e.\t* ["
-                                + crfFolderName
+                                + subcontext.getId()
                                 + "]\n\t* ["
                                 + evaluationFolderName
                                 + "]");
             }
         }
+    }
+    
+    private String getLearningMode(String contextId, StorageService storageService)
+    {
+        return storageService
+        .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY,
+                new PropertiesAdapter())
+        .getMap().get(ExtractFeaturesTask.class.getName() + "|" + DIM_LEARNING_MODE);
     }
 }

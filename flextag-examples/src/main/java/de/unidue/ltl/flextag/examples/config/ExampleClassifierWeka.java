@@ -22,12 +22,14 @@ import static java.util.Arrays.asList;
 
 import java.util.List;
 
-import org.dkpro.tc.features.ngram.LuceneCharacterNGramUFE;
+import org.apache.uima.collection.CollectionReader;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
-import weka.classifiers.functions.SMO;
-import weka.classifiers.functions.supportVector.PolyKernel;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
+import weka.classifiers.functions.SMO;
+import weka.classifiers.functions.supportVector.PolyKernel;
 
 public class ExampleClassifierWeka
 {
@@ -45,7 +47,7 @@ public class ExampleClassifierWeka
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";
@@ -61,11 +63,9 @@ public class ExampleClassifierWeka
         }
         flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
-                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
-                false);
+        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         List<String> configuration = asList(new String[] { SMO.class.getName() });
         flex.setWekaClassifier(configuration);
@@ -78,7 +78,7 @@ public class ExampleClassifierWeka
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";
@@ -94,11 +94,9 @@ public class ExampleClassifierWeka
         }
         flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
-                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
-                false);
+        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         List<String> configuration = asList(new String[] { SMO.class.getName(), "-C", "1.0", "-K",
                 PolyKernel.class.getName() + " " + "-C -1 -E 2" });

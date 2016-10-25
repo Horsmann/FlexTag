@@ -26,18 +26,17 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.util.FeatureUtil;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.unidue.ltl.flextag.features.IsAllCapitalized;
 
 public class IsAllCapitalizedTest
 {
     JCas jcas;
-    TextClassificationUnit tokOne;
-    TextClassificationUnit tokTwo;
+    TextClassificationTarget tokOne;
+    TextClassificationTarget tokTwo;
 
     @Before
     public void setUp()
@@ -47,10 +46,10 @@ public class IsAllCapitalizedTest
         jcas.setDocumentLanguage("en");
         jcas.setDocumentText("Hi PETER");
 
-        tokOne = new TextClassificationUnit(jcas, 0, 2);
+        tokOne = new TextClassificationTarget(jcas, 0, 2);
         tokOne.addToIndexes();
 
-        tokTwo = new TextClassificationUnit(jcas, 3, 8);
+        tokTwo = new TextClassificationTarget(jcas, 3, 8);
         tokTwo.addToIndexes();
     }
 
@@ -58,8 +57,7 @@ public class IsAllCapitalizedTest
     public void testFirstToken()
         throws Exception
     {
-        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
-                new Object[] {});
+        IsAllCapitalized featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsAllCapitalized.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
 
         assertEquals(1, features.size());
@@ -74,8 +72,7 @@ public class IsAllCapitalizedTest
     public void testSecondToken()
         throws Exception
     {
-        IsAllCapitalized featureExtractor = FeatureUtil.createResource(IsAllCapitalized.class,
-                new Object[] {});
+        IsAllCapitalized featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsAllCapitalized.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
 
         assertEquals(1, features.size());

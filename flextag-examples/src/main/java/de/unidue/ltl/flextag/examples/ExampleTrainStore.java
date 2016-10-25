@@ -20,6 +20,9 @@ package de.unidue.ltl.flextag.examples;
 
 import java.io.File;
 
+import org.apache.uima.collection.CollectionReader;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
@@ -40,7 +43,7 @@ public class ExampleTrainStore
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String corpora = "src/main/resources/train/";
         String fileSuffix = "*.txt";
@@ -56,10 +59,8 @@ public class ExampleTrainStore
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(new String[] { BrownCluster.class.getName() },
-                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
-                false);
+        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                "src/main/resources/res/dummyBrownCluster.txt.gz"));
 
         flex.execute(false);
     }

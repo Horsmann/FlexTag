@@ -22,6 +22,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.uima.collection.CollectionReader;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.core.FlexTagUseModel;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -66,7 +69,7 @@ public class ExampleUseModel
         throws Exception
     {
         String language = "en";
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String corpora = "src/main/resources/train/";
         String fileSuffix = "*.txt";
@@ -74,10 +77,8 @@ public class ExampleUseModel
         FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
                 fileSuffix, new File(folder));
 
-        flex.setFeatures(new String[] { BrownCluster.class.getName() },
-                new Object[] { BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                        "src/main/resources/res/dummyBrownCluster.txt.gz" },
-                false);
+        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                "src/main/resources/res/dummyBrownCluster.txt.gz"));
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");

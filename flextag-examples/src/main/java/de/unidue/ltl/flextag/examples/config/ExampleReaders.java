@@ -18,6 +18,8 @@
  */
 package de.unidue.ltl.flextag.examples.config;
 
+import org.apache.uima.collection.CollectionReader;
+
 import de.tudarmstadt.ukp.dkpro.core.io.tei.TeiReader;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -38,7 +40,7 @@ public class ExampleReaders
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";

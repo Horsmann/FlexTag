@@ -33,10 +33,10 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceSpecifier;
 import org.dkpro.tc.api.exception.TextClassificationException;
-import org.dkpro.tc.api.features.ClassificationUnitFeatureExtractor;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.FeatureExtractor;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 
 /**
  * A feature extractor that uses a Brown cluster resource. We take the format of the resource as
@@ -44,7 +44,7 @@ import org.dkpro.tc.api.type.TextClassificationUnit;
  */
 public class BrownCluster
     extends FeatureExtractorResource_ImplBase
-    implements ClassificationUnitFeatureExtractor
+    implements FeatureExtractor
 {
     static final String FEATURE_NAME_16 = "brown16_";
     static final String FEATURE_NAME_14 = "brown14_";
@@ -88,10 +88,10 @@ public class BrownCluster
         return true;
     }
 
-    public Set<Feature> extract(JCas aJcas, TextClassificationUnit aClassificationUnit)
+    public Set<Feature> extract(JCas aJcas, TextClassificationTarget aTarget)
         throws TextClassificationException
     {
-        String unit = aClassificationUnit.getCoveredText();
+        String unit = aTarget.getCoveredText();
 
         if (lowerCase) {
             unit = unit.toLowerCase();

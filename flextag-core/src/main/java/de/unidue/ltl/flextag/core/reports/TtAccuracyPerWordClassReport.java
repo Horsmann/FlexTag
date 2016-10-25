@@ -30,7 +30,7 @@ import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.crfsuite.task.CRFSuiteTestTask;
+import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 
 /**
  * Determines the accuracy for each word class
@@ -44,10 +44,9 @@ public class TtAccuracyPerWordClassReport
     public void execute()
         throws Exception
     {
-
+        StorageService storageService = getContext().getStorageService();
         for (TaskContextMetadata subcontext : getSubtasks()) {
-            if (subcontext.getType().contains(CRFSuiteTestTask.class.getName())) {
-                StorageService storageService = getContext().getStorageService();
+            if (TcTaskTypeUtil.isMachineLearningAdapterTask(storageService, subcontext.getId())) {
                 File locateKey = storageService.locateKey(subcontext.getId(),
                         Constants.ID_OUTCOME_KEY);
 

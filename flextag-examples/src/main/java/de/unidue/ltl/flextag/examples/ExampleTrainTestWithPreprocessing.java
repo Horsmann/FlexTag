@@ -20,8 +20,10 @@ package de.unidue.ltl.flextag.examples;
 
 import java.io.File;
 
+import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.dkpro.tc.features.ngram.LuceneCharacterNGramUFE;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
@@ -46,7 +48,7 @@ public class ExampleTrainTestWithPreprocessing
     {
         String language = "en";
 
-        Class<?> reader = TextReader.class;
+        Class<? extends CollectionReader> reader = TextReader.class;
 
         String corpora = "src/main/resources/raw/";
         String fileSuffix = "*.txt";
@@ -59,11 +61,9 @@ public class ExampleTrainTestWithPreprocessing
         }
         flex.setExperimentName("FlexTest");
 
-        flex.setFeatures(new String[] { LuceneCharacterNGramUFE.class.getName() },
-                new Object[] { LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 50 },
-                false);
+        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
+                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         flex.setPreprocessing(
                 AnalysisEngineFactory.createEngineDescription(BreakIteratorSegmenter.class),

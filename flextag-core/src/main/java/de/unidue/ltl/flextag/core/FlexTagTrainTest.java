@@ -18,14 +18,16 @@
 package de.unidue.ltl.flextag.core;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentTrainTest;
 
 import de.unidue.ltl.flextag.core.reports.TtAccuracyPerWordClassReport;
@@ -35,12 +37,12 @@ import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 public class FlexTagTrainTest
     extends FlexTagSetUp
 {
-    private Class<?> testReader;
+    private Class<? extends CollectionReader> testReader;
     private String testDataFolder;
     private String testFileSuffix;
     private String posTestingMappingLocation;
 
-    public FlexTagTrainTest(String language, Class<?> reader, String trainDataFolder,
+    public FlexTagTrainTest(String language, Class<? extends CollectionReader> reader, String trainDataFolder,
             String trainFileSuffix, String testDataFolder, String testFileSuffix)
     {
         super(language, reader, trainDataFolder, trainFileSuffix);
@@ -49,8 +51,7 @@ public class FlexTagTrainTest
         this.testDataFolder = testDataFolder;
         this.testFileSuffix = testFileSuffix;
 
-        this.featureNames = DefaultFeatures.getDefaultFeatures();
-        this.featureParameters = DefaultFeatures.getDefaultFeatureParameter();
+        this.features = DefaultFeatures.getDefaultFeatures();
     }
 
     /**
@@ -59,19 +60,16 @@ public class FlexTagTrainTest
      * 
      * @param reader
      */
-    public void setTestReader(Class<?> reader)
+    public void setTestReader(Class<? extends CollectionReader> reader)
     {
         testReader = reader;
     }
 
-    private Map<String, Object> wrapReaders()
+    private Map<String, Object> wrapReaders() throws ResourceInitializationException
     {
         Map<String, Object> dimReaders = new HashMap<String, Object>();
-        dimReaders = wrapReader(dimReaders, DIM_READER_TRAIN, reader, DIM_READER_TRAIN_PARAMS,
-                dataFolder, fileSuffix, posMappingLocation);
-
-        dimReaders = wrapReader(dimReaders, DIM_READER_TEST, testReader, DIM_READER_TEST_PARAMS,
-                testDataFolder, testFileSuffix, posTestingMappingLocation);
+        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
+        dimReaders.put(DIM_READER_TEST, createReader(testReader, testDataFolder, testFileSuffix, posTestingMappingLocation));
 
         return dimReaders;
     }
@@ -94,10 +92,9 @@ public class FlexTagTrainTest
     {
 
         Map<String, Object> dimReaders = wrapReaders();
-        Dimension<List<String>> dimFeatureSets = wrapFeatures();
-        Dimension<List<Object>> dimPipelineParameters = wrapFeatureParameters();
+        Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
-        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets, dimPipelineParameters);
+        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
         
         ExperimentTrainTest batch = new ExperimentTrainTest(experimentName, getClassifier());
         batch.setParameterSpace(pSpace);

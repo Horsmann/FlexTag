@@ -18,10 +18,14 @@
  */
 package de.unidue.ltl.flextag.examples.config;
 
+import java.util.Arrays;
+
+import org.apache.uima.collection.CollectionReader;
 import org.dkpro.lab.task.Dimension;
-import org.dkpro.tc.features.length.NrOfCharsUFE;
-import org.dkpro.tc.svmhmm.task.SVMHMMTestTask;
-import org.dkpro.tc.svmhmm.util.OriginalTextHolderFeatureExtractor;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.core.Constants;
+import org.dkpro.tc.features.ngram.LuceneNGram;
+import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -39,7 +43,7 @@ public class ExampleClassifierSvmHmm
     {
         String language = "en";
 
-        Class<?> reader = LineTokenTagReader.class;
+        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
 
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";
@@ -58,26 +62,11 @@ public class ExampleClassifierSvmHmm
         // SvmHmm does not support String value feature, some of the provided feature do use string
         // values. Please be aware that a feature space which works for classifier A does not
         // necessarily work for classifier B
-        flex.setFeatures(new String[] { NrOfCharsUFE.class.getName(),
+        flex.setFeatures(true, TcFeatureFactory.create(LuceneNGram.class), TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
 
-                // This feature is required by SvmHmm to be present
-                OriginalTextHolderFeatureExtractor.class.getName()
-
-        }, new String[] {}, true);
-
-        Dimension<Double> dimClassificationArgsC = Dimension.create(SVMHMMTestTask.PARAM_C, 1.0,
-                5.0);
-
-        // various orders of dependencies of transitions in HMM (max 3)
-        Dimension<Integer> dimClassificationArgsT = Dimension.create(SVMHMMTestTask.PARAM_ORDER_T,
-                1);
-
-        // various orders of dependencies of emissions in HMM (max 1)
-        Dimension<Integer> dimClassificationArgsE = Dimension.create(SVMHMMTestTask.PARAM_ORDER_E,
-                0);
-
-        flex.setSvmHmmClassifier(dimClassificationArgsC, dimClassificationArgsT,
-                dimClassificationArgsE);
+        
+        Dimension<Object> dimClassificationArgs = Dimension.create(Constants.DIM_CLASSIFICATION_ARGS, Arrays.asList("-c", "5.0", "-t", "2"));
+        flex.setSvmHmmClassifier(dimClassificationArgs);
 
         flex.execute(false);
     }

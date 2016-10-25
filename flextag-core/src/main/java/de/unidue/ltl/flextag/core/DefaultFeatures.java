@@ -17,37 +17,31 @@
  ******************************************************************************/
 package de.unidue.ltl.flextag.core;
 
-import org.dkpro.tc.features.ngram.LuceneCharacterNGramUFE;
-import org.dkpro.tc.features.tcu.CurrentUnit;
-import org.dkpro.tc.features.tcu.NextUnit;
-import org.dkpro.tc.features.tcu.PrevUnit;
+import static org.dkpro.tc.api.features.TcFeatureFactory.create;
+import org.dkpro.tc.api.features.TcFeatureSet;
+import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
+import org.dkpro.tc.features.tcu.TargetSurfaceFormContextFeature;
 
 import de.unidue.ltl.flextag.features.IsFirstLetterCapitalized;
 
 public class DefaultFeatures
 {
-    
-    public static String[] getDefaultFeatures(){
-        return new String [] {
-                // Context features
-                PrevUnit.class.getName(), CurrentUnit.class.getName(), NextUnit.class.getName(),
-                
-                // boolean features
-                IsFirstLetterCapitalized.class.getName(),
-                
-                // character ngrams - uses default values for min N, max N and top N char ngrams used
-                LuceneCharacterNGramUFE.class.getName()
-        };
-    }
 
-    public static Object [] getDefaultFeatureParameter()
+    public static TcFeatureSet getDefaultFeatures()
     {
-        return new Object [] {
-                // We override the default configuration here
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MIN_N, 2,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_MAX_N, 4,
-                LuceneCharacterNGramUFE.PARAM_CHAR_NGRAM_USE_TOP_K, 750 
-        };
-    }
+        TcFeatureSet set = new TcFeatureSet();
 
+        set.add(create(TargetSurfaceFormContextFeature.class,
+                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, -1));
+        set.add(create(TargetSurfaceFormContextFeature.class,
+                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, 0));
+        set.add(create(TargetSurfaceFormContextFeature.class,
+                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, +1));
+        set.add(create(IsFirstLetterCapitalized.class));
+        set.add(create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
+        
+        return set;
+    }
 }

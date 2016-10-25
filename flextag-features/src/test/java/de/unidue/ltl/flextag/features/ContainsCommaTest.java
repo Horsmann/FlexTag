@@ -26,8 +26,9 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.util.FeatureUtil;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,18 +37,18 @@ import de.unidue.ltl.flextag.features.ContainsComma;
 public class ContainsCommaTest
 {
     JCas jcas;
-    TextClassificationUnit tokOne;
-    TextClassificationUnit tokTwo;
+    TextClassificationTarget tokOne;
+    TextClassificationTarget tokTwo;
     @Before
     public void setUp() throws UIMAException {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
         jcas.setDocumentText("hi @T,ixi");
         
-        tokOne = new TextClassificationUnit(jcas,0,2);
+        tokOne = new TextClassificationTarget(jcas,0,2);
         tokOne.addToIndexes();
         
-        tokTwo = new TextClassificationUnit(jcas,3,9);
+        tokTwo = new TextClassificationTarget(jcas,3,9);
         tokTwo.addToIndexes();
     }
     
@@ -55,7 +56,7 @@ public class ContainsCommaTest
     public void testFirstToken()
         throws Exception
     {
-        ContainsComma featureExtractor = FeatureUtil.createResource(ContainsComma.class, new Object [] {});
+        ContainsComma featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(ContainsComma.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
         
         assertEquals(1, features.size());
@@ -70,7 +71,7 @@ public class ContainsCommaTest
     public void testSecondToken()
         throws Exception
     {
-        ContainsComma featureExtractor = FeatureUtil.createResource(ContainsComma.class, new Object [] {});
+        ContainsComma featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(ContainsComma.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
         
         assertEquals(1, features.size());

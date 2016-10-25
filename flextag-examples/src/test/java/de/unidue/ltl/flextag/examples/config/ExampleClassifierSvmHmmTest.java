@@ -23,7 +23,7 @@ import org.junit.Test;
 public class ExampleClassifierSvmHmmTest
 {
     @Test
-    public void testCrfsuite() throws Exception
+    public void testSvmHmm() throws Exception
     {
         new ExampleClassifierSvmHmm().run();
     }

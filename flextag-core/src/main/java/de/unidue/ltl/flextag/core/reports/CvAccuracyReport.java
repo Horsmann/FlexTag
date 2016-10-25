@@ -18,19 +18,23 @@
 package de.unidue.ltl.flextag.core.reports;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
+import org.dkpro.lab.storage.impl.PropertiesAdapter;
+import org.dkpro.lab.task.Task;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.core.util.ReportConstants;
-import org.dkpro.tc.crfsuite.task.CRFSuiteTestTask;
-import org.dkpro.tc.ml.ExperimentCrossValidation;
+import org.dkpro.tc.core.task.ExtractFeaturesTask;
+import org.dkpro.tc.evaluation.Id2Outcome;
+import org.dkpro.tc.evaluation.evaluator.EvaluatorBase;
+import org.dkpro.tc.evaluation.evaluator.EvaluatorFactory;
+import org.dkpro.tc.evaluation.measures.label.Accuracy;
+import org.dkpro.tc.ml.crfsuite.task.CRFSuiteTestTask;
+import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 
 /**
  * This report only prints sysout messages to point the user to the ouput directory which is used to
@@ -44,47 +48,58 @@ public class CvAccuracyReport
     public void execute()
         throws Exception
     {
-        
+        StorageService storageService = getContext().getStorageService();
         for (TaskContextMetadata subcontext : getSubtasks()) {
-            if (subcontext.getType().contains(ExperimentCrossValidation.class.getSimpleName())) {
-                StorageService storageService = getContext().getStorageService();
-                File properties = storageService.locateKey(subcontext.getId(), "PROPERTIES.txt");
-                List<String> foldersOfSingleRuns = getFoldersOfSingleRuns(properties);
-                
+            if (TcTaskTypeUtil.isCrossValidationTask(storageService, subcontext.getId())) {
+                File attributes = storageService.locateKey(subcontext.getId(), "ATTRIBUTES.txt");
+                List<String> foldersOfSingleRuns = getFoldersOfSingleRuns(attributes);
+
                 Double sumAcc = 0.0;
-                for(String folder : foldersOfSingleRuns){
-                    File file = storageService.locateKey(folder, Constants.RESULTS_FILENAME);
-                    Properties p = new Properties();
-                    p.load(new FileInputStream(file));
-                    String property = p.getProperty(ReportConstants.PCT_CORRECT);
-                    Double runAcc = Double.valueOf(property);
-                    sumAcc +=runAcc;
+                for (String folder : foldersOfSingleRuns) {
+
+                    File id2outcomeFile = storageService.locateKey(folder,
+                            Constants.ID_OUTCOME_KEY);
+                    String learningMode = getLearningMode(folder, storageService);
+                    Id2Outcome o = new Id2Outcome(id2outcomeFile, learningMode);
+                    EvaluatorBase createEvaluator = EvaluatorFactory.createEvaluator(o, true,
+                            false);
+
+                    Double accuracy = createEvaluator.calculateEvaluationMeasures()
+                            .get(Accuracy.class.getSimpleName());
+                    sumAcc += accuracy;
                 }
-                
+
                 Double average = sumAcc / foldersOfSingleRuns.size();
-                
+
                 System.out.println("\nAverage accuracy over all folds: "
-                        + String.format("%.1f percent\n", average*100));
+                        + String.format("%.1f percent\n", average * 100));
                 System.out.println("Many more results are provided in the DKPRO_HOME folder ["
                         + System.getProperty("DKPRO_HOME") + "]\nin the folder ["
                         + getContext().getId() + "]");
             }
         }
-        
-        
-}
-    
-    private List<String> getFoldersOfSingleRuns(File propertiesTXT)
-            throws Exception {
-        List<String> readLines = FileUtils.readLines(propertiesTXT);
+
+    }
+
+    private String getLearningMode(String contextId, StorageService storageService)
+    {
+        return storageService
+                .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY,
+                        new PropertiesAdapter())
+                .getMap().get(ExtractFeaturesTask.class.getName() + "|" + DIM_LEARNING_MODE);
+    }
+
+    private List<String> getFoldersOfSingleRuns(File attributesTXT)
+        throws Exception
+    {
+        List<String> readLines = FileUtils.readLines(attributesTXT);
 
         int idx = 0;
         for (String line : readLines) {
-            if (line.startsWith("#")) {
-                idx++;
-                continue;
+            if (line.startsWith("Subtask")) {
+                break;
             }
-            break;
+            idx++;
         }
         String line = readLines.get(idx);
         int start = line.indexOf("[");

@@ -37,6 +37,12 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<repositories>
+	<repository>
+  			<id>releaseRep</id>
+  			<url>https://oss.sonatype.org/content/repositories/orgdkpro-1024</url>
+  		</repository>
+  		</repositories>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -466,7 +472,7 @@
 	  <tag>HEAD</tag>
   </scm>
 	<properties>
-		<dkpro.tc.version>0.8.0</dkpro.tc.version>
+		<dkpro.tc.version>0.9.0</dkpro.tc.version>
 		<dkpro.core.version>1.8.0</dkpro.core.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>

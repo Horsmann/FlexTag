@@ -25,15 +25,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.features.TcFeature;
+import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
-import org.dkpro.tc.crfsuite.CRFSuiteAdapter;
-import org.dkpro.tc.svmhmm.SVMHMMAdapter;
-import org.dkpro.tc.weka.WekaClassificationAdapter;
+import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
+import org.dkpro.tc.ml.svmhmm.SVMHMMAdapter;
+import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
 
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
@@ -43,10 +48,9 @@ public abstract class FlexTagSetUp
 {
     protected String experimentName = "FlexTag";
     protected String language;
-    protected String[] featureNames;
-    protected Object[] featureParameters;
+    protected TcFeatureSet features;
 
-    protected Class<?> reader;
+    protected Class<? extends CollectionReader> reader;
     protected String dataFolder;
     protected String fileSuffix;
 
@@ -54,9 +58,9 @@ public abstract class FlexTagSetUp
     protected AnalysisEngineDescription[] userPreprocessing;
 
     protected FlexTagMachineLearningAdapter classifier;
-    protected List<Dimension<?>> classificationArgs;
+    protected Dimension<?> dimClassificationArgs;
 
-    public FlexTagSetUp(String language, Class<?> reader, String dataFolder, String fileSuffix)
+    public FlexTagSetUp(String language, Class<? extends CollectionReader> reader, String dataFolder, String fileSuffix)
     {
         this.language = language;
 
@@ -64,22 +68,17 @@ public abstract class FlexTagSetUp
         this.dataFolder = dataFolder;
         this.fileSuffix = fileSuffix;
 
-        this.featureNames = DefaultFeatures.getDefaultFeatures();
-        this.featureParameters = DefaultFeatures.getDefaultFeatureParameter();
+        this.features = DefaultFeatures.getDefaultFeatures();
 
         this.classifier = FlexTagMachineLearningAdapter.CRFSUITE;
-        this.classificationArgs = setCrfsuiteDefaultClassificationArgs();
+        this.dimClassificationArgs = setCrfsuiteDefaultClassificationArgs();
     }
 
     @SuppressWarnings("unchecked")
-    private List<Dimension<?>> setCrfsuiteDefaultClassificationArgs()
+    private Dimension<?> setCrfsuiteDefaultClassificationArgs()
     {
-        List<Dimension<?>> dims = new ArrayList<>();
-
-        dims.add(Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
-                CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR })));
-
-        return dims;
+        return Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
+                CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
     }
 
     /**
@@ -91,16 +90,15 @@ public abstract class FlexTagSetUp
      * @param featureParameters
      * @param useDefaultFeatures
      */
-    public void setFeatures(String[] features, Object[] featureParameters,
-            boolean useDefaultFeatures)
+    public void setFeatures(boolean useDefaultFeatures, TcFeature... features)
     {
         if (useDefaultFeatures) {
-            addNewFeaturesToTheDefaultFeatures(features);
-            addNewFeatureParameterToTheDefaultFeatures(featureParameters);
+            for(TcFeature tf : features){
+                this.features.add(tf);
+            }
         }
         else {
-            this.featureNames = features;
-            this.featureParameters = featureParameters;
+            this.features = new TcFeatureSet(features);
         }
     }
 
@@ -113,24 +111,6 @@ public abstract class FlexTagSetUp
     public void setExperimentName(String experimentName)
     {
         this.experimentName = experimentName;
-    }
-
-    private void addNewFeatureParameterToTheDefaultFeatures(Object[] featureParameters)
-    {
-        List<Object> param = new ArrayList<Object>(
-                Arrays.asList(DefaultFeatures.getDefaultFeatureParameter()));
-        ArrayList<Object> newParameters = new ArrayList<Object>(Arrays.asList(featureParameters));
-        param.addAll(newParameters);
-        this.featureParameters = param.toArray(new Object[0]);
-    }
-
-    private void addNewFeaturesToTheDefaultFeatures(String[] features)
-    {
-        List<String> feat = new ArrayList<String>(
-                Arrays.asList(DefaultFeatures.getDefaultFeatures()));
-        List<String> newFeatures = new ArrayList<String>(Arrays.asList(features));
-        feat.addAll(newFeatures);
-        this.featureNames = feat.toArray(new String[0]);
     }
 
     /**
@@ -154,12 +134,9 @@ public abstract class FlexTagSetUp
         this.posMappingLocation = posMappingLocation;
     }
 
-    protected Map<String, Object> wrapReader(Map<String, Object> dim, String dimReader,
-            Class<?> reader, String dimReaderParm, String dataFolder, String fileSuffix,
-            String posMappingLocation)
+    protected CollectionReaderDescription createReader(Class<? extends CollectionReader> reader, String dataFolder, String fileSuffix,
+            String posMappingLocation) throws ResourceInitializationException
     {
-        dim.put(dimReader, reader);
-
         List<Object> readerParam = Arrays.asList(ComponentParameters.PARAM_LANGUAGE, language,
                 ComponentParameters.PARAM_SOURCE_LOCATION, dataFolder,
                 ComponentParameters.PARAM_PATTERNS, fileSuffix);
@@ -167,46 +144,23 @@ public abstract class FlexTagSetUp
             readerParam.add(ComponentParameters.PARAM_POS_MAPPING_LOCATION);
             readerParam.add(posMappingLocation);
         }
-        dim.put(dimReaderParm, readerParam);
-
-        return dim;
+        
+        CollectionReaderDescription crd = CollectionReaderFactory.createReaderDescription(reader, readerParam.toArray());
+        return crd;
     }
 
-    @SuppressWarnings("unchecked")
-    protected Dimension<List<Object>> wrapFeatureParameters()
+    protected Dimension<TcFeatureSet> wrapFeatures()
     {
-        return Dimension.create(DIM_PIPELINE_PARAMS, Arrays.asList(featureParameters));
-    }
-
-    @SuppressWarnings("unchecked")
-    protected Dimension<List<String>> wrapFeatures()
-    {
-        return Dimension.create(DIM_FEATURE_SET, Arrays.asList(featureNames));
+        return Dimension.create(DIM_FEATURE_SET, features);
     }
 
     protected ParameterSpace assembleParameterSpace(Map<String, Object> dimReaders,
-            Dimension<List<String>> dimFeatureSets, Dimension<List<Object>> dimPipelineParameters)
+            Dimension<TcFeatureSet> dimFeatureSets)
     {
-        switch (classifier) {
-        case SVMHMM: {
-            Dimension<?> dimClassificationArgsC = classificationArgs.get(0);
-            Dimension<?> dimClassificationArgsT = classificationArgs.get(1);
-            Dimension<?> dimClassificationArgsE = classificationArgs.get(2);
             return new ParameterSpace(Dimension.createBundle("readers", dimReaders),
                     Dimension.create(DIM_LEARNING_MODE, Constants.LM_SINGLE_LABEL),
-                    Dimension.create(DIM_FEATURE_MODE, Constants.FM_SEQUENCE),
-                    dimPipelineParameters, dimFeatureSets, dimClassificationArgsC,
-                    dimClassificationArgsT, dimClassificationArgsE);
-        }
-        default: {
-            Dimension<?> dimClassificationArgs = classificationArgs.get(0);
-            return new ParameterSpace(Dimension.createBundle("readers", dimReaders),
-                    Dimension.create(DIM_LEARNING_MODE, Constants.LM_SINGLE_LABEL),
-                    Dimension.create(DIM_FEATURE_MODE, Constants.FM_SEQUENCE),
-                    dimPipelineParameters, dimFeatureSets, dimClassificationArgs);
-        }
-
-        }
+                    Dimension.create(DIM_FEATURE_MODE, Constants.FM_SEQUENCE), dimFeatureSets,
+                    dimClassificationArgs);
     }
 
     protected Class<? extends TCMachineLearningAdapter> getClassifier()
@@ -231,34 +185,24 @@ public abstract class FlexTagSetUp
         this.classifier = classifier;
     }
 
-    public void setSvmHmmClassifier(Dimension<Double> dimClassificationArgsC,
-            Dimension<Integer> dimClassificationArgsT, Dimension<Integer> dimClassificationArgsE)
+    public void setSvmHmmClassifier(Dimension<Object> dimClassificationArgs)
     {
         classifier = FlexTagMachineLearningAdapter.SVMHMM;
-
-        classificationArgs = new ArrayList<>();
-        classificationArgs.add(dimClassificationArgsC);
-        classificationArgs.add(dimClassificationArgsT);
-        classificationArgs.add(dimClassificationArgsE);
+        this.dimClassificationArgs = dimClassificationArgs;
     }
 
     @SuppressWarnings("unchecked")
     public void setCrfsuiteClassifier(String algorithm)
     {
         classifier = FlexTagMachineLearningAdapter.CRFSUITE;
-
-        classificationArgs = new ArrayList<>();
-        classificationArgs
-                .add(Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] { algorithm })));
+        dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] { algorithm }));
     }
 
     @SuppressWarnings("unchecked")
     public void setWekaClassifier(List<String> args)
     {
         classifier = FlexTagMachineLearningAdapter.WEKA;
-        classificationArgs = new ArrayList<>();
-        classificationArgs.add(Dimension.create(DIM_CLASSIFICATION_ARGS, args));
-
+        dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, args);
     }
 
     /**
@@ -272,11 +216,11 @@ public abstract class FlexTagSetUp
         throws ResourceInitializationException
     {
         List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
-        
+
         if (userPreprocessing != null) {
             preprocessing.addAll(Arrays.asList(userPreprocessing));
         }
-        
+
         preprocessing.add(AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
                 TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
 

@@ -18,14 +18,15 @@
 package de.unidue.ltl.flextag.core;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.report.BatchCrossValidationReport;
 
@@ -37,7 +38,7 @@ public class FlexTagCrossValidation
 {
     private int numberOfFolds;
 
-    public FlexTagCrossValidation(String language, Class<?> reader, String dataFolder,
+    public FlexTagCrossValidation(String language, Class<? extends CollectionReader> reader, String dataFolder,
             String fileSuffix, int numberOfFolds)
     {
         super(language, reader, dataFolder, fileSuffix);
@@ -49,13 +50,11 @@ public class FlexTagCrossValidation
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<>();
-        dimReaders = wrapReader(dimReaders, DIM_READER_TRAIN, reader, DIM_READER_TRAIN_PARAMS,
-                dataFolder, fileSuffix, posMappingLocation);
-        Dimension<List<String>> dimFeatureSets = wrapFeatures();
-        Dimension<List<Object>> dimPipelineParameters = wrapFeatureParameters();
+        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
+        
+        Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
-        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets,
-                dimPipelineParameters);
+        ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
         ExperimentCrossValidation batch = new ExperimentCrossValidation(experimentName,
                 getClassifier(), numberOfFolds);

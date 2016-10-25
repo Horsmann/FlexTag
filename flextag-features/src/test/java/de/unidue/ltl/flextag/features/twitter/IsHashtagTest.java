@@ -26,18 +26,17 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.util.FeatureUtil;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.unidue.ltl.flextag.features.twitter.IsHashtag;
 
 public class IsHashtagTest
 {
     JCas jcas;
-    TextClassificationUnit tokOne;
-    TextClassificationUnit tokTwo;
+    TextClassificationTarget tokOne;
+    TextClassificationTarget tokTwo;
 
     @Before
     public void setUp()
@@ -47,10 +46,10 @@ public class IsHashtagTest
         jcas.setDocumentLanguage("en");
         jcas.setDocumentText("hi #Trixi");
 
-        tokOne = new TextClassificationUnit(jcas, 0, 2);
+        tokOne = new TextClassificationTarget(jcas, 0, 2);
         tokOne.addToIndexes();
 
-        tokTwo = new TextClassificationUnit(jcas, 3, 9);
+        tokTwo = new TextClassificationTarget(jcas, 3, 9);
         tokTwo.addToIndexes();
     }
 
@@ -58,7 +57,7 @@ public class IsHashtagTest
     public void testFirstToken()
         throws Exception
     {
-        IsHashtag featureExtractor = FeatureUtil.createResource(IsHashtag.class, new Object[] {});
+        IsHashtag featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsHashtag.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
 
         assertEquals(1, features.size());
@@ -73,7 +72,7 @@ public class IsHashtagTest
     public void testSecondToken()
         throws Exception
     {
-        IsHashtag featureExtractor = FeatureUtil.createResource(IsHashtag.class, new Object[] {});
+        IsHashtag featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsHashtag.class));
         List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
 
         assertEquals(1, features.size());

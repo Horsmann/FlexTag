@@ -26,7 +26,7 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.dkpro.tc.api.type.TextClassificationOutcome;
 import org.dkpro.tc.api.type.TextClassificationSequence;
-import org.dkpro.tc.api.type.TextClassificationUnit;
+import org.dkpro.tc.api.type.TextClassificationTarget;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
@@ -53,24 +53,24 @@ public class TcPosTaggingWrapper
             List<Token> tokens = JCasUtil.selectCovered(aJCas, Token.class, sent);
 
             for (Token token : tokens) {
-                TextClassificationUnit unit = new TextClassificationUnit(aJCas, token.getBegin(),
+                TextClassificationTarget target = new TextClassificationTarget(aJCas, token.getBegin(),
                         token.getEnd());
-                unit.setId(tcId++);
-                unit.setSuffix(token.getCoveredText());
-                unit.addToIndexes();
+                target.setId(tcId++);
+                target.setSuffix(token.getCoveredText());
+                target.addToIndexes();
 
                 TextClassificationOutcome outcome = new TextClassificationOutcome(aJCas,
                         token.getBegin(), token.getEnd());
-                outcome.setOutcome(getTextClassificationOutcome(aJCas, unit));
+                outcome.setOutcome(getTextClassificationOutcome(aJCas, target));
                 outcome.addToIndexes();
             }
 
         }
     }
 
-    public String getTextClassificationOutcome(JCas jcas, TextClassificationUnit unit)
+    public String getTextClassificationOutcome(JCas jcas, TextClassificationTarget target)
     {
-        List<POS> posList = JCasUtil.selectCovered(jcas, POS.class, unit);
+        List<POS> posList = JCasUtil.selectCovered(jcas, POS.class, target);
 
         String outcome = "";
         if (useCoarseGrained) {
