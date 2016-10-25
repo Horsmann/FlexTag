@@ -23,30 +23,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.unidue.ltl.flextag</groupId>
-		<artifactId>FlexTag</artifactId>
+		<artifactId>flextag</artifactId>
 		<version>0.2.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>flextag-examples</artifactId>
 	<name>FlexTag - Examples</name>
 	<dependencies>
-		<dependency>
-			<groupId>org.dkpro.tc</groupId>
-			<artifactId>dkpro-tc-features</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.tc</groupId>
-			<artifactId>dkpro-tc-features-ngram</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.lab</groupId>
-			<artifactId>dkpro-lab-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-  			de.tudarmstadt.ukp.dkpro.core.api.parameter-asl
-  		</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
 			<artifactId>flextag-core</artifactId>
@@ -55,10 +37,15 @@
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl
+			</artifactId>
+		</dependency>				
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
   			de.tudarmstadt.ukp.dkpro.core.io.tei-asl
   		</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>
@@ -100,6 +87,12 @@
 			</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.io.text-asl
+			</artifactId>
+		</dependency>		
+		<dependency>
 			<groupId>org.apache.uima</groupId>
 			<artifactId>uimafit-core</artifactId>
 		</dependency>
@@ -117,26 +110,26 @@
 			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-				de.tudarmstadt.ukp.dkpro.core.io.text-asl
-			</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>de.unidue.ltl.flextag</groupId>
 			<artifactId>flextag-features</artifactId>
 			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.meka</groupId>
-			<artifactId>meka</artifactId>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-api-features</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-				de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl
-			</artifactId>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-features</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-features-ngram</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-ml-svmhmm</artifactId>
+		</dependency>		
 	</dependencies>
 	<properties>
 		<!-- This module should not be deployed to the repository -->
