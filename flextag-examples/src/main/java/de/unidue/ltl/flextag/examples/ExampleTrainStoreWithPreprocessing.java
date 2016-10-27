@@ -36,12 +36,12 @@ import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
  * file which is first segemented and than tagged with the Stanford tagger during preprocessing. The
  * Stanford prediction are used as gold labels for training our own model
  */
-public class ExampleTrainTestWithPreprocessing
+public class ExampleTrainStoreWithPreprocessing
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleTrainTestWithPreprocessing().run();
+        new ExampleTrainStoreWithPreprocessing().run();
     }
 
     public void run()

@@ -26,7 +26,7 @@ public class ExampleTrainTestPreprocessingTest
     public void runExample()
         throws Exception
     {
-        new ExampleTrainTestWithPreprocessing().run();
+        new ExampleTrainStoreWithPreprocessing().run();
     }
 
 }

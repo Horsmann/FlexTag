@@ -99,9 +99,6 @@ public class FlexTagTrainTest
         //configure
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.addReport(BatchTrainTestReport.class);
-        batch.addReport(TtAccuracyReport.class);
-        batch.addReport(TtAccuracyPerWordClassReport.class);
         batch.setPreprocessing(
                 AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
                         TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
