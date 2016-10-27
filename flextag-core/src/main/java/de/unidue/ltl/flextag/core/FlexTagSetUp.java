@@ -56,7 +56,7 @@ public abstract class FlexTagSetUp
     protected String posMappingLocation;
     protected AnalysisEngineDescription[] userPreprocessing;
 
-    protected FlexTagMachineLearningAdapter classifier;
+    protected Classifier classifier;
     protected Dimension<?> dimClassificationArgs;
     
     boolean useCoarse = false;
@@ -67,12 +67,12 @@ public abstract class FlexTagSetUp
 
         this.features = DefaultFeatures.getDefaultFeatures();
 
-        this.classifier = FlexTagMachineLearningAdapter.CRFSUITE;
-        this.dimClassificationArgs = setCrfsuiteDefaultClassificationArgs();
+        this.classifier = Classifier.CRFSUITE;
+        this.dimClassificationArgs = setDefaultCrfClassifier();
     }
 
     @SuppressWarnings("unchecked")
-    private Dimension<?> setCrfsuiteDefaultClassificationArgs()
+    private Dimension<?> setDefaultCrfClassifier()
     {
         return Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
                 CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
@@ -141,19 +141,6 @@ public abstract class FlexTagSetUp
         System.setProperty("DKPRO_HOME", home);
     }
 
-    /**
-     * Specifies a mapping of the part-of-speech tags found in the training data to the main word
-     * classes as defined in the DKPro framework (e.g. noun, verb, adjective). This mapping enables
-     * it to remove fine-grained word class distinctions without having to edit the training data.
-     * If this mapping is not provided a default mapping based on the provided language is loaded
-     * instead.
-     */
-    public void setTrainingPosMappingLocation(String posMappingLocation)
-    {
-        this.posMappingLocation = posMappingLocation;
-    }
-
-
     protected Dimension<TcFeatureSet> wrapFeatures()
     {
         return Dimension.create(DIM_FEATURE_SET, features);
@@ -189,7 +176,7 @@ public abstract class FlexTagSetUp
     }
 
     @SuppressWarnings("unchecked")
-    public void setMachineLearningClassifier(FlexTagMachineLearningAdapter classifier,
+    public void setClassifier(Classifier classifier,
             List<Object> dimClassificationArgs)
     {
         this.classifier = classifier;

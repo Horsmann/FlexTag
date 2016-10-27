@@ -27,7 +27,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
-import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -76,7 +76,7 @@ public class ExampleClassifierWeka
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         List<Object> configuration = asList(new Object[] { SMO.class.getName() });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
+        flex.setClassifier(Classifier.WEKA, configuration);
 
         flex.execute();
     }
@@ -113,7 +113,7 @@ public class ExampleClassifierWeka
 
         List<Object> configuration = asList(new Object[] { SMO.class.getName(), "-C", "1.0", "-K",
                 PolyKernel.class.getName() + " " + "-C -1 -E 2" });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
+        flex.setClassifier(Classifier.WEKA, configuration);
 
         flex.execute();
     }

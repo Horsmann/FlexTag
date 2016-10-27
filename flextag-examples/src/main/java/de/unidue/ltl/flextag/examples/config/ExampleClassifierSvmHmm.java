@@ -27,7 +27,7 @@ import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.features.ngram.LuceneNGram;
 import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
 
-import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -74,7 +74,7 @@ public class ExampleClassifierSvmHmm
 
         
         List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.SVMHMM, classificationArgs);
+        flex.setClassifier(Classifier.SVMHMM, classificationArgs);
 
         flex.execute();
     }

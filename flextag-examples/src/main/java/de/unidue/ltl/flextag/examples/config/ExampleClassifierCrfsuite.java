@@ -27,7 +27,7 @@ import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 
-import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -72,7 +72,7 @@ public class ExampleClassifierCrfsuite
         // CRFSuite defines various algorithm to use for training which are defined over the
         // CRFSuiteAdapter constant. Some are slow on large data sets
         List<Object> classificationArgs = Arrays.asList(CRFSuiteAdapter.ALGORITHM_AVERAGED_PERCEPTRON);
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.CRFSUITE, classificationArgs);
+        flex.setClassifier(Classifier.CRFSUITE, classificationArgs);
         flex.execute();
     }
 

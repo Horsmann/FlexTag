@@ -29,7 +29,7 @@ import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
-import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -81,7 +81,7 @@ public class ExampleClassifierLibsvm
         List<Object> configuration = asList(
                 new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS });
 
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
+        flex.setClassifier(Classifier.LIBSVM, configuration);
 
         flex.execute();
     }
@@ -123,7 +123,7 @@ public class ExampleClassifierLibsvm
         List<Object> configuration = asList(
                 new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS, "-c", "1000",
                         "-t", LibsvmAdapter.PARAM_KERNEL_RADIAL_BASED });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
+        flex.setClassifier(Classifier.LIBSVM, configuration);
 
         flex.execute();
     }

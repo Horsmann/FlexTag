@@ -27,7 +27,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
-import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -76,7 +76,7 @@ public class ExampleClassifierLiblinear
 
         List<Object> configuration = asList(new Object[] {  "-s", "3" });
         
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBLINEAR, configuration);
+        flex.setClassifier(Classifier.LIBLINEAR, configuration);
         
         flex.execute();
     }
@@ -112,7 +112,7 @@ public class ExampleClassifierLiblinear
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         List<Object> configuration = asList(new Object[] { "-c", "100", "-e", "0.2", "-s", "3" });
-        flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBLINEAR, configuration);
+        flex.setClassifier(Classifier.LIBLINEAR, configuration);
 
         flex.execute();
     }

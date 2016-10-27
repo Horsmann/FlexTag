@@ -17,7 +17,7 @@
  ******************************************************************************/
 package de.unidue.ltl.flextag.core;
 
-public enum FlexTagMachineLearningAdapter
+public enum Classifier
 {
     CRFSUITE, SVMHMM, WEKA, LIBLINEAR, LIBSVM;
 
