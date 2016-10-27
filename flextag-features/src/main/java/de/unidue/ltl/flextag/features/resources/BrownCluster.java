@@ -57,8 +57,8 @@ public class BrownCluster
 
     static final String FEATURE_NOVALUE = "*";
 
-    public static final String PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES = "brownClassProbLocation";
-    @ConfigurationParameter(name = PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES, mandatory = true)
+    public static final String PARAM_BROWN_CLUSTER_LOCATION = "brownLocation";
+    @ConfigurationParameter(name = PARAM_BROWN_CLUSTER_LOCATION, mandatory = true)
     File inputFile;
 
     public static final String PARAM_BROWN_CLUSTER_NORMALIZATION = "doBrownNormalization";

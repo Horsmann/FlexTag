@@ -82,7 +82,7 @@ public class ExampleClassifierLibsvm
 
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
 
-        flex.execute(false);
+        flex.execute();
     }
 
     public void runComplex()
@@ -124,7 +124,7 @@ public class ExampleClassifierLibsvm
                         "-t", LibsvmAdapter.PARAM_KERNEL_RADIAL_BASED });
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.LIBSVM, configuration);
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

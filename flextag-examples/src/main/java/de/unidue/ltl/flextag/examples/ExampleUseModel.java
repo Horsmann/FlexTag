@@ -28,6 +28,7 @@ import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.core.FlexTagUseModel;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
@@ -77,16 +78,16 @@ public class ExampleUseModel
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, corpora,
                 LineTokenTagReader.PARAM_PATTERNS, fileSuffix);
-        
+
         FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File(folder));
 
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                "src/main/resources/res/dummyBrownCluster.txt.gz"));
+        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
         flex.setExperimentName("ExampleUseModelDemo");
-        flex.execute(false);
+        flex.execute();
     }
 }

@@ -69,7 +69,7 @@ public class FlexTagTrainTest
     }
 
     @Override
-    public void execute(boolean useCoarse)
+    public void execute()
         throws Exception
     {
 

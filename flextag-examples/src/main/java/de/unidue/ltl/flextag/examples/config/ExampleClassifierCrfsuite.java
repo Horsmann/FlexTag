@@ -73,7 +73,7 @@ public class ExampleClassifierCrfsuite
         // CRFSuiteAdapter constant. Some are slow on large data sets
         List<Object> classificationArgs = Arrays.asList(CRFSuiteAdapter.ALGORITHM_AVERAGED_PERCEPTRON);
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.CRFSUITE, classificationArgs);
-        flex.execute(false);
+        flex.execute();
     }
 
 }

@@ -58,6 +58,8 @@ public abstract class FlexTagSetUp
 
     protected FlexTagMachineLearningAdapter classifier;
     protected Dimension<?> dimClassificationArgs;
+    
+    boolean useCoarse = false;
 
     public FlexTagSetUp(CollectionReaderDescription reader)
     {
@@ -199,7 +201,11 @@ public abstract class FlexTagSetUp
     {
         userPreprocessing = createEngineDescription;
     }
+    
+    public void useCoarse(boolean useCoarse){
+        this.useCoarse = useCoarse;
+    }
 
-    public abstract void execute(boolean useCoarse)
+    public abstract void execute()
         throws Exception;
 }

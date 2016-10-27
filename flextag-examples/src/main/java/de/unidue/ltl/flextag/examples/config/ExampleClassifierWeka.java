@@ -77,7 +77,7 @@ public class ExampleClassifierWeka
         List<Object> configuration = asList(new Object[] { SMO.class.getName() });
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
 
-        flex.execute(false);
+        flex.execute();
     }
 
     public void runComplex()
@@ -114,7 +114,7 @@ public class ExampleClassifierWeka
                 PolyKernel.class.getName() + " " + "-C -1 -E 2" });
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.WEKA, configuration);
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

@@ -75,7 +75,7 @@ public class ExampleClassifierSvmHmm
         List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
         flex.setMachineLearningClassifier(FlexTagMachineLearningAdapter.SVMHMM, classificationArgs);
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

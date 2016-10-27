@@ -74,7 +74,7 @@ public class ExampleReaders
         }
         flex.setExperimentName("ReaderDemo");
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

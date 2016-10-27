@@ -88,6 +88,6 @@ public class ExampleUseModelUima
             flex.setDKProHomeFolder("target/home");
         }
         flex.setExperimentName("ExampleUseModelDemo");
-        flex.execute(false);
+        flex.execute();
     }
 }

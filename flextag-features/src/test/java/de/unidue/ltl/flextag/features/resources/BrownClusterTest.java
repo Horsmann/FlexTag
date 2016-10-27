@@ -58,7 +58,7 @@ public class BrownClusterTest
         throws Exception
     {
         BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
                 "src/test/resources/dummyBrownCluster.txt.gz",
                 BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
                 true));
@@ -97,7 +97,7 @@ public class BrownClusterTest
         throws Exception
     {
         BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
                 "src/test/resources/dummyBrownCluster.txt.gz",
                 BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
                 true));
@@ -136,7 +136,7 @@ public class BrownClusterTest
         throws Exception
     {
         BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
                 "src/test/resources/dummyBrownCluster.txt.gz",
                 BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
                 true));
@@ -186,7 +186,7 @@ public class BrownClusterTest
         throws Exception
     {
         BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
                 "src/test/resources/dummyBrownCluster.txt.gz",
                 BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, false, BrownCluster.PARAM_LOWER_CASE,
                 true));
@@ -226,7 +226,7 @@ public class BrownClusterTest
     {
         
         BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
                 "src/test/resources/dummyBrownCluster.txt.gz",
                 BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
                 false));

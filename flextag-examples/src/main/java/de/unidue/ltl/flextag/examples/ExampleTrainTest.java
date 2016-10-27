@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
@@ -46,12 +47,12 @@ public class ExampleTrainTest
         String trainFileSuffix = "*.txt";
         String testCorpora = "src/main/resources/test/";
         String testFileSuffix = "*.txt";
-        
+
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, trainFileSuffix);
-        
+
         CollectionReaderDescription testReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, testCorpora,
@@ -67,10 +68,10 @@ public class ExampleTrainTest
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                        "src/main/resources/res/dummyBrownCluster.txt.gz"));
+        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

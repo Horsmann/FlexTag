@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
@@ -56,12 +57,10 @@ public class ExampleCrossValidation
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(false,
-                TcFeatureFactory.create(BrownCluster.class,
-                        BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                        "src/main/resources/res/dummyBrownCluster.txt.gz"));
+        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }

@@ -45,7 +45,7 @@ public class FlexTagCrossValidation
     }
 
     @Override
-    public void execute(boolean useCoarse)
+    public void execute()
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<>();

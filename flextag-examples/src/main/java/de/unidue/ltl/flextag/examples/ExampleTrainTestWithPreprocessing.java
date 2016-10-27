@@ -50,29 +50,46 @@ public class ExampleTrainTestWithPreprocessing
         String language = "en";
         String corpora = "src/main/resources/raw/";
         String fileSuffix = "*.txt";
-        
+
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, corpora,
                 LineTokenTagReader.PARAM_PATTERNS, fileSuffix);
 
-        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File(System.getProperty("user.home") + "/Desktop/flexOut"));
+        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader,
+                new File(System.getProperty("user.home") + "/Desktop/flexOut"));
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder(System.getProperty("user.home") + "/Desktop/");
         }
         flex.setExperimentName("FlexTest");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
-                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         flex.setPreprocessing(
                 AnalysisEngineFactory.createEngineDescription(BreakIteratorSegmenter.class),
-                AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class,
+                AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class, // We specify
+                                                                                       // not model
+                                                                                       // here and
+                                                                                       // we use the
+                                                                                       // default
+                                                                                       // model -
+                                                                                       // you can
+                                                                                       // specify
+                                                                                       // other
+                                                                                       // model
+                                                                                       // versions
+                                                                                       // by setting
+                                                                                       // a
+                                                                                       // parameter
+                                                                                       // wit the
+                                                                                       // model's
+                                                                                       // name
                         StanfordPosTagger.PARAM_LANGUAGE, "en"));
 
-        flex.execute(false);
+        flex.execute();
     }
 
 }
