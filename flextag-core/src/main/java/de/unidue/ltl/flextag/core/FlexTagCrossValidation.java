@@ -20,7 +20,7 @@ package de.unidue.ltl.flextag.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
@@ -38,10 +38,9 @@ public class FlexTagCrossValidation
 {
     private int numberOfFolds;
 
-    public FlexTagCrossValidation(String language, Class<? extends CollectionReader> reader, String dataFolder,
-            String fileSuffix, int numberOfFolds)
+    public FlexTagCrossValidation(CollectionReaderDescription reader, int numberOfFolds)
     {
-        super(language, reader, dataFolder, fileSuffix);
+        super(reader);
         this.numberOfFolds = numberOfFolds;
     }
 
@@ -50,7 +49,8 @@ public class FlexTagCrossValidation
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<>();
-        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
+        
+        dimReaders.put(DIM_READER_TRAIN, reader);
         
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 

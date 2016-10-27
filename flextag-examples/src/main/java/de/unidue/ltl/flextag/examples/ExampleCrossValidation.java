@@ -18,7 +18,8 @@
  */
 package de.unidue.ltl.flextag.examples;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
@@ -32,17 +33,20 @@ public class ExampleCrossValidation
     {
         new ExampleCrossValidation().run();
     }
-    
-    public void run() throws Exception{
+
+    public void run()
+        throws Exception
+    {
         String language = "en";
-
-        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
-
         String trainCorpora = "src/main/resources/cv/";
         String trainFileSuffix = "*.txt";
 
-        FlexTagCrossValidation flex = new FlexTagCrossValidation(language, reader, trainCorpora,
-                trainFileSuffix, 2);
+        CollectionReaderDescription crd = CollectionReaderFactory.createReaderDescription(
+                LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
+                LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
+                LineTokenTagReader.PARAM_PATTERNS, trainFileSuffix);
+
+        FlexTagCrossValidation flex = new FlexTagCrossValidation(crd, 2);
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
@@ -52,8 +56,10 @@ public class ExampleCrossValidation
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
-                "src/main/resources/res/dummyBrownCluster.txt.gz"));
+        flex.setFeatures(false,
+                TcFeatureFactory.create(BrownCluster.class,
+                        BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
+                        "src/main/resources/res/dummyBrownCluster.txt.gz"));
 
         flex.execute(false);
     }

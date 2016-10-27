@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
@@ -34,10 +34,9 @@ public class FlexTagTrainSaveModel
 {
     private File modelOutputFolder;
 
-    public FlexTagTrainSaveModel(String language, Class<? extends CollectionReader> reader, String dataFolder,
-            String fileSuffix, File modelOutputFolder)
+    public FlexTagTrainSaveModel(CollectionReaderDescription reader, File modelOutputFolder)
     {
-        super(language, reader, dataFolder, fileSuffix);
+        super(reader);
         this.modelOutputFolder = modelOutputFolder;
     }
 
@@ -46,7 +45,7 @@ public class FlexTagTrainSaveModel
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<String, Object>();
-        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
+        dimReaders.put(DIM_READER_TRAIN, reader);
 
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 

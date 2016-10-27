@@ -20,7 +20,8 @@ package de.unidue.ltl.flextag.examples;
 
 import java.io.File;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
@@ -42,14 +43,15 @@ public class ExampleTrainStore
         throws Exception
     {
         String language = "en";
-
-        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
-
         String corpora = "src/main/resources/train/";
         String fileSuffix = "*.txt";
 
-        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
-                fileSuffix, new File("target/trainedModel"));
+        CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
+                LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
+                LineTokenTagReader.PARAM_SOURCE_LOCATION, corpora,
+                LineTokenTagReader.PARAM_PATTERNS, fileSuffix);
+        
+        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File("target/trainedModel"));
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");

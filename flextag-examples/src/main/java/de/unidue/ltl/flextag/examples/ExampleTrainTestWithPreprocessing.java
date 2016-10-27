@@ -20,15 +20,16 @@ package de.unidue.ltl.flextag.examples;
 
 import java.io.File;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
-import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
 import de.tudarmstadt.ukp.dkpro.core.stanfordnlp.StanfordPosTagger;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
+import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
 /**
  * An example which demonstrates the use of the preprocessing. We will trains a model on a raw text
@@ -47,14 +48,15 @@ public class ExampleTrainTestWithPreprocessing
         throws Exception
     {
         String language = "en";
-
-        Class<? extends CollectionReader> reader = TextReader.class;
-
         String corpora = "src/main/resources/raw/";
         String fileSuffix = "*.txt";
+        
+        CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
+                LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
+                LineTokenTagReader.PARAM_SOURCE_LOCATION, corpora,
+                LineTokenTagReader.PARAM_PATTERNS, fileSuffix);
 
-        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
-                fileSuffix, new File(System.getProperty("user.home") + "/Desktop/flexOut"));
+        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File(System.getProperty("user.home") + "/Desktop/flexOut"));
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder(System.getProperty("user.home") + "/Desktop/");

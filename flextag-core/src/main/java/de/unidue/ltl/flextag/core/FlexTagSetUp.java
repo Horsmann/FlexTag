@@ -25,10 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
@@ -42,7 +40,6 @@ import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 import org.dkpro.tc.ml.svmhmm.SVMHMMAdapter;
 import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
 
-import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public abstract class FlexTagSetUp
@@ -52,7 +49,7 @@ public abstract class FlexTagSetUp
     protected String language;
     protected TcFeatureSet features;
 
-    protected Class<? extends CollectionReader> reader;
+    protected CollectionReaderDescription reader;
     protected String dataFolder;
     protected String fileSuffix;
 
@@ -62,13 +59,9 @@ public abstract class FlexTagSetUp
     protected FlexTagMachineLearningAdapter classifier;
     protected Dimension<?> dimClassificationArgs;
 
-    public FlexTagSetUp(String language, Class<? extends CollectionReader> reader, String dataFolder, String fileSuffix)
+    public FlexTagSetUp(CollectionReaderDescription reader)
     {
-        this.language = language;
-
         this.reader = reader;
-        this.dataFolder = dataFolder;
-        this.fileSuffix = fileSuffix;
 
         this.features = DefaultFeatures.getDefaultFeatures();
 
@@ -136,20 +129,6 @@ public abstract class FlexTagSetUp
         this.posMappingLocation = posMappingLocation;
     }
 
-    protected CollectionReaderDescription createReader(Class<? extends CollectionReader> reader, String dataFolder, String fileSuffix,
-            String posMappingLocation) throws ResourceInitializationException
-    {
-        List<Object> readerParam = Arrays.asList(ComponentParameters.PARAM_LANGUAGE, language,
-                ComponentParameters.PARAM_SOURCE_LOCATION, dataFolder,
-                ComponentParameters.PARAM_PATTERNS, fileSuffix);
-        if (posMappingLocation != null) {
-            readerParam.add(ComponentParameters.PARAM_POS_MAPPING_LOCATION);
-            readerParam.add(posMappingLocation);
-        }
-        
-        CollectionReaderDescription crd = CollectionReaderFactory.createReaderDescription(reader, readerParam.toArray());
-        return crd;
-    }
 
     protected Dimension<TcFeatureSet> wrapFeatures()
     {

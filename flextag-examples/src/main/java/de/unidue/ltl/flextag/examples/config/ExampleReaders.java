@@ -18,7 +18,8 @@
  */
 package de.unidue.ltl.flextag.examples.config;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 
 import de.tudarmstadt.ukp.dkpro.core.io.tei.TeiReader;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
@@ -39,11 +40,13 @@ public class ExampleReaders
         throws Exception
     {
         String language = "en";
-
-        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
-
         String trainCorpora = "src/main/resources/train/";
         String trainFileSuffix = "*.txt";
+
+        CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
+                LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
+                LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
+                LineTokenTagReader.PARAM_PATTERNS, trainFileSuffix);
 
         /*
          * We read here a file in the TEI-XML file format. DKPro provides a reader for this data
@@ -55,21 +58,21 @@ public class ExampleReaders
          * Furthermore, the suffix at the end of the test folder paths will recursively read all
          * .xml files in all sub-folders of the specified test folder path.
          */
-        String testDataFolder = "src/main/resources/test/**/*"; // read all sub-folders found under
-                                                                // the test folders
+        String testCorpora = "src/main/resources/test/**/*"; // read all sub-folders found under
+                                                             // the test folders
         String testFileSuffix = "*.xml";
 
-        FlexTagTrainTest flex = new FlexTagTrainTest(language, reader, trainCorpora,
-                trainFileSuffix, testDataFolder, testFileSuffix);
+        CollectionReaderDescription testReader = CollectionReaderFactory.createReaderDescription(
+                TeiReader.class, TeiReader.PARAM_LANGUAGE, language,
+                TeiReader.PARAM_SOURCE_LOCATION, testCorpora, TeiReader.PARAM_PATTERNS,
+                testFileSuffix);
+
+        FlexTagTrainTest flex = new FlexTagTrainTest(trainReader, testReader);
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
         flex.setExperimentName("ReaderDemo");
-
-        // The reader set in the constructor cannot handle the xml format of the test-data, we thus
-        // set a different reader.
-        flex.setTestReader(TeiReader.class);
 
         flex.execute(false);
     }

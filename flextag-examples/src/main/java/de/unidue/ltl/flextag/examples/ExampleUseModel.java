@@ -22,7 +22,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
@@ -69,13 +70,15 @@ public class ExampleUseModel
         throws Exception
     {
         String language = "en";
-        Class<? extends CollectionReader> reader = LineTokenTagReader.class;
-
         String corpora = "src/main/resources/train/";
         String fileSuffix = "*.txt";
 
-        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(language, reader, corpora,
-                fileSuffix, new File(folder));
+        CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
+                LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
+                LineTokenTagReader.PARAM_SOURCE_LOCATION, corpora,
+                LineTokenTagReader.PARAM_PATTERNS, fileSuffix);
+        
+        FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File(folder));
 
         flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_CLASS_PROPABILITIES,
                 "src/main/resources/res/dummyBrownCluster.txt.gz"));

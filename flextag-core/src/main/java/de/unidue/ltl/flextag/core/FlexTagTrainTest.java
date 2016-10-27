@@ -20,7 +20,7 @@ package de.unidue.ltl.flextag.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.uima.collection.CollectionReader;
+import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.Lab;
@@ -37,19 +37,13 @@ import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 public class FlexTagTrainTest
     extends FlexTagSetUp
 {
-    private Class<? extends CollectionReader> testReader;
-    private String testDataFolder;
-    private String testFileSuffix;
-    private String posTestingMappingLocation;
+    private CollectionReaderDescription testReader;
 
-    public FlexTagTrainTest(String language, Class<? extends CollectionReader> reader, String trainDataFolder,
-            String trainFileSuffix, String testDataFolder, String testFileSuffix)
+    public FlexTagTrainTest(CollectionReaderDescription readerTrain, CollectionReaderDescription readerTest)
     {
-        super(language, reader, trainDataFolder, trainFileSuffix);
+        super(readerTrain);
 
-        this.testReader = reader;
-        this.testDataFolder = testDataFolder;
-        this.testFileSuffix = testFileSuffix;
+        this.testReader = readerTest;
 
         this.features = DefaultFeatures.getDefaultFeatures();
     }
@@ -60,7 +54,7 @@ public class FlexTagTrainTest
      * 
      * @param reader
      */
-    public void setTestReader(Class<? extends CollectionReader> reader)
+    public void setTestReader(CollectionReaderDescription reader)
     {
         testReader = reader;
     }
@@ -68,22 +62,10 @@ public class FlexTagTrainTest
     private Map<String, Object> wrapReaders() throws ResourceInitializationException
     {
         Map<String, Object> dimReaders = new HashMap<String, Object>();
-        dimReaders.put(DIM_READER_TRAIN, createReader(reader, dataFolder, fileSuffix, posMappingLocation));
-        dimReaders.put(DIM_READER_TEST, createReader(testReader, testDataFolder, testFileSuffix, posTestingMappingLocation));
+        dimReaders.put(DIM_READER_TRAIN, super.reader);
+        dimReaders.put(DIM_READER_TEST,  testReader);
 
         return dimReaders;
-    }
-
-    /**
-     * Specifies a mapping of the part-of-speech tags found in the test data to the main word
-     * classes as defined in the DKPro framework (e.g. noun, verb, adjective). This mapping enables
-     * it to remove fine-grained word class distinctions without having to edit the training data.
-     * If this mapping is not provided a default mapping based on the provided language is loaded
-     * instead.
-     */
-    public void setTestingPosMappingLocation(String posMappingLocation)
-    {
-        this.posTestingMappingLocation = posMappingLocation;
     }
 
     @Override
