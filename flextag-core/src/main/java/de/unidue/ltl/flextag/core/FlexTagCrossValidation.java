@@ -17,15 +17,19 @@
  ******************************************************************************/
 package de.unidue.ltl.flextag.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.dkpro.lab.Lab;
+import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.report.BatchCrossValidationReport;
@@ -37,12 +41,42 @@ import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 public class FlexTagCrossValidation
     extends FlexTagSetUp
 {
-    private int numberOfFolds;
+
+    private List<Class<? extends Report>> innerReports = new ArrayList<>();
 
     public FlexTagCrossValidation(CollectionReaderDescription reader, int numberOfFolds)
+        throws TextClassificationException
     {
         super(reader);
-        this.numberOfFolds = numberOfFolds;
+
+        this.reports = initCrossValidationReports();
+        batch = new ExperimentCrossValidation(experimentName, getClassifier(), numberOfFolds);
+    }
+
+    private List<Class<? extends Report>> initCrossValidationReports()
+    {
+        List<Class<? extends Report>> r = new ArrayList<>();
+        r.add(BatchCrossValidationReport.class);
+        r.add(CvAvgAccuracyReport.class);
+        r.add(CvAvgPerWordClassReport.class);
+        return r;
+    }
+    
+    public void addInnerReports(Class<? extends Report> innerReport){
+        innerReports.add(innerReport);
+    }
+
+    public void removeReports()
+    {
+        reports = new ArrayList<>();
+        innerReports = new ArrayList<>();
+    }
+    
+    private void addInnerReports()
+    {
+        for (Class<? extends Report> r : innerReports) {
+            batch.addInnerReport(r);
+        }
     }
 
     @Override
@@ -50,22 +84,19 @@ public class FlexTagCrossValidation
         throws Exception
     {
         Map<String, Object> dimReaders = new HashMap<>();
-        
-        dimReaders.put(DIM_READER_TRAIN, reader);
-        
-        Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
+        dimReaders.put(DIM_READER_TRAIN, reader);
+        Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
-        ExperimentCrossValidation batch = new ExperimentCrossValidation(experimentName,
-                getClassifier(), numberOfFolds);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(AnalysisEngineFactory.createEngineDescription(
-                TcPosTaggingWrapper.class, TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
-        batch.addReport(BatchCrossValidationReport.class);
-        batch.addReport(CvAvgAccuracyReport.class);
-        batch.addReport(CvAvgPerWordClassReport.class);
+        batch.setPreprocessing(
+                AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
+                        TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+
+        addReports(reports);
+        addInnerReports();
 
         Lab.getInstance().run(batch);
     }

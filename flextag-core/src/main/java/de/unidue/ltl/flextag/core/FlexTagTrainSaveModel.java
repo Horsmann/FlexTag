@@ -48,7 +48,6 @@ public class FlexTagTrainSaveModel
         dimReaders.put(DIM_READER_TRAIN, reader);
 
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
-
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
         ExperimentSaveModel batch = new ExperimentSaveModel(experimentName, getClassifier(),

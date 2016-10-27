@@ -17,18 +17,23 @@
  ******************************************************************************/
 package de.unidue.ltl.flextag.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.Lab;
+import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
+import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentTrainTest;
+import org.dkpro.tc.ml.report.BatchTrainTestReport;
 
 import de.unidue.ltl.flextag.core.reports.TtAccuracyPerWordClassReport;
 import de.unidue.ltl.flextag.core.reports.TtAccuracyReport;
@@ -39,13 +44,25 @@ public class FlexTagTrainTest
 {
     private CollectionReaderDescription testReader;
 
-    public FlexTagTrainTest(CollectionReaderDescription readerTrain, CollectionReaderDescription readerTest)
+    public FlexTagTrainTest(CollectionReaderDescription readerTrain,
+            CollectionReaderDescription readerTest)
+                throws TextClassificationException
     {
         super(readerTrain);
-
         this.testReader = readerTest;
-
         this.features = DefaultFeatures.getDefaultFeatures();
+
+        this.reports = initTrainTestReports();
+        batch = new ExperimentTrainTest(experimentName, getClassifier());
+    }
+
+    private List<Class<? extends Report>> initTrainTestReports()
+    {
+        List<Class<? extends Report>> r = new ArrayList<>();
+        r.add(BatchTrainTestReport.class);
+        r.add(TtAccuracyReport.class);
+        r.add(TtAccuracyPerWordClassReport.class);
+        return r;
     }
 
     /**
@@ -59,11 +76,12 @@ public class FlexTagTrainTest
         testReader = reader;
     }
 
-    private Map<String, Object> wrapReaders() throws ResourceInitializationException
+    private Map<String, Object> wrapReaders()
+        throws ResourceInitializationException
     {
         Map<String, Object> dimReaders = new HashMap<String, Object>();
         dimReaders.put(DIM_READER_TRAIN, super.reader);
-        dimReaders.put(DIM_READER_TEST,  testReader);
+        dimReaders.put(DIM_READER_TEST, testReader);
 
         return dimReaders;
     }
@@ -77,14 +95,17 @@ public class FlexTagTrainTest
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
-        
-        ExperimentTrainTest batch = new ExperimentTrainTest(experimentName, getClassifier());
+
+        //configure
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
+        batch.addReport(BatchTrainTestReport.class);
         batch.addReport(TtAccuracyReport.class);
         batch.addReport(TtAccuracyPerWordClassReport.class);
-        batch.setPreprocessing(AnalysisEngineFactory.createEngineDescription(
-                TcPosTaggingWrapper.class, TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+        batch.setPreprocessing(
+                AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
+                        TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+        addReports(reports);
 
         Lab.getInstance().run(batch);
 

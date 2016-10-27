@@ -28,12 +28,14 @@ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.tc.api.features.TcFeature;
 import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
+import org.dkpro.tc.ml.Experiment_ImplBase;
 import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 import org.dkpro.tc.ml.liblinear.LiblinearAdapter;
 import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
@@ -48,6 +50,7 @@ public abstract class FlexTagSetUp
     protected String experimentName = "FlexTag";
     protected String language;
     protected TcFeatureSet features;
+    protected Experiment_ImplBase batch;
 
     protected CollectionReaderDescription reader;
     protected String dataFolder;
@@ -59,12 +62,12 @@ public abstract class FlexTagSetUp
     protected Classifier classifier;
     protected Dimension<?> dimClassificationArgs;
     
+    protected List<Class<? extends Report>> reports;
     boolean useCoarse = false;
 
     public FlexTagSetUp(CollectionReaderDescription reader)
     {
         this.reader = reader;
-
         this.features = DefaultFeatures.getDefaultFeatures();
 
         this.classifier = Classifier.CRFSUITE;
@@ -213,6 +216,17 @@ public abstract class FlexTagSetUp
     
     public void useCoarse(boolean useCoarse){
         this.useCoarse = useCoarse;
+    }
+    
+    public void addReport(Class<? extends Report> report){
+        reports.add(report);
+    }
+
+    protected void addReports(List<Class<? extends Report>> r)
+    {
+        for(Class<? extends Report> c : reports){
+            batch.addReport(c);
+        }
     }
 
     public abstract void execute()
