@@ -98,6 +98,28 @@ public abstract class FlexTagSetUp
             this.features = new TcFeatureSet(features);
         }
     }
+    
+    /**
+     * Sets new feature names and their parameters, the provided features can be added additionally
+     * to the default features by setting a boolean value to <b>true</b> otherwise the by default
+     * used feature set is <i>overwritten</i> with the here provided features!
+     *
+     * @param useDefaultFeatures
+     *        if the default feature set shall be used 
+     * @param features
+     *        a feature set
+     */
+    public void setFeatures(boolean useDefaultFeatures, TcFeatureSet featureSet)
+    {
+        if (useDefaultFeatures) {
+            for(TcFeature tf : featureSet){
+                this.features.add(tf);
+            }
+        }
+        else {
+            this.features = featureSet;
+        }
+    }
 
     /**
      * Sets an own experiment name which will make it easier to locate the result folders in the

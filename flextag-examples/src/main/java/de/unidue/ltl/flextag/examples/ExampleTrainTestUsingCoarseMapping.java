@@ -45,9 +45,9 @@ public class ExampleTrainTestUsingCoarseMapping
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = "src/main/resources/test/";
+        String testCorpora = DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         /**

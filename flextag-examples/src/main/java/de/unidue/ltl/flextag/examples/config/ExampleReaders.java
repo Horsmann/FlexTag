@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 
 import de.tudarmstadt.ukp.dkpro.core.io.tei.TeiReader;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
 /**
@@ -40,7 +41,7 @@ public class ExampleReaders
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(

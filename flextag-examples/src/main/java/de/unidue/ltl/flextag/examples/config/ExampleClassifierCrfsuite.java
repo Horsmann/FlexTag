@@ -29,6 +29,7 @@ import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 
 import de.unidue.ltl.flextag.core.FlexTagMachineLearningAdapter;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
 public class ExampleClassifierCrfsuite
@@ -43,10 +44,9 @@ public class ExampleClassifierCrfsuite
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-
-        String testCorpora= "src/main/resources/test/";
+        String testCorpora= DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
         
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(

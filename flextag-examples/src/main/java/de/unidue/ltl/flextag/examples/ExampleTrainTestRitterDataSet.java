@@ -25,27 +25,33 @@ import org.dkpro.tc.api.features.TcFeatureFactory;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
+import de.unidue.ltl.flextag.features.IsNumber;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
+import de.unidue.ltl.flextag.features.twitter.IsHashtag;
+import de.unidue.ltl.flextag.features.twitter.IsRetweet;
+import de.unidue.ltl.flextag.features.twitter.IsUserMention;
 
 /**
  * An example which trains a model on the provided data and evaluates the trained model on provided
- * test data
+ * test data. Unlike the other test cases this one uses a much larger data set and more features to
+ * produce some more serious output than the other examples which use only toy-setups for
+ * demonstrations
  */
-public class ExampleTrainTest
+public class ExampleTrainTestRitterDataSet
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleTrainTest().run();
+        new ExampleTrainTestRitterDataSet().run();
     }
 
     public void run()
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = "src/main/resources/ritter/train";
         String trainFileSuffix = "*.txt";
-        String testCorpora = "src/main/resources/test/";
+        String testCorpora = "src/main/resources/ritter/test";
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
@@ -63,13 +69,15 @@ public class ExampleTrainTest
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("TrainTestDemo");
+        flex.setExperimentName("RitterRichFeatureSetTrainTestDemo");
 
-        // we additionally add a brown cluster and specify that we want to keep using the default
-        // feature set, setting the last parameter to "false" will remove the default feature set
-        // and only use the here specified features will be used.
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+        flex.setFeatures(true,
+                TcFeatureFactory.create(BrownCluster.class,
+                        BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER),
+                TcFeatureFactory.create(IsHashtag.class),
+                TcFeatureFactory.create(IsUserMention.class),
+                TcFeatureFactory.create(IsNumber.class),
+                TcFeatureFactory.create(IsRetweet.class));
 
         flex.execute();
     }

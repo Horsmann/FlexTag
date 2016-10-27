@@ -71,7 +71,7 @@ public class ExampleUseModel
         throws Exception
     {
         String language = "en";
-        String corpora = "src/main/resources/train/";
+        String corpora = DemoConstants.TRAIN_FOLDER;
         String fileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(

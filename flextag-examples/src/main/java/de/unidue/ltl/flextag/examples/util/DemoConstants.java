@@ -21,4 +21,7 @@ package de.unidue.ltl.flextag.examples.util;
 public class DemoConstants
 {
     public static final String BROWN_CLUSTER = "src/main/resources/res/Owoputi2012_50m.txt.gz";
+    public static final String TRAIN_FOLDER = "src/main/resources/train/";
+    public static final String TEST_FOLDER = "src/main/resources/test/";
+    public static final String TRAIN_FOLDER_CROSS_VALIDATION = "src/main/resources/cv/";
 }

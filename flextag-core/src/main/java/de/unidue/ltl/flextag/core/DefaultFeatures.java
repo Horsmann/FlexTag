@@ -38,10 +38,19 @@ public class DefaultFeatures
         set.add(create(TargetSurfaceFormContextFeature.class,
                 TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, +1));
         set.add(create(IsFirstLetterCapitalized.class));
-        set.add(create(LuceneCharacterNGram.class,
-                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
-                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
-        
+        set.add(create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
+                LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 1,
+                LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+        set.add(create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 2,
+                LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
+        set.add(create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 3,
+                LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 3,
+                LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
+        set.add(create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 4,
+                LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
+                LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
+
         return set;
     }
 }

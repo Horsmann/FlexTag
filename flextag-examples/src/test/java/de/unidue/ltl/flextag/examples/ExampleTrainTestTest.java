@@ -26,7 +26,7 @@ public class ExampleTrainTestTest
     public void runExample()
         throws Exception
     {
-        new ExampleTrainTest().run();
+        new ExampleTrainTestRitterDataSet().run();
     }
 
 }

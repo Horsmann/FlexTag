@@ -39,7 +39,7 @@ public class ExampleCrossValidation
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/cv/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER_CROSS_VALIDATION;
         String trainFileSuffix = "*.txt";
 
         CollectionReaderDescription crd = CollectionReaderFactory.createReaderDescription(

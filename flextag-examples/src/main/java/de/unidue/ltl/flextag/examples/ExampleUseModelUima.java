@@ -30,6 +30,7 @@ import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.core.uima.FlexTagUima;
+import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.examples.util.OutputPrinter;
 
@@ -74,7 +75,7 @@ public class ExampleUseModelUima
         throws Exception
     {
         String language = "en";
-        String corpora = "src/main/resources/train/";
+        String corpora = DemoConstants.TRAIN_FOLDER;
         String fileSuffix = "*.txt";
         
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(

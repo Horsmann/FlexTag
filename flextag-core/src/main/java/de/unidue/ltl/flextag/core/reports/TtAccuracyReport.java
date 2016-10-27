@@ -53,38 +53,31 @@ public class TtAccuracyReport
         for (TaskContextMetadata subcontext : getSubtasks()) {
             if (TcTaskTypeUtil.isMachineLearningAdapterTask(store, subcontext.getId())) {
 
-                File id2outcomeFile = store.locateKey(subcontext.getId(),
-                        Constants.ID_OUTCOME_KEY);
-                
-                String learningMode =getLearningMode(subcontext.getId(), store);
+                File id2outcomeFile = store.locateKey(subcontext.getId(), Constants.ID_OUTCOME_KEY);
+
+                String learningMode = getLearningMode(subcontext.getId(), store);
                 Id2Outcome o = new Id2Outcome(id2outcomeFile, learningMode);
                 EvaluatorBase createEvaluator = EvaluatorFactory.createEvaluator(o, true, false);
-                
+
                 Map<String, Double> results = createEvaluator.calculateEvaluationMeasures();
                 Double accuracy = results.get(Accuracy.class.getSimpleName());
 
-                System.out.println("\n\nAccuracy: " + String.format("%.1f percent\n", accuracy));
-                System.out
-                        .println("Further results are provided in the DKPRO_HOME folder in the folder starting with ["
-                                + CRFSuiteTestTask.class.getSimpleName()
-                                + "] and [Evaluation]\n\n"
-                                + "DKPRO_HOME="
-                                + System.getProperty("DKPRO_HOME")
-                                + "\n"
-                                + "i.e.\t* ["
-                                + subcontext.getId()
-                                + "]\n\t* ["
-                                + evaluationFolderName
-                                + "]");
+                System.out.println(
+                        "\n\nAccuracy: " + String.format("%.1f percent\n", accuracy * 100));
+                System.out.println(
+                        "Further results are provided in the DKPRO_HOME folder in the folder starting with ["
+                                + CRFSuiteTestTask.class.getSimpleName() + "] and [Evaluation]\n\n"
+                                + "DKPRO_HOME=" + System.getProperty("DKPRO_HOME") + "\n"
+                                + "i.e.\t* [" + subcontext.getId() + "]\n\t* ["
+                                + evaluationFolderName + "]");
             }
         }
     }
-    
+
     private String getLearningMode(String contextId, StorageService storageService)
     {
         return storageService
-        .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY,
-                new PropertiesAdapter())
-        .getMap().get(ExtractFeaturesTask.class.getName() + "|" + DIM_LEARNING_MODE);
+                .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY, new PropertiesAdapter())
+                .getMap().get(ExtractFeaturesTask.class.getName() + "|" + DIM_LEARNING_MODE);
     }
 }
