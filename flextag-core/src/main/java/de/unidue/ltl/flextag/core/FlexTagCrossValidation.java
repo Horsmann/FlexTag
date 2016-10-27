@@ -30,7 +30,8 @@ import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.report.BatchCrossValidationReport;
 
-import de.unidue.ltl.flextag.core.reports.CvAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.CvAvgAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.CvAvgPerWordClassReport;
 import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public class FlexTagCrossValidation
@@ -60,10 +61,11 @@ public class FlexTagCrossValidation
                 getClassifier(), numberOfFolds);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.addReport(BatchCrossValidationReport.class);
         batch.setPreprocessing(AnalysisEngineFactory.createEngineDescription(
                 TcPosTaggingWrapper.class, TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
-        batch.addReport(CvAccuracyReport.class);
+        batch.addReport(BatchCrossValidationReport.class);
+        batch.addReport(CvAvgAccuracyReport.class);
+        batch.addReport(CvAvgPerWordClassReport.class);
 
         Lab.getInstance().run(batch);
     }

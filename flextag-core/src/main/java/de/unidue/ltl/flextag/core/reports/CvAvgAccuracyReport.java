@@ -40,10 +40,12 @@ import org.dkpro.tc.ml.report.TcTaskTypeUtil;
  * This report only prints sysout messages to point the user to the ouput directory which is used to
  * store all results
  */
-public class CvAccuracyReport
+public class CvAvgAccuracyReport
     extends BatchReportBase
     implements Constants
 {
+
+    private static final String OUTPUT_FILE = "avgAccuracy.txt";
 
     public void execute()
         throws Exception
@@ -73,6 +75,11 @@ public class CvAccuracyReport
 
                 System.out.println("\nAverage accuracy over all folds: "
                         + String.format("%.1f percent\n", average * 100));
+
+                File locateKey = storageService.locateKey(subcontext.getId(), OUTPUT_FILE);
+                FileUtils.writeStringToFile(locateKey,
+                        String.format("Avg-Accuracy: %.1f", average * 100), "utf-8");
+
                 System.out.println("Many more results are provided in the DKPRO_HOME folder ["
                         + System.getProperty("DKPRO_HOME") + "]\nin the folder ["
                         + getContext().getId() + "]");
@@ -84,8 +91,7 @@ public class CvAccuracyReport
     private String getLearningMode(String contextId, StorageService storageService)
     {
         return storageService
-                .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY,
-                        new PropertiesAdapter())
+                .retrieveBinary(contextId, Task.DISCRIMINATORS_KEY, new PropertiesAdapter())
                 .getMap().get(ExtractFeaturesTask.class.getName() + "|" + DIM_LEARNING_MODE);
     }
 
