@@ -114,7 +114,7 @@ public class ExampleClassifierLiblinear
 
         List<Object> configuration = asList(new Object[] { "-c", "100", "-e", "0.2", "-s", "3" });
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
-
+        flex.addReport(TtLiblinearKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
