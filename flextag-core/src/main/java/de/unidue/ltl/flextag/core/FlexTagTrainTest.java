@@ -50,7 +50,6 @@ public class FlexTagTrainTest
     {
         super(readerTrain);
         this.testReader = readerTest;
-        this.features = DefaultFeatures.getDefaultFeatures();
 
         this.reports = initTrainTestReports();
     }

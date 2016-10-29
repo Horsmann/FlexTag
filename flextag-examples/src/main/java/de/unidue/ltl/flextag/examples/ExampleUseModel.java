@@ -83,7 +83,7 @@ public class ExampleUseModel
 
         FlexTagTrainSaveModel flex = new FlexTagTrainSaveModel(trainReader, new File(folder));
 
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+        flex.setFeatures(TcFeatureFactory.create(BrownCluster.class,
                 BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
 
         if (System.getProperty("DKPRO_HOME") == null) {

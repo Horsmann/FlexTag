@@ -28,6 +28,7 @@ import org.apache.uima.fit.pipeline.SimplePipeline;
 
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
+import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.core.uima.FlexTagUima;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -88,6 +89,7 @@ public class ExampleUseModelUima
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
+        flex.setFeatures(DefaultFeatures.getDefaultFeatures());
         flex.setExperimentName("ExampleUseModelDemo");
         flex.execute();
     }

@@ -85,9 +85,9 @@ public class ExampleClassifierWeka
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = "src/main/resources/test/";
+        String testCorpora = DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
@@ -107,7 +107,7 @@ public class ExampleClassifierWeka
         }
         flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
                 LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 

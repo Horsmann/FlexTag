@@ -68,38 +68,16 @@ public abstract class FlexTagSetUp
     public FlexTagSetUp(CollectionReaderDescription reader)
     {
         this.reader = reader;
-        this.features = DefaultFeatures.getDefaultFeatures();
 
         this.classifier = Classifier.CRFSUITE;
-        this.dimClassificationArgs = setDefaultCrfClassifier();
+        this.dimClassificationArgs = setDefaultCrfConfiguration();
     }
 
     @SuppressWarnings("unchecked")
-    private Dimension<?> setDefaultCrfClassifier()
+    private Dimension<?> setDefaultCrfConfiguration()
     {
         return Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
                 CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
-    }
-
-    /**
-     * Sets new feature names and their parameters, the provided features can be added additionally
-     * to the default features by setting a boolean value to <b>true</b> otherwise the by default
-     * used feature set is <i>overwritten</i> with the here provided features!
-     * 
-     * @param features
-     * @param featureParameters
-     * @param useDefaultFeatures
-     */
-    public void setFeatures(boolean useDefaultFeatures, TcFeature... features)
-    {
-        if (useDefaultFeatures) {
-            for (TcFeature tf : features) {
-                this.features.add(tf);
-            }
-        }
-        else {
-            this.features = new TcFeatureSet(features);
-        }
     }
 
     /**
