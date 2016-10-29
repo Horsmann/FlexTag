@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright 2016
+ * Language Technology Lab
+ * University of Duisburg-Essen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package de.unidue.ltl.flextag.core.reports.crf;
 
 import java.io.BufferedReader;
@@ -62,11 +79,11 @@ public class TtCrfKnownUnknownWordAccuracyReport
 
         File train = buildFileLocation(store, trainContextId,
                 TEST_TASK_OUTPUT_KEY + "/" + featureFile);
-        Set<String> trainVocab = extractVocab(train);
+        List<String> trainVocab = extractVocab(train);
 
         File test = buildFileLocation(store, testContextId,
                 TEST_TASK_OUTPUT_KEY + "/" + featureFile);
-        List<String> testVocab = readTest(test);
+        List<String> testVocab = extractVocab(test);
 
         File p = buildFileLocation(store, predictionContextId, predictionFile);
         outputFolder = p.getParentFile();
@@ -89,16 +106,16 @@ public class TtCrfKnownUnknownWordAccuracyReport
                     i++;
                     continue;
                 }
-                pre.add(r.split("\t")[1]);
+                pre.add(r);
             }
 
             return pre;
         }
 
-        protected Set<String> extractVocab(File train)
+        protected List<String> extractVocab(File train)
             throws Exception
         {
-            Set<String> training = new HashSet<String>();
+            List<String> training = new ArrayList<String>();
             InputStreamReader streamReader = new InputStreamReader(new FileInputStream(train), "UTF-8");
             BufferedReader br = new BufferedReader(streamReader);
 
@@ -116,21 +133,23 @@ public class TtCrfKnownUnknownWordAccuracyReport
             return training;
         }
 
-    private void evaluate(Set<String> trainVocab, List<String> testVocab, List<String> pred,
+    private void evaluate(List<String> trainTokens, List<String> testTokens, List<String> pred,
             List<Double> in, List<Double> out)
     {
         double correct_in = 0;
         double incorrect_in = 0;
         double correct_out = 0;
         double incorrect_out = 0;
+        
+        Set<String> trainVocab = new HashSet<>(trainTokens);
 
-        for (int i = 0; i < testVocab.size(); i++) {
-            String string = testVocab.get(i);
-
+        for (int i = 0; i < testTokens.size(); i++) {
+            String testToken = testTokens.get(i);
+            String string = pred.get(i);
             String[] split = string.split("\t");
 
-            if (trainVocab.contains(split[0])) {
-                if (pred.get(i).equals(split[1])) {
+            if (trainVocab.contains(testToken)) {
+                if (split[0].equals(split[1])) {
                     correct_in++;
                 }
                 else {
@@ -138,7 +157,7 @@ public class TtCrfKnownUnknownWordAccuracyReport
                 }
             }
             else {
-                if (pred.get(i).equals(split[1])) {
+                if (split[0].equals(split[1])) {
                     correct_out++;
                 }
                 else {
@@ -149,36 +168,6 @@ public class TtCrfKnownUnknownWordAccuracyReport
         }
         in.add(correct_in / (correct_in + incorrect_in));
         out.add(correct_out / (correct_out + incorrect_out));
-    }
-
-    private List<String> readTest(File test)
-        throws Exception
-    {
-        List<String> lines = new ArrayList<>();
-        InputStreamReader streamReader = new InputStreamReader(new FileInputStream(test), "UTF-8");
-        BufferedReader br = new BufferedReader(streamReader);
-
-        String next = null;
-        while ((next = br.readLine()) != null) {
-
-            if (next.isEmpty()) {
-                continue;
-            }
-
-            String word = extractUnit(next);
-            String tag = extractTag(next);
-            lines.add(word + "\t" + tag);
-        }
-
-        br.close();
-
-        return lines;
-    }
-
-    private String extractTag(String next)
-    {
-        String[] split = next.split("\t");
-        return split[0];
     }
 
     private File buildFileLocation(StorageService store, String context, String fileName)
