@@ -31,6 +31,7 @@ import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.crf.TtLibLinearSvmKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -39,9 +40,6 @@ public class ExampleClassifierLibsvm
     public static void main(String[] args)
         throws Exception
     {
-        // Weka's classifier offer various configuration parameters this demo shows how to use
-        // Liblinear
-        // classifier in their plain mode and with provided configuration parameters
         new ExampleClassifierLibsvm().runSimple();
         new ExampleClassifierLibsvm().runComplex();
     }
@@ -70,19 +68,19 @@ public class ExampleClassifierLibsvm
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("LiblinearConfiguration");
+        flex.setExperimentName("LibsvmConfiguration");
 
         flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
                 TcFeatureFactory.create(LuceneCharacterNGram.class,
-                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
                         LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 1000));
 
         List<Object> configuration = asList(
                 new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS });
 
         flex.setClassifier(Classifier.LIBSVM, configuration);
-
+        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
@@ -91,12 +89,11 @@ public class ExampleClassifierLibsvm
     {
         String language = "en";
 
-        String trainCorpora = "src/main/resources/train/";
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-
-        String testCorpora = "src/main/resources/test/";
+        String testCorpora= DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
-
+        
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
@@ -112,19 +109,19 @@ public class ExampleClassifierLibsvm
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("LiblinearConfiguration");
+        flex.setExperimentName("LibsvmConfiguration");
 
         flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
                 TcFeatureFactory.create(LuceneCharacterNGram.class,
-                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2,
+                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
                         LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
 
         List<Object> configuration = asList(
                 new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS, "-c", "1000",
                         "-t", LibsvmAdapter.PARAM_KERNEL_RADIAL_BASED });
         flex.setClassifier(Classifier.LIBSVM, configuration);
-
+        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

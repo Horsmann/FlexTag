@@ -29,7 +29,7 @@ import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.crf.TtLiblinearKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.crf.TtLibLinearSvmKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -77,7 +77,7 @@ public class ExampleClassifierLiblinear
 
         List<Object> configuration = asList(new Object[] {  "-s", "3" });
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
-        flex.addReport(TtLiblinearKnownUnknownWordAccuracyReport.class);
+        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
@@ -113,7 +113,7 @@ public class ExampleClassifierLiblinear
 
         List<Object> configuration = asList(new Object[] { "-c", "100", "-e", "0.2", "-s", "3" });
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
-        flex.addReport(TtLiblinearKnownUnknownWordAccuracyReport.class);
+        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

@@ -50,9 +50,9 @@ public class ExampleTrainTestRitterDataSet
         throws Exception
     {
         String language = "en";
-        String trainCorpora = "src/main/resources/ritter/train";
+        String trainCorpora = DemoConstants.RITTER_TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = "src/main/resources/ritter/test";
+        String testCorpora = DemoConstants.RITTER_TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(

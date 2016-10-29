@@ -31,7 +31,7 @@ import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.liblinear.LiblinearAdapter;
 
-public class TtLiblinearKnownUnknownWordAccuracyReport
+public class TtLibLinearSvmKnownUnknownWordAccuracyReport
     extends TtAbstractKnownUnknownWordAccuracyReport
 {
     
