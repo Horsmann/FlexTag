@@ -76,7 +76,6 @@ public class ExampleClassifierLiblinear
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         List<Object> configuration = asList(new Object[] {  "-s", "3" });
-        
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
         flex.addReport(TtLiblinearKnownUnknownWordAccuracyReport.class);
         flex.execute();

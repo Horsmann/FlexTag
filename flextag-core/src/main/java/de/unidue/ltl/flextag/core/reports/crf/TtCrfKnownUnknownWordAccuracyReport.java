@@ -93,4 +93,10 @@ public class TtCrfKnownUnknownWordAccuracyReport
 
         return word;
     }
+
+    @Override
+    protected String[] splitPredictions(String string)
+    {
+        return string.split("\t");
+    }
 }

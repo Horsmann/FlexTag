@@ -112,7 +112,7 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         for (int i = 0; i < testTokens.size(); i++) {
             String testToken = testTokens.get(i);
             String string = pred.get(i);
-            String[] split = string.split(" ");
+            String[] split = splitPredictions(string);
 
             if (trainVocab.contains(testToken)) {
                 if (split[0].equals(split[1])) {
@@ -136,6 +136,8 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         outvocabAccuracy = correct_out / (correct_out + incorrect_out);
     }
 
+    protected abstract String[] splitPredictions(String string);
+
     protected File buildFileLocation(StorageService store, String context, String fileName)
     {
         return store.locateKey(context, fileName);
@@ -145,9 +147,9 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         throws IOException
     {
         FileUtils.write(new File(outputFolder, UNKNOWN_WORDS_FINE),
-                String.format("%.1f", invocabAccuracy * 100));
-        FileUtils.write(new File(outputFolder, KNOWN_WORDS_FINE),
                 String.format("%.1f", outvocabAccuracy * 100));
+        FileUtils.write(new File(outputFolder, KNOWN_WORDS_FINE),
+                String.format("%.1f", invocabAccuracy * 100));
     }
 
 }

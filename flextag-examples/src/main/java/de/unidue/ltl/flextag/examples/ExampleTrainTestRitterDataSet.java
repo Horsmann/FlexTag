@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.crf.TtCrfKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.IsNumber;
@@ -78,7 +79,8 @@ public class ExampleTrainTestRitterDataSet
                 TcFeatureFactory.create(IsUserMention.class),
                 TcFeatureFactory.create(IsNumber.class),
                 TcFeatureFactory.create(IsRetweet.class));
-
+        
+        flex.addReport(TtCrfKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

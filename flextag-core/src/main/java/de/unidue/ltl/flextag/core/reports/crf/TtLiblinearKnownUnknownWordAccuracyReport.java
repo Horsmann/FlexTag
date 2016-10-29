@@ -122,4 +122,10 @@ public class TtLiblinearKnownUnknownWordAccuracyReport
         String word = next.substring(start + 1);
         return word;
     }
+
+    @Override
+    protected String[] splitPredictions(String string)
+    {
+        return string.split(" ");
+    }
 }
