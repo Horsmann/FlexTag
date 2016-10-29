@@ -29,6 +29,7 @@ import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.crf.TtWekaKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import weka.classifiers.functions.SMO;
@@ -42,7 +43,7 @@ public class ExampleClassifierWeka
         // Weka's classifier offer various configuration parameters this demo shows how to use Weka
         // classifier in their plain mode and with provided configuration parameters
         new ExampleClassifierWeka().runSimple();
-        new ExampleClassifierWeka().runComplex();
+//        new ExampleClassifierWeka().runComplex();
     }
 
     public void runSimple()
@@ -73,11 +74,11 @@ public class ExampleClassifierWeka
 
         flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
                 LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
-                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
 
         List<Object> configuration = asList(new Object[] { SMO.class.getName() });
         flex.setClassifier(Classifier.WEKA, configuration);
-
+        flex.addReport(TtWekaKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
@@ -114,7 +115,7 @@ public class ExampleClassifierWeka
         List<Object> configuration = asList(new Object[] { SMO.class.getName(), "-C", "1.0", "-K",
                 PolyKernel.class.getName() + " " + "-C -1 -E 2" });
         flex.setClassifier(Classifier.WEKA, configuration);
-
+        flex.addReport(TtWekaKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

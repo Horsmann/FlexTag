@@ -20,16 +20,19 @@ package de.unidue.ltl.flextag.core.reports.crf;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
+import org.dkpro.lab.storage.impl.PropertiesAdapter;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.ml.report.TcTaskTypeUtil;
@@ -39,8 +42,10 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
     implements Constants
 {
 
-    public final static String UNKNOWN_WORDS_FINE = "unknown_words_acc.txt";
-    public final static String KNOWN_WORDS_FINE = "known_words_acc.txt";
+    public final static String UNKNOWN_WORDS = "unknown_words_acc.txt";
+    public final static String KNOWN_WORDS = "known_words_acc.txt";
+    private static final String ACCURACY = "ACC";
+    private static final String NUM_INSTANCES = "NumInstances";
 
     String featureFile = null;
     String predictionFile = null;
@@ -51,6 +56,9 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
 
     double invocabAccuracy = 0;
     double outvocabAccuracy = 0;
+    
+    int unknownInstances;
+    int knownInstances;
 
     public void execute()
         throws Exception
@@ -134,6 +142,9 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         }
         invocabAccuracy = correct_in / (correct_in + incorrect_in);
         outvocabAccuracy = correct_out / (correct_out + incorrect_out);
+        
+        knownInstances = (int) (correct_in+incorrect_in);
+        unknownInstances = (int) (correct_out + incorrect_out);
     }
 
     protected abstract String[] splitPredictions(String string);
@@ -144,12 +155,23 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
     }
 
     protected void writeResults()
-        throws IOException
+        throws Exception
     {
-        FileUtils.write(new File(outputFolder, UNKNOWN_WORDS_FINE),
-                String.format("%.1f", outvocabAccuracy * 100));
-        FileUtils.write(new File(outputFolder, KNOWN_WORDS_FINE),
-                String.format("%.1f", invocabAccuracy * 100));
+        Map<String,String> known = new HashMap<>();
+        known.put(ACCURACY, new Double(invocabAccuracy * 100).toString());
+        known.put(NUM_INSTANCES, new Integer(knownInstances).toString());
+        FileOutputStream fos = new FileOutputStream(new File(outputFolder, KNOWN_WORDS));
+        PropertiesAdapter adapter = new PropertiesAdapter(known, "Results on known tokens");
+        adapter.write(fos);
+        fos.close();
+
+        Map<String,String> unknown = new HashMap<>();
+        unknown.put(ACCURACY, new Double(outvocabAccuracy * 100).toString());
+        unknown.put(NUM_INSTANCES, new Integer(unknownInstances).toString());
+        fos = new FileOutputStream(new File(outputFolder, UNKNOWN_WORDS));
+        adapter = new PropertiesAdapter(unknown, "Results on unkown tokens");
+        adapter.write(fos);
+        fos.close();
     }
 
 }
