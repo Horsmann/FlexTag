@@ -133,10 +133,4 @@ public class TtWekaKnownUnknownWordAccuracyReport
         br.close();
         return training;
     }
-
-    @Override
-    protected String[] splitPredictions(String string)
-    {
-        return string.split(" ");
-    }
 }

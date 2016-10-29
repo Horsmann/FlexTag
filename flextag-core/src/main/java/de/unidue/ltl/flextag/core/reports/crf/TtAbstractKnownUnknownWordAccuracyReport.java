@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.storage.impl.PropertiesAdapter;
@@ -78,8 +79,36 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         }
     }
 
-    protected abstract List<String> readPredictions(File p)
-        throws IOException;
+    protected List<String> readPredictions(File id2o) throws IOException
+    {
+        List<String> out = new ArrayList<>();
+        Map<String,String> mapping = new HashMap<>();
+        for(String l :FileUtils.readLines(id2o, "utf-8")){
+            if(l.startsWith("#labels")){
+                loadMapping(l, mapping);
+            }
+            if(l.startsWith("#")){
+                continue;
+            }
+            String[] split = l.split("=");
+            String[] split2 = split[1].split(";");
+            String g = mapping.get(split2[0]);
+            String p = mapping.get(split2[1]);
+            out.add(g+" "+p);
+        }
+        
+        return out;
+    }
+
+    private void loadMapping(String l, Map<String, String> mapping)
+    {
+        l = l.replaceAll("#labels", "").trim();
+        String[] split = l.split(" ");
+        for(String s : split){
+            String[] split2 = s.split("=");
+            mapping.put(split2[0], split2[1]);
+        }
+    }
 
     protected List<String> extractVocab(File train)
         throws Exception
@@ -146,8 +175,11 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
         knownInstances = (int) (correct_in+incorrect_in);
         unknownInstances = (int) (correct_out + incorrect_out);
     }
-
-    protected abstract String[] splitPredictions(String string);
+    
+    protected String[] splitPredictions(String string)
+    {
+        return string.split(" ");
+    }
 
     protected File buildFileLocation(StorageService store, String context, String fileName)
     {

@@ -18,12 +18,10 @@
 package de.unidue.ltl.flextag.core.reports.crf;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.storage.StorageService;
+import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
@@ -52,33 +50,12 @@ public class TtCrfKnownUnknownWordAccuracyReport
                 TEST_TASK_OUTPUT_KEY + "/" + featureFile);
         List<String> testVocab = extractVocab(test);
 
-        File p = buildFileLocation(store, predictionContextId, predictionFile);
+        File p = buildFileLocation(store, predictionContextId, Constants.ID_OUTCOME_KEY);
         outputFolder = p.getParentFile();
         List<String> pred = readPredictions(p);
         evaluate(trainVocab, testVocab, pred);
         writeResults();
     }
-
-    @Override
-    protected List<String> readPredictions(File p)
-            throws IOException
-        {
-            List<String> pre = new ArrayList<>();
-            List<String> readLines = FileUtils.readLines(p);
-            int i = 0;
-            for (String r : readLines) {
-                if (r.isEmpty()) {
-                    continue;
-                }
-                if (r.startsWith("#") && i == 0) {
-                    i++;
-                    continue;
-                }
-                pre.add(r);
-            }
-
-            return pre;
-        }
 
     protected String extractUnit(String next)
     {
@@ -94,9 +71,4 @@ public class TtCrfKnownUnknownWordAccuracyReport
         return word;
     }
 
-    @Override
-    protected String[] splitPredictions(String string)
-    {
-        return string.split("\t");
-    }
 }

@@ -18,13 +18,8 @@
 package de.unidue.ltl.flextag.core.reports.crf;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
@@ -63,37 +58,6 @@ public class TtLibLinearSvmKnownUnknownWordAccuracyReport
         writeResults();
     }
 
-    protected List<String> readPredictions(File id2o) throws IOException
-    {
-        List<String> out = new ArrayList<>();
-        Map<String,String> mapping = new HashMap<>();
-        for(String l :FileUtils.readLines(id2o, "utf-8")){
-            if(l.startsWith("#labels")){
-                loadMapping(l, mapping);
-            }
-            if(l.startsWith("#")){
-                continue;
-            }
-            String[] split = l.split("=");
-            String[] split2 = split[1].split(";");
-            String g = mapping.get(split2[0]);
-            String p = mapping.get(split2[1]);
-            out.add(g+" "+p);
-        }
-        
-        return out;
-    }
-
-    private void loadMapping(String l, Map<String, String> mapping)
-    {
-        l = l.replaceAll("#labels", "").trim();
-        String[] split = l.split(" ");
-        for(String s : split){
-            String[] split2 = s.split("=");
-            mapping.put(split2[0], split2[1]);
-        }
-    }
-
     protected String extractUnit(String next)
     {
         int start = next.lastIndexOf("_");
@@ -101,9 +65,4 @@ public class TtLibLinearSvmKnownUnknownWordAccuracyReport
         return word;
     }
 
-    @Override
-    protected String[] splitPredictions(String string)
-    {
-        return string.split(" ");
-    }
 }
