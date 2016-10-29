@@ -29,6 +29,7 @@ import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.crf.TtLiblinearKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -40,7 +41,7 @@ public class ExampleClassifierLiblinear
         // Weka's classifier offer various configuration parameters this demo shows how to use Liblinear
         // classifier in their plain mode and with provided configuration parameters
         new ExampleClassifierLiblinear().runSimple();
-        new ExampleClassifierLiblinear().runComplex();
+//        new ExampleClassifierLiblinear().runComplex();
     }
 
     public void runSimple()
@@ -77,7 +78,7 @@ public class ExampleClassifierLiblinear
         List<Object> configuration = asList(new Object[] {  "-s", "3" });
         
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
-        
+        flex.addReport(TtLiblinearKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

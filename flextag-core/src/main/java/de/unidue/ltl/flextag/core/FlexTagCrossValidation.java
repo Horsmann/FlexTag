@@ -43,14 +43,14 @@ public class FlexTagCrossValidation
 {
 
     private List<Class<? extends Report>> innerReports = new ArrayList<>();
+    private int numberOfFolds;
 
     public FlexTagCrossValidation(CollectionReaderDescription reader, int numberOfFolds)
         throws TextClassificationException
     {
         super(reader);
-
+        this.numberOfFolds = numberOfFolds;
         this.reports = initCrossValidationReports();
-        batch = new ExperimentCrossValidation(experimentName, getClassifier(), numberOfFolds);
     }
 
     private List<Class<? extends Report>> initCrossValidationReports()
@@ -89,6 +89,7 @@ public class FlexTagCrossValidation
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
+        batch = new ExperimentCrossValidation(experimentName, getClassifier(), numberOfFolds);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
         batch.setPreprocessing(

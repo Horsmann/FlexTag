@@ -53,7 +53,6 @@ public class FlexTagTrainTest
         this.features = DefaultFeatures.getDefaultFeatures();
 
         this.reports = initTrainTestReports();
-        batch = new ExperimentTrainTest(experimentName, getClassifier());
     }
 
     private List<Class<? extends Report>> initTrainTestReports()
@@ -97,6 +96,7 @@ public class FlexTagTrainTest
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
         //configure
+        batch = new ExperimentTrainTest(experimentName, getClassifier());
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
         batch.setPreprocessing(

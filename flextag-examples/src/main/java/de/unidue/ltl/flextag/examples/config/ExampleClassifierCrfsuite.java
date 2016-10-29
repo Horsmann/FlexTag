@@ -29,6 +29,7 @@ import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.crf.TtCrfKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -73,6 +74,7 @@ public class ExampleClassifierCrfsuite
         // CRFSuiteAdapter constant. Some are slow on large data sets
         List<Object> classificationArgs = Arrays.asList(CRFSuiteAdapter.ALGORITHM_AVERAGED_PERCEPTRON);
         flex.setClassifier(Classifier.CRFSUITE, classificationArgs);
+        flex.addReport(TtCrfKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
