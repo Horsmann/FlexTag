@@ -107,7 +107,7 @@ public class ExampleClassifierLiblinear
         }
         flex.setExperimentName("LiblinearConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
                 LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 

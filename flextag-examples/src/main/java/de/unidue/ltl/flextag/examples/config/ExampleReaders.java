@@ -22,6 +22,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 
 import de.tudarmstadt.ukp.dkpro.core.io.tei.TeiReader;
+import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -74,7 +75,7 @@ public class ExampleReaders
             flex.setDKProHomeFolder("target/home");
         }
         flex.setExperimentName("ReaderDemo");
-
+        flex.setFeatures(DefaultFeatures.getDefaultFeatures());
         flex.execute();
     }
 

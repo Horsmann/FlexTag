@@ -21,7 +21,9 @@ package de.unidue.ltl.flextag.examples;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.api.features.TcFeatureSet;
 
+import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.core.reports.crf.TtCrfKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -72,14 +74,15 @@ public class ExampleTrainTestRitterDataSet
         }
         flex.setExperimentName("RitterRichFeatureSetTrainTestDemo");
 
-        flex.setFeatures(true,
-                TcFeatureFactory.create(BrownCluster.class,
-                        BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER),
-                TcFeatureFactory.create(IsHashtag.class),
-                TcFeatureFactory.create(IsUserMention.class),
-                TcFeatureFactory.create(IsNumber.class),
-                TcFeatureFactory.create(IsRetweet.class));
-        
+        TcFeatureSet features = DefaultFeatures.getDefaultFeatures();
+        features.add(TcFeatureFactory.create(IsHashtag.class));
+        features.add(TcFeatureFactory.create(IsUserMention.class));
+        features.add(TcFeatureFactory.create(IsNumber.class));
+        features.add(TcFeatureFactory.create(IsRetweet.class));
+        features.add(TcFeatureFactory.create(BrownCluster.class,
+                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+        flex.setFeatures(features);
+
         flex.addReport(TtCrfKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }

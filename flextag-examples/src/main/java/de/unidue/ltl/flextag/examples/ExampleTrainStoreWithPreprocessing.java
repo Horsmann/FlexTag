@@ -64,29 +64,13 @@ public class ExampleTrainStoreWithPreprocessing
         }
         flex.setExperimentName("FlexTest");
 
-        flex.setFeatures(false, TcFeatureFactory.create(LuceneCharacterNGram.class,
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
                 LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
                 4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
         flex.setPreprocessing(
                 AnalysisEngineFactory.createEngineDescription(BreakIteratorSegmenter.class),
-                AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class, // We specify
-                                                                                       // not model
-                                                                                       // here and
-                                                                                       // we use the
-                                                                                       // default
-                                                                                       // model -
-                                                                                       // you can
-                                                                                       // specify
-                                                                                       // other
-                                                                                       // model
-                                                                                       // versions
-                                                                                       // by setting
-                                                                                       // a
-                                                                                       // parameter
-                                                                                       // wit the
-                                                                                       // model's
-                                                                                       // name
+                AnalysisEngineFactory.createEngineDescription(StanfordPosTagger.class,  
                         StanfordPosTagger.PARAM_LANGUAGE, "en"));
 
         flex.execute();

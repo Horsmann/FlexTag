@@ -23,7 +23,9 @@ import java.io.File;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.api.features.TcFeatureSet;
 
+import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
@@ -63,8 +65,10 @@ public class ExampleTrainStore
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+        TcFeatureSet features = DefaultFeatures.getDefaultFeatures();
+        features.add(TcFeatureFactory.create(BrownCluster.class,
                 BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+        flex.setFeatures(features);
 
         flex.execute();
     }

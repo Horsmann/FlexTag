@@ -61,7 +61,7 @@ public abstract class FlexTagSetUp
 
     protected Classifier classifier;
     protected Dimension<?> dimClassificationArgs;
-    
+
     protected List<Class<? extends Report>> reports;
     boolean useCoarse = false;
 
@@ -93,7 +93,7 @@ public abstract class FlexTagSetUp
     public void setFeatures(boolean useDefaultFeatures, TcFeature... features)
     {
         if (useDefaultFeatures) {
-            for(TcFeature tf : features){
+            for (TcFeature tf : features) {
                 this.features.add(tf);
             }
         }
@@ -101,26 +101,27 @@ public abstract class FlexTagSetUp
             this.features = new TcFeatureSet(features);
         }
     }
-    
+
     /**
-     * Sets new feature names and their parameters, the provided features can be added additionally
-     * to the default features by setting a boolean value to <b>true</b> otherwise the by default
-     * used feature set is <i>overwritten</i> with the here provided features!
+     * Sets new feature
      *
-     * @param useDefaultFeatures
-     *        if the default feature set shall be used 
      * @param features
-     *        a feature set
+     *            a feature set
      */
-    public void setFeatures(boolean useDefaultFeatures, TcFeatureSet featureSet)
+    public void setFeatures(TcFeatureSet featureSet)
     {
-        if (useDefaultFeatures) {
-            for(TcFeature tf : featureSet){
-                this.features.add(tf);
-            }
+        this.features = featureSet;
+    }
+
+    public void setFeatures(TcFeature... features)
+    {
+        if (this.features == null) {
+            this.features = new TcFeatureSet(features);
         }
         else {
-            this.features = featureSet;
+            for (TcFeature f : features) {
+                this.features.add(f);
+            }
         }
     }
 
@@ -152,10 +153,10 @@ public abstract class FlexTagSetUp
     protected ParameterSpace assembleParameterSpace(Map<String, Object> dimReaders,
             Dimension<TcFeatureSet> dimFeatureSets)
     {
-            return new ParameterSpace(Dimension.createBundle("readers", dimReaders),
-                    Dimension.create(DIM_LEARNING_MODE, Constants.LM_SINGLE_LABEL),
-                    Dimension.create(DIM_FEATURE_MODE, Constants.FM_SEQUENCE), dimFeatureSets,
-                    dimClassificationArgs);
+        return new ParameterSpace(Dimension.createBundle("readers", dimReaders),
+                Dimension.create(DIM_LEARNING_MODE, Constants.LM_SINGLE_LABEL),
+                Dimension.create(DIM_FEATURE_MODE, Constants.FM_SEQUENCE), dimFeatureSets,
+                dimClassificationArgs);
     }
 
     protected Class<? extends TCMachineLearningAdapter> getClassifier()
@@ -170,7 +171,7 @@ public abstract class FlexTagSetUp
         case LIBLINEAR:
             return LiblinearAdapter.class;
         case LIBSVM:
-            return LibsvmAdapter.class;            
+            return LibsvmAdapter.class;
         default:
             throw new IllegalArgumentException(
                     "Classifier [" + classifier.toString() + "] is unknown");
@@ -179,11 +180,11 @@ public abstract class FlexTagSetUp
     }
 
     @SuppressWarnings("unchecked")
-    public void setClassifier(Classifier classifier,
-            List<Object> dimClassificationArgs)
+    public void setClassifier(Classifier classifier, List<Object> dimClassificationArgs)
     {
         this.classifier = classifier;
-        this.dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS, dimClassificationArgs);
+        this.dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS,
+                dimClassificationArgs);
     }
 
     /**
@@ -213,19 +214,28 @@ public abstract class FlexTagSetUp
     {
         userPreprocessing = createEngineDescription;
     }
-    
-    public void useCoarse(boolean useCoarse){
+
+    public void useCoarse(boolean useCoarse)
+    {
         this.useCoarse = useCoarse;
     }
-    
-    public void addReport(Class<? extends Report> report){
+
+    public void addReport(Class<? extends Report> report)
+    {
         reports.add(report);
     }
 
     protected void addReports(List<Class<? extends Report>> r)
     {
-        for(Class<? extends Report> c : reports){
+        for (Class<? extends Report> c : reports) {
             batch.addReport(c);
+        }
+    }
+    
+    protected void checkFeatureSpace()
+    {
+        if (features == null || features.isEmpty()) {
+            throw new IllegalStateException("The feature space contains no feature extractors");
         }
     }
 

@@ -57,7 +57,7 @@ public class ExampleCrossValidation
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(false, TcFeatureFactory.create(BrownCluster.class,
+        flex.setFeatures(TcFeatureFactory.create(BrownCluster.class,
                 BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
 
         flex.execute();

@@ -70,7 +70,7 @@ public class ExampleClassifierLibsvm
         }
         flex.setExperimentName("LibsvmConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
+        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
                 TcFeatureFactory.create(LuceneCharacterNGram.class,
                         LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
                         LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
@@ -111,7 +111,7 @@ public class ExampleClassifierLibsvm
         }
         flex.setExperimentName("LibsvmConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class),
+        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
                 TcFeatureFactory.create(LuceneCharacterNGram.class,
                         LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
                         LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,

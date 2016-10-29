@@ -68,7 +68,7 @@ public class ExampleClassifierCrfsuite
         }
         flex.setExperimentName("CrfsuiteConfiguration");
 
-        flex.setFeatures(false, TcFeatureFactory.create(NrOfChars.class));
+        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class));
 
         // CRFSuite defines various algorithm to use for training which are defined over the
         // CRFSuiteAdapter constant. Some are slow on large data sets

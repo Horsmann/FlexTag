@@ -61,8 +61,9 @@ public class FlexTagCrossValidation
         r.add(CvAvgPerWordClassReport.class);
         return r;
     }
-    
-    public void addInnerReports(Class<? extends Report> innerReport){
+
+    public void addInnerReports(Class<? extends Report> innerReport)
+    {
         innerReports.add(innerReport);
     }
 
@@ -71,7 +72,7 @@ public class FlexTagCrossValidation
         reports = new ArrayList<>();
         innerReports = new ArrayList<>();
     }
-    
+
     private void addInnerReports()
     {
         for (Class<? extends Report> r : innerReports) {
@@ -83,6 +84,8 @@ public class FlexTagCrossValidation
     public void execute()
         throws Exception
     {
+        checkFeatureSpace();
+
         Map<String, Object> dimReaders = new HashMap<>();
 
         dimReaders.put(DIM_READER_TRAIN, reader);
@@ -101,4 +104,5 @@ public class FlexTagCrossValidation
 
         Lab.getInstance().run(batch);
     }
+
 }

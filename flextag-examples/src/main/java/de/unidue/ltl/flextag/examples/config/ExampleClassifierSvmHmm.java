@@ -46,19 +46,18 @@ public class ExampleClassifierSvmHmm
         String language = "en";
         String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora= DemoConstants.TEST_FOLDER;
+        String testCorpora = DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, trainFileSuffix);
-        
+
         CollectionReaderDescription testReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, testCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, testFileSuffix);
-        
 
         FlexTagTrainTest flex = new FlexTagTrainTest(trainReader, testReader);
 
@@ -70,9 +69,9 @@ public class ExampleClassifierSvmHmm
         // SvmHmm does not support String value feature, some of the provided feature do use string
         // values. Please be aware that a feature space which works for classifier A does not
         // necessarily work for classifier B
-        flex.setFeatures(true, TcFeatureFactory.create(LuceneNGram.class), TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
+        flex.setFeatures(TcFeatureFactory.create(LuceneNGram.class),
+                TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
 
-        
         List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
         flex.setClassifier(Classifier.SVMHMM, classificationArgs);
 
