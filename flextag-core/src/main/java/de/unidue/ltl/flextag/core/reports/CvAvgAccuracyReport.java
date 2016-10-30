@@ -79,10 +79,6 @@ public class CvAvgAccuracyReport
                 File locateKey = storageService.locateKey(subcontext.getId(), OUTPUT_FILE);
                 FileUtils.writeStringToFile(locateKey,
                         String.format("Avg-Accuracy: %.1f", average * 100), "utf-8");
-
-                System.out.println("Many more results are provided in the DKPRO_HOME folder ["
-                        + System.getProperty("DKPRO_HOME") + "]\nin the folder ["
-                        + getContext().getId() + "]");
             }
         }
 

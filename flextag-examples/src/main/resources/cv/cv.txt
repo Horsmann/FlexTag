@@ -11,7 +11,7 @@ music NN
 of IN
 all DT
 time NN
-, ,
+, COMMA
 my PRP$
 foot NN
 has VBZ
@@ -133,7 +133,7 @@ that DT
 im PRP
 doin VBG
 good JJ
-, ,
+, COMMA
 just RB
 maxin VBG
 & CC
@@ -165,7 +165,7 @@ a DT
 Justin NNP
 Bieber NNP
 concert NN
-, ,
+, COMMA
 yoiu PRP
 wake VBP
 up IN
@@ -191,7 +191,7 @@ out IN
 of IN
 the DT
 loop NN
-, ,
+, COMMA
 but CC
 is VBZ
 Private NNP
@@ -214,7 +214,7 @@ a DT
 Justin NNP
 Bieber NNP
 concert NN
-, ,
+, COMMA
 yoiu PRP
 wake VBP
 up IN

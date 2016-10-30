@@ -23,24 +23,25 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.tc.core.Constants;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
-import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
+import org.dkpro.tc.ml.weka.WekaClassificationAdapter;
 
 /**
  * This report only prints sysout messages to point the user to the ouput directory which is used to
  * store all results
  */
-public class CvCrfAvgKnownUnknownAccuracyReport
+public class CvWekafAvgKnownUnknownAccuracyReport
     extends CvAbstractAvgKnownUnknownAccuracyReport
 {
     private String featureFile;
 
     {
-        TCMachineLearningAdapter adapter = CRFSuiteAdapter.getInstance();
+        TCMachineLearningAdapter adapter = WekaClassificationAdapter.getInstance();
         featureFile = adapter.getFrameworkFilename(AdapterNameEntries.featureVectorsFile);
     }
 
@@ -66,13 +67,14 @@ public class CvCrfAvgKnownUnknownAccuracyReport
         throws Exception
     {
         List<String> training = new ArrayList<String>();
-        InputStreamReader streamReader = new InputStreamReader(new FileInputStream(train), "UTF-8");
+        InputStreamReader streamReader = new InputStreamReader(
+                new GZIPInputStream(new FileInputStream(train)), "UTF-8");
         BufferedReader br = new BufferedReader(streamReader);
 
         String next = null;
         while ((next = br.readLine()) != null) {
 
-            if (next.startsWith("#")) {
+            if (next.startsWith("@")) {
                 continue;
             }
             if (next.isEmpty()) {

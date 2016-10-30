@@ -18,15 +18,21 @@
  */
 package de.unidue.ltl.flextag.examples.cv;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
-import de.unidue.ltl.flextag.core.reports.adapter.cv.CvCrfAvgKnownUnknownAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.cv.CvWekafAvgKnownUnknownAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
-import de.unidue.ltl.flextag.features.resources.BrownCluster;
+import weka.classifiers.trees.J48;
 
 public class ExampleWekaCrossValidation
 {
@@ -53,14 +59,16 @@ public class ExampleWekaCrossValidation
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("CrfCrossValidationDemo");
+        flex.setExperimentName("WekaCrossValidationDemo");
 
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        flex.setFeatures(TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
-        flex.addReport(CvCrfAvgKnownUnknownAccuracyReport.class);
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class));
+        
+        List<Object> configuration = asList(new Object[] { J48.class.getName() });
+        flex.setClassifier(Classifier.WEKA, configuration);
+        flex.addReport(CvWekafAvgKnownUnknownAccuracyReport.class);
         flex.execute();
     }
 
