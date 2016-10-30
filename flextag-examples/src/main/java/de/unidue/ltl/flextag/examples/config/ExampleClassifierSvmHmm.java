@@ -29,6 +29,7 @@ import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
+import de.unidue.ltl.flextag.core.reports.adapter.TtSvmHmmKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
@@ -44,9 +45,9 @@ public class ExampleClassifierSvmHmm
         throws Exception
     {
         String language = "en";
-        String trainCorpora = DemoConstants.TRAIN_FOLDER;
+        String trainCorpora = DemoConstants.RITTER_TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = DemoConstants.TEST_FOLDER;
+        String testCorpora = DemoConstants.RITTER_TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
@@ -69,12 +70,14 @@ public class ExampleClassifierSvmHmm
         // SvmHmm does not support String value feature, some of the provided feature do use string
         // values. Please be aware that a feature space which works for classifier A does not
         // necessarily work for classifier B
-        flex.setFeatures(TcFeatureFactory.create(LuceneNGram.class),
+        flex.setFeatures(
+                TcFeatureFactory.create(LuceneNGram.class, LuceneNGram.PARAM_NGRAM_MIN_N, 1,
+                        LuceneNGram.PARAM_NGRAM_MAX_N, 1, LuceneNGram.PARAM_NGRAM_USE_TOP_K, 1000),
                 TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
 
         List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
         flex.setClassifier(Classifier.SVMHMM, classificationArgs);
-
+        flex.addReport(TtSvmHmmKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
