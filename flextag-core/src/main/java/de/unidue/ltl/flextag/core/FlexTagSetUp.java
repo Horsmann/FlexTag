@@ -81,9 +81,9 @@ public abstract class FlexTagSetUp
     }
 
     /**
-     * Sets new feature
+     * Sets a new feature set
      *
-     * @param features
+     * @param featureSet
      *            a feature set
      */
     public void setFeatures(TcFeatureSet featureSet)
@@ -91,6 +91,13 @@ public abstract class FlexTagSetUp
         this.features = featureSet;
     }
 
+    /**
+     * Sets a new feature set
+     *
+     * @param features
+     *            an array of features which are added to the current features. If no features have
+     *            been set yet the feature set is initialized.
+     */
     public void setFeatures(TcFeature... features)
     {
         if (this.features == null) {
@@ -108,16 +115,13 @@ public abstract class FlexTagSetUp
      * DKPRO_HOME folder
      * 
      * @param experimentName
+     *            the name of the experiment
      */
     public void setExperimentName(String experimentName)
     {
         this.experimentName = experimentName;
     }
 
-    /**
-     * FlexTag expects an environmental variable DKPRO_HOME to be set. If you do not have or do not
-     * want to set it permanently you can programmatically set this folder here.
-     */
     public void setDKProHomeFolder(String home)
     {
         System.setProperty("DKPRO_HOME", home);
@@ -209,7 +213,7 @@ public abstract class FlexTagSetUp
             batch.addReport(c);
         }
     }
-    
+
     protected void checkFeatureSpace()
     {
         if (features == null || features.isEmpty()) {

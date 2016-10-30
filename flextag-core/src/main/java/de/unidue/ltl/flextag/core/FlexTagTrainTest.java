@@ -68,6 +68,7 @@ public class FlexTagTrainTest
      * specified in the constructor you can set it here.
      * 
      * @param reader
+     *        a collection reader description for reading the test data
      */
     public void setTestReader(CollectionReaderDescription reader)
     {
