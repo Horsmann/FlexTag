@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples.config;
+package de.unidue.ltl.flextag.examples.tt;
 
 import static java.util.Arrays.asList;
 
@@ -25,23 +25,25 @@ import java.util.List;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
-import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
-import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.adapter.TtLibLinearSvmKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.TtWekaKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
+import weka.classifiers.functions.SMO;
+import weka.classifiers.functions.supportVector.PolyKernel;
 
-public class ExampleClassifierLibsvm
+public class ExampleClassifierWeka
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleClassifierLibsvm().runSimple();
-        new ExampleClassifierLibsvm().runComplex();
+        // Weka's classifier offer various configuration parameters this demo shows how to use Weka
+        // classifier in their plain mode and with provided configuration parameters
+        new ExampleClassifierWeka().runSimple();
+//        new ExampleClassifierWeka().runComplex();
     }
 
     public void runSimple()
@@ -68,19 +70,15 @@ public class ExampleClassifierLibsvm
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("LibsvmConfiguration");
+        flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
-                TcFeatureFactory.create(LuceneCharacterNGram.class,
-                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
-                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 1000));
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
 
-        List<Object> configuration = asList(
-                new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS });
-
-        flex.setClassifier(Classifier.LIBSVM, configuration);
-        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
+        List<Object> configuration = asList(new Object[] { SMO.class.getName() });
+        flex.setClassifier(Classifier.WEKA, configuration);
+        flex.addReport(TtWekaKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 
@@ -88,12 +86,11 @@ public class ExampleClassifierLibsvm
         throws Exception
     {
         String language = "en";
-
         String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora= DemoConstants.TEST_FOLDER;
+        String testCorpora = DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
-        
+
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
@@ -103,25 +100,22 @@ public class ExampleClassifierLibsvm
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, testCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, testFileSuffix);
+        
 
         FlexTagTrainTest flex = new FlexTagTrainTest(trainReader, testReader);
-
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("LibsvmConfiguration");
+        flex.setExperimentName("WekaConfiguration");
 
-        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
-                TcFeatureFactory.create(LuceneCharacterNGram.class,
-                        LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
-                        LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 4,
-                        LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 750));
+        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class,
+                LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 2, LuceneCharacterNGram.PARAM_NGRAM_MAX_N,
+                4, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 50));
 
-        List<Object> configuration = asList(
-                new Object[] { "-s", LibsvmAdapter.PARAM_SVM_TYPE_C_SVC_MULTI_CLASS, "-c", "1000",
-                        "-t", LibsvmAdapter.PARAM_KERNEL_RADIAL_BASED });
-        flex.setClassifier(Classifier.LIBSVM, configuration);
-        flex.addReport(TtLibLinearSvmKnownUnknownWordAccuracyReport.class);
+        List<Object> configuration = asList(new Object[] { SMO.class.getName(), "-C", "1.0", "-K",
+                PolyKernel.class.getName() + " " + "-C -1 -E 2" });
+        flex.setClassifier(Classifier.WEKA, configuration);
+        flex.addReport(TtWekaKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples.config;
+package de.unidue.ltl.flextag.examples.tt;
 
 import java.util.Arrays;
 import java.util.List;

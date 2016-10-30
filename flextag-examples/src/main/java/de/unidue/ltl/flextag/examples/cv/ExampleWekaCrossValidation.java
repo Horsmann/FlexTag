@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples;
+package de.unidue.ltl.flextag.examples.cv;
 
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
@@ -28,12 +28,12 @@ import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
 
-public class ExampleCrossValidation
+public class ExampleWekaCrossValidation
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleCrossValidation().run();
+        new ExampleWekaCrossValidation().run();
     }
 
     public void run()

@@ -20,6 +20,8 @@ package de.unidue.ltl.flextag.examples.config;
 
 import org.junit.Test;
 
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierCrfsuite;
+
 public class ExampleClassifierCrfsuiteTest
 {
     @Test

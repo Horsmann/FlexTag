@@ -20,6 +20,8 @@ package de.unidue.ltl.flextag.examples.config;
 
 import org.junit.Test;
 
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierWeka;
+
 public class ExampleClassifierWekaTest
 {
     @Test

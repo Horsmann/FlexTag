@@ -20,7 +20,7 @@ package de.unidue.ltl.flextag.examples;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.config.ExampleReaders;
+import de.unidue.ltl.flextag.examples.tt.ExampleReaders;
 
 public class ExampleReadersTest
 {
