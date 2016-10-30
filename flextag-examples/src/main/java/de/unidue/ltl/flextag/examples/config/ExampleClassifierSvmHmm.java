@@ -45,9 +45,9 @@ public class ExampleClassifierSvmHmm
         throws Exception
     {
         String language = "en";
-        String trainCorpora = DemoConstants.RITTER_TRAIN_FOLDER;
+        String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = DemoConstants.RITTER_TEST_FOLDER;
+        String testCorpora = DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
 
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
