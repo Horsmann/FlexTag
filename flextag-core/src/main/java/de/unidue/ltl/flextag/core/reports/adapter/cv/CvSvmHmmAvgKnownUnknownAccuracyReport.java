@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.unidue.ltl.flextag.core.reports.adapter;
+package de.unidue.ltl.flextag.core.reports.adapter.cv;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,36 +30,35 @@ import org.dkpro.tc.core.ml.TCMachineLearningAdapter;
 import org.dkpro.tc.core.ml.TCMachineLearningAdapter.AdapterNameEntries;
 import org.dkpro.tc.ml.svmhmm.SVMHMMAdapter;
 
-public class TtSvmHmmKnownUnknownWordAccuracyReport
-    extends TtAbstractKnownUnknownWordAccuracyReport
+/**
+ * This report only prints sysout messages to point the user to the ouput directory which is used to
+ * store all results
+ */
+public class CvSvmHmmAvgKnownUnknownAccuracyReport
+    extends CvAbstractAvgKnownUnknownAccuracyReport
 {
+    private String featureFile;
 
     {
         TCMachineLearningAdapter adapter = new SVMHMMAdapter();
         featureFile = adapter.getFrameworkFilename(AdapterNameEntries.featureVectorsFile);
-        predictionFile = adapter.getFrameworkFilename(AdapterNameEntries.predictionsFile);
     }
 
-    public void execute()
+    @Override
+    protected void processIteration()
         throws Exception
     {
         StorageService store = getContext().getStorageService();
-        super.execute();
+        File train = buildFileLocation(store, trainContext,
+                TEST_TASK_OUTPUT_KEY + "/" + featureFile);
+        List<String> trainVocab = extractVocab(train);
 
-        File train = buildFileLocation(store, trainContextId,
-                TEST_TASK_OUTPUT_KEY + "/" + "feature-vectors.txt");
-        List<String> trainTokens = extractVocab(train);
+        File test = buildFileLocation(store, testContext, TEST_TASK_OUTPUT_KEY + "/" + featureFile);
+        List<String> testVocab = extractVocab(test);
 
-        File test = buildFileLocation(store, testContextId,
-                TEST_TASK_OUTPUT_KEY + "/" + "feature-vectors.txt");
-        List<String> testTokens = extractVocab(test);
-
-        File p = buildFileLocation(store, predictionContextId, Constants.ID_OUTCOME_KEY);
+        File p = buildFileLocation(store, mlAdapterContext, Constants.ID_OUTCOME_KEY);
         List<String> pred = readPredictions(p);
-        outputFolder = p.getParentFile();
-
-        evaluate(trainTokens, testTokens, pred);
-        writeResults();
+        evaluate(trainVocab, testVocab, pred, inVocab, outVocab, inVocabCount, outVocabCount);
     }
 
     protected List<String> extractVocab(File train)

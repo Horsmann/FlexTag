@@ -41,8 +41,6 @@ public class TtAccuracyReport
         throws Exception
     {
 
-        String evaluationFolderName = getContext().getId();
-
         /*
          * Iterate over all created folders in DKPRO_HOME that belong to the execution of this
          * experiment e.g. initialization, meta , training data feature extraction, test data
