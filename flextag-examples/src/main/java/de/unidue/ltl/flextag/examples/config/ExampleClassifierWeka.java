@@ -29,7 +29,7 @@ import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.crf.TtWekaKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.TtWekaKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import weka.classifiers.functions.SMO;

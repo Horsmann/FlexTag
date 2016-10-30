@@ -29,7 +29,7 @@ import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.crf.TtCrfKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.TtCrfKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 

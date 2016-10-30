@@ -31,7 +31,7 @@ import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.crf.TtLibLinearSvmKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.TtLibLinearSvmKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
