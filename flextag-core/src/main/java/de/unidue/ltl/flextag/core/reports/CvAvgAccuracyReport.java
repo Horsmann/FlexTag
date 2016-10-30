@@ -33,7 +33,6 @@ import org.dkpro.tc.evaluation.Id2Outcome;
 import org.dkpro.tc.evaluation.evaluator.EvaluatorBase;
 import org.dkpro.tc.evaluation.evaluator.EvaluatorFactory;
 import org.dkpro.tc.evaluation.measures.label.Accuracy;
-import org.dkpro.tc.ml.crfsuite.task.CRFSuiteTestTask;
 import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 
 /**
@@ -104,7 +103,7 @@ public class CvAvgAccuracyReport
             idx++;
         }
         String line = readLines.get(idx);
-        int start = line.indexOf("[");
+        int start = line.indexOf("[") + 1;
         int end = line.indexOf("]");
         String subTasks = line.substring(start, end);
 
@@ -113,7 +112,8 @@ public class CvAvgAccuracyReport
         List<String> results = new ArrayList<>();
 
         for (String task : tasks) {
-            if (task.contains(CRFSuiteTestTask.class.getSimpleName())) {
+            if (TcTaskTypeUtil.isMachineLearningAdapterTask(getContext().getStorageService(),
+                    task.trim())) {
                 results.add(task.trim());
             }
         }

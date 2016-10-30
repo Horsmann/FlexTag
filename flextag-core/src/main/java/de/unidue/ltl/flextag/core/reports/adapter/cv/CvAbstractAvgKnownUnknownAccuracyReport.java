@@ -87,7 +87,7 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
 
                 processIteration();
             }
-            writeResults(outputFolder, inVocab, outVocab, outVocabCount, outVocabCount);
+            writeResults(outputFolder, inVocab, outVocab, inVocabCount, outVocabCount);
         }
     }
 

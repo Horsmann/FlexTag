@@ -30,7 +30,6 @@ import org.dkpro.lab.reporting.BatchReportBase;
 import org.dkpro.lab.storage.StorageService;
 import org.dkpro.lab.task.TaskContextMetadata;
 import org.dkpro.tc.core.Constants;
-import org.dkpro.tc.ml.crfsuite.task.CRFSuiteTestTask;
 import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 
 /**
@@ -117,7 +116,7 @@ public class CvAvgPerWordClassReport
             idx++;
         }
         String line = readLines.get(idx);
-        int start = line.indexOf("[");
+        int start = line.indexOf("[") + 1;
         int end = line.indexOf("]");
         String subTasks = line.substring(start, end);
 
@@ -126,7 +125,8 @@ public class CvAvgPerWordClassReport
         List<String> results = new ArrayList<>();
 
         for (String task : tasks) {
-            if (task.contains(CRFSuiteTestTask.class.getSimpleName())) {
+            if (TcTaskTypeUtil.isMachineLearningAdapterTask(getContext().getStorageService(),
+                    task.trim())) {
                 results.add(task.trim());
             }
         }
