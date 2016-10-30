@@ -30,12 +30,12 @@ import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 /**
  * An example that addresses configuration of readers
  */
-public class ExampleReaders
+public class ExampleReadersTrainTest
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleReaders().run();
+        new ExampleReadersTrainTest().run();
     }
 
     public void run()

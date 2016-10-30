@@ -20,13 +20,13 @@ package de.unidue.ltl.flextag.examples.config;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierCrfsuite;
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierCrfsuiteTrainTest;
 
 public class ExampleClassifierCrfsuiteTest
 {
     @Test
     public void testCrfsuite() throws Exception
     {
-        new ExampleClassifierCrfsuite().run();
+        new ExampleClassifierCrfsuiteTrainTest().run();
     }
 }

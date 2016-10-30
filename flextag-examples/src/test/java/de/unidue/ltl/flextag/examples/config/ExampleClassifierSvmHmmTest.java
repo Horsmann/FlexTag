@@ -20,13 +20,13 @@ package de.unidue.ltl.flextag.examples.config;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierSvmHmm;
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierSvmHmmTrainTest;
 
 public class ExampleClassifierSvmHmmTest
 {
     @Test
     public void testSvmHmm() throws Exception
     {
-        new ExampleClassifierSvmHmm().run();
+        new ExampleClassifierSvmHmmTrainTest().run();
     }
 }

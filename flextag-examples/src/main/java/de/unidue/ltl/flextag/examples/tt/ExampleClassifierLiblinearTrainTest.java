@@ -33,14 +33,14 @@ import de.unidue.ltl.flextag.core.reports.adapter.TtLibLinearSvmKnownUnknownWord
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
-public class ExampleClassifierLiblinear
+public class ExampleClassifierLiblinearTrainTest
 {
     public static void main(String[] args)
         throws Exception
     {
         // Weka's classifier offer various configuration parameters this demo shows how to use Liblinear
         // classifier in their plain mode and with provided configuration parameters
-        new ExampleClassifierLiblinear().runSimple();
+        new ExampleClassifierLiblinearTrainTest().runSimple();
 //        new ExampleClassifierLiblinear().runComplex();
     }
 

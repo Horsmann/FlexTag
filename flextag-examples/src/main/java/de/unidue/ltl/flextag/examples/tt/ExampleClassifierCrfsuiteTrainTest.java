@@ -24,21 +24,21 @@ import java.util.List;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
-import org.dkpro.tc.features.ngram.LuceneNGram;
-import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
+import org.dkpro.tc.features.length.NrOfChars;
+import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
-import de.unidue.ltl.flextag.core.reports.adapter.TtSvmHmmKnownUnknownWordAccuracyReport;
+import de.unidue.ltl.flextag.core.reports.adapter.TtCrfKnownUnknownWordAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 
-public class ExampleClassifierSvmHmm
+public class ExampleClassifierCrfsuiteTrainTest
 {
     public static void main(String[] args)
         throws Exception
     {
-        new ExampleClassifierSvmHmm().run();
+        new ExampleClassifierCrfsuiteTrainTest().run();
     }
 
     public void run()
@@ -47,37 +47,34 @@ public class ExampleClassifierSvmHmm
         String language = "en";
         String trainCorpora = DemoConstants.TRAIN_FOLDER;
         String trainFileSuffix = "*.txt";
-        String testCorpora = DemoConstants.TEST_FOLDER;
+        String testCorpora= DemoConstants.TEST_FOLDER;
         String testFileSuffix = "*.txt";
-
+        
         CollectionReaderDescription trainReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, trainCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, trainFileSuffix);
-
+        
         CollectionReaderDescription testReader = CollectionReaderFactory.createReaderDescription(
                 LineTokenTagReader.class, LineTokenTagReader.PARAM_LANGUAGE, language,
                 LineTokenTagReader.PARAM_SOURCE_LOCATION, testCorpora,
                 LineTokenTagReader.PARAM_PATTERNS, testFileSuffix);
+        
 
         FlexTagTrainTest flex = new FlexTagTrainTest(trainReader, testReader);
 
         if (System.getProperty("DKPRO_HOME") == null) {
             flex.setDKProHomeFolder("target/home");
         }
-        flex.setExperimentName("SvmHmm");
+        flex.setExperimentName("CrfsuiteConfiguration");
 
-        // SvmHmm does not support String value feature, some of the provided feature do use string
-        // values. Please be aware that a feature space which works for classifier A does not
-        // necessarily work for classifier B
-        flex.setFeatures(
-                TcFeatureFactory.create(LuceneNGram.class, LuceneNGram.PARAM_NGRAM_MIN_N, 1,
-                        LuceneNGram.PARAM_NGRAM_MAX_N, 1, LuceneNGram.PARAM_NGRAM_USE_TOP_K, 1000),
-                TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
+        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class));
 
-        List<Object> classificationArgs = Arrays.asList("-c", "5.0", "-t", "2");
-        flex.setClassifier(Classifier.SVMHMM, classificationArgs);
-        flex.addReport(TtSvmHmmKnownUnknownWordAccuracyReport.class);
+        // CRFSuite defines various algorithm to use for training which are defined over the
+        // CRFSuiteAdapter constant. Some are slow on large data sets
+        List<Object> classificationArgs = Arrays.asList(CRFSuiteAdapter.ALGORITHM_AVERAGED_PERCEPTRON);
+        flex.setClassifier(Classifier.CRFSUITE, classificationArgs);
+        flex.addReport(TtCrfKnownUnknownWordAccuracyReport.class);
         flex.execute();
     }
 

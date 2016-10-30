@@ -20,7 +20,7 @@ package de.unidue.ltl.flextag.examples;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleReaders;
+import de.unidue.ltl.flextag.examples.tt.ExampleReadersTrainTest;
 
 public class ExampleReadersTest
 {
@@ -28,7 +28,7 @@ public class ExampleReadersTest
     public void runExample()
         throws Exception
     {
-        new ExampleReaders().run();
+        new ExampleReadersTrainTest().run();
     }
 
 }

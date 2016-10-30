@@ -20,20 +20,20 @@ package de.unidue.ltl.flextag.examples.config;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierWeka;
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierWekaTrainTest;
 
 public class ExampleClassifierWekaTest
 {
     @Test
     public void testWekaSimple() throws Exception
     {
-        new ExampleClassifierWeka().runSimple();
+        new ExampleClassifierWekaTrainTest().runSimple();
     }
     
     @Test
     public void testWekaComplex() throws Exception
     {
-        new ExampleClassifierWeka().runComplex();
+        new ExampleClassifierWekaTrainTest().runComplex();
     }
 
 }
