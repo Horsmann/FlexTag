@@ -63,12 +63,6 @@ public class TtAccuracyReport
 
                 System.out.println(
                         "\n\nAccuracy: " + String.format("%.1f percent\n", accuracy * 100));
-                System.out.println(
-                        "Further results are provided in the DKPRO_HOME folder in the folder starting with ["
-                                + "xxxTestTask] and [Evaluation]\n\n"
-                                + "DKPRO_HOME=" + System.getProperty("DKPRO_HOME") + "\n"
-                                + "i.e.\t* [" + subcontext.getId() + "]\n\t* ["
-                                + evaluationFolderName + "]");
             }
         }
     }
