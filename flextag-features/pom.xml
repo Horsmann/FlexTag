@@ -58,5 +58,17 @@
 			<groupId>org.dkpro.tc</groupId>
 			<artifactId>dkpro-tc-features-ngram</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.api.segmentation-asl
+			</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.api.frequency-asl
+			</artifactId>
+		</dependency>
 	</dependencies>
 </project>
