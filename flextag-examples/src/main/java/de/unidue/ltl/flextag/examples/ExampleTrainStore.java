@@ -25,6 +25,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.TcFeatureSet;
 
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -65,7 +66,7 @@ public class ExampleTrainStore
         // we additionally add a brown cluster and specify that we want to keep using the default
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
-        TcFeatureSet features = DefaultFeatures.getDefaultFeatures();
+        TcFeatureSet features = DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE);
         features.add(TcFeatureFactory.create(BrownCluster.class,
                 BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.setFeatures(features);

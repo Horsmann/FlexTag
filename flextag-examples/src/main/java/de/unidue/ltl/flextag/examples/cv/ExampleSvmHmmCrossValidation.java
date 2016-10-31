@@ -65,11 +65,11 @@ public class ExampleSvmHmmCrossValidation
 
         flex.setFeatures(
                 TcFeatureFactory.create(NrOfChars.class),
-                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                         -1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
-                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                         0, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
-                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                         +1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
                 TcFeatureFactory.create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 1000),
                 TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));

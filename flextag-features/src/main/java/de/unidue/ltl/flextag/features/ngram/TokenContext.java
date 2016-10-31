@@ -36,14 +36,14 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
  * support string values i.e. all except CRFsuite. The features builds a frequency distribution
  * about the top N most frequent tokens. The index parameter defines on which field the focus lies
  * relative to the current token. Thus, -1 will set a boolean word to 1 iff the word is preceding
- * the current token AND the previous token is on of the N most frequent ones.
+ * the current token AND the previous token is one of the N most frequent ones.
  */
 public class TokenContext
     extends LookUpWithLucene
     implements FeatureExtractor
 {
-    public static final String PARAM_INDEX_TARGET_INDEX = "PARAM_INDEX_TARGET_INDEX";
-    @ConfigurationParameter(name = PARAM_INDEX_TARGET_INDEX, mandatory = true)
+    public static final String PARAM_TARGET_INDEX = "PARAM_INDEX_TARGET_INDEX";
+    @ConfigurationParameter(name = PARAM_TARGET_INDEX, mandatory = true)
     protected int shiftIdx;
 
     public Set<Feature> extract(JCas jcas, TextClassificationTarget target)

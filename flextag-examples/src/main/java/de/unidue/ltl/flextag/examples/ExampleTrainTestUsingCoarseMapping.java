@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.TcFeatureSet;
 
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -79,7 +80,7 @@ public class ExampleTrainTestUsingCoarseMapping
         }
         flex.setExperimentName("TrainTestDemo");
 
-        TcFeatureSet features = DefaultFeatures.getDefaultFeatures();
+        TcFeatureSet features = DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE);
         features.add(TcFeatureFactory.create(BrownCluster.class,
                 BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.setFeatures(features);

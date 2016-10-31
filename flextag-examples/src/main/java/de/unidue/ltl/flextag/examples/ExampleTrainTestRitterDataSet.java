@@ -23,6 +23,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 import org.dkpro.tc.api.features.TcFeatureSet;
 
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.core.reports.adapter.TtCrfKnownUnknownWordAccuracyReport;
@@ -74,7 +75,7 @@ public class ExampleTrainTestRitterDataSet
         }
         flex.setExperimentName("RitterRichFeatureSetTrainTestDemo");
 
-        TcFeatureSet features = DefaultFeatures.getDefaultFeatures();
+        TcFeatureSet features = DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE);
         features.add(TcFeatureFactory.create(IsHashtag.class));
         features.add(TcFeatureFactory.create(IsUserMention.class));
         features.add(TcFeatureFactory.create(IsNumber.class));

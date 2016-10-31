@@ -23,20 +23,31 @@ import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 import org.dkpro.tc.features.tcu.TargetSurfaceFormContextFeature;
 
 import de.unidue.ltl.flextag.features.IsFirstLetterCapitalized;
+import de.unidue.ltl.flextag.features.ngram.TokenContext;
 
 public class DefaultFeatures
 {
 
-    public static TcFeatureSet getDefaultFeatures()
+    public static TcFeatureSet getDefaultFeatures(Classifier c)
     {
         TcFeatureSet set = new TcFeatureSet();
 
-        set.add(create(TargetSurfaceFormContextFeature.class,
-                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, -1));
-        set.add(create(TargetSurfaceFormContextFeature.class,
-                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, 0));
-        set.add(create(TargetSurfaceFormContextFeature.class,
-                TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, +1));
+        if (c == Classifier.CRFSUITE) {
+            set.add(create(TargetSurfaceFormContextFeature.class,
+                    TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, -1));
+            set.add(create(TargetSurfaceFormContextFeature.class,
+                    TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, 0));
+            set.add(create(TargetSurfaceFormContextFeature.class,
+                    TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, +1));
+        }
+        else {
+            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+                    -1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
+            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+                    0, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
+            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+                    +1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
+        }
         set.add(create(IsFirstLetterCapitalized.class));
         set.add(create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_MIN_N, 1,
                 LuceneCharacterNGram.PARAM_NGRAM_MAX_N, 1,

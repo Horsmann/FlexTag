@@ -22,6 +22,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 
 import de.tudarmstadt.ukp.dkpro.core.io.tei.TeiReader;
+import de.unidue.ltl.flextag.core.Classifier;
 import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -75,7 +76,7 @@ public class ExampleReadersTrainTest
             flex.setDKProHomeFolder("target/home");
         }
         flex.setExperimentName("ReaderDemo");
-        flex.setFeatures(DefaultFeatures.getDefaultFeatures());
+        flex.setFeatures(DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE));
         flex.execute();
     }
 
