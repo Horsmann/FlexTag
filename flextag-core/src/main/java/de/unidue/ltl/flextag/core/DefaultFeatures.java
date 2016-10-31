@@ -41,11 +41,11 @@ public class DefaultFeatures
                     TargetSurfaceFormContextFeature.PARAM_RELATIVE_TARGET_ANNOTATION_INDEX, +1));
         }
         else {
-            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+            set.add(create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                     -1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
-            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+            set.add(create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                     0, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
-            set.add(create(TargetSurfaceFormContextFeature.class, TokenContext.PARAM_TARGET_INDEX,
+            set.add(create(TokenContext.class, TokenContext.PARAM_TARGET_INDEX,
                     +1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000));
         }
         set.add(create(IsFirstLetterCapitalized.class));
