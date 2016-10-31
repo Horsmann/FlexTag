@@ -61,9 +61,6 @@ public class ExampleWekaCrossValidation
         }
         flex.setExperimentName("WekaCrossValidationDemo");
 
-        // we additionally add a brown cluster and specify that we want to keep using the default
-        // feature set, setting the last parameter to "false" will remove the default feature set
-        // and only use the here specified features will be used.
         flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class));
         
         List<Object> configuration = asList(new Object[] { J48.class.getName() });

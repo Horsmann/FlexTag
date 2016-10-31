@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
 
 import de.unidue.ltl.flextag.core.Classifier;
@@ -60,12 +61,10 @@ public class ExampleLiblinearCrossValidation
         }
         flex.setExperimentName("LiblinearCrossValidationDemo");
 
-        // we additionally add a brown cluster and specify that we want to keep using the default
-        // feature set, setting the last parameter to "false" will remove the default feature set
-        // and only use the here specified features will be used.
-        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class));
-        
-        List<Object> configuration = asList(new Object[] {  "-s", "3" });
+        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
+                TcFeatureFactory.create(LuceneCharacterNGram.class));
+
+        List<Object> configuration = asList(new Object[] { "-s", "3" });
         flex.setClassifier(Classifier.LIBLINEAR, configuration);
         flex.addReport(CvLibLinearSvmAvgKnownUnknownAccuracyReport.class);
         flex.execute();

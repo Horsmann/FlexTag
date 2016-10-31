@@ -24,8 +24,9 @@ import java.util.List;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.features.ngram.LuceneCharacterNGram;
-import org.dkpro.tc.features.ngram.LuceneNGram;
+import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 import org.dkpro.tc.ml.svmhmm.util.OriginalTextHolderFeatureExtractor;
 
 import de.unidue.ltl.flextag.core.Classifier;
@@ -33,6 +34,7 @@ import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
 import de.unidue.ltl.flextag.core.reports.adapter.cv.CvSvmHmmAvgKnownUnknownAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
+import de.unidue.ltl.flextag.features.ngram.TokenContext;
 
 public class ExampleSvmHmmCrossValidation
 {
@@ -61,14 +63,18 @@ public class ExampleSvmHmmCrossValidation
         }
         flex.setExperimentName("SvmHmmCrossValidationDemo");
 
-        // we additionally add a brown cluster and specify that we want to keep using the default
-        // feature set, setting the last parameter to "false" will remove the default feature set
-        // and only use the here specified features will be used.
-        flex.setFeatures(TcFeatureFactory.create(LuceneCharacterNGram.class),
-                TcFeatureFactory.create(LuceneNGram.class),
+        flex.setFeatures(
+                TcFeatureFactory.create(NrOfChars.class),
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                        -1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                        0, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
+                TcFeatureFactory.create(TokenContext.class, TokenContext.PARAM_INDEX_TARGET_INDEX,
+                        +1, TokenContext.PARAM_NGRAM_USE_TOP_K, 1000),
+                TcFeatureFactory.create(LuceneCharacterNGram.class, LuceneCharacterNGram.PARAM_NGRAM_USE_TOP_K, 1000),
                 TcFeatureFactory.create(OriginalTextHolderFeatureExtractor.class));
 
-        List<Object> configuration = Arrays.asList("-c", "5.0", "-t", "2");
+        List<Object> configuration = Arrays.asList("-s", LibsvmAdapter.PARAM_SVM_TYPE_NU_SVC_MULTI_CLASS, "-c", "100.0", "-t", LibsvmAdapter.PARAM_KERNEL_POLYNOMIAL);
         flex.setClassifier(Classifier.SVMHMM, configuration);
         flex.addReport(CvSvmHmmAvgKnownUnknownAccuracyReport.class);
         flex.execute();
