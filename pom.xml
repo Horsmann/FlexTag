@@ -37,12 +37,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	<repositories>
-	<repository>
-  			<id>releaseRep</id>
-  			<url>https://oss.sonatype.org/content/repositories/orgdkpro-1024</url>
-  		</repository>
-  		</repositories>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
