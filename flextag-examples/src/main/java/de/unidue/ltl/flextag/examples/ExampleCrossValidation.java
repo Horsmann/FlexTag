@@ -59,7 +59,7 @@ public class ExampleCrossValidation
         // feature set, setting the last parameter to "false" will remove the default feature set
         // and only use the here specified features will be used.
         flex.setFeatures(TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+                BrownCluster.PARAM_RESOURCE_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.addReport(CvCrfAvgKnownUnknownAccuracyReport.class);
         flex.execute();
     }

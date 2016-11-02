@@ -82,7 +82,7 @@ public class ExampleTrainTestUsingCoarseMapping
 
         TcFeatureSet features = DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE);
         features.add(TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+                BrownCluster.PARAM_RESOURCE_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.setFeatures(features);
 
         flex.useCoarse(true); // set to true to use the coarse mapped tags

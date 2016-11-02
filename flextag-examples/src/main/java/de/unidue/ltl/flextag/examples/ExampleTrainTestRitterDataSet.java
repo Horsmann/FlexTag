@@ -81,7 +81,7 @@ public class ExampleTrainTestRitterDataSet
         features.add(TcFeatureFactory.create(IsNumber.class));
         features.add(TcFeatureFactory.create(IsRetweet.class));
         features.add(TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+                BrownCluster.PARAM_RESOURCE_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.setFeatures(features);
 
         flex.addReport(TtCrfKnownUnknownWordAccuracyReport.class);

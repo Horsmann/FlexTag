@@ -57,16 +57,16 @@ public class BrownCluster
 
     static final String FEATURE_NOVALUE = "*";
 
-    public static final String PARAM_BROWN_CLUSTER_LOCATION = "brownLocation";
-    @ConfigurationParameter(name = PARAM_BROWN_CLUSTER_LOCATION, mandatory = true)
+    public static final String PARAM_RESOURCE_LOCATION = "brownLocation";
+    @ConfigurationParameter(name = PARAM_RESOURCE_LOCATION, mandatory = true)
     File inputFile;
 
-    public static final String PARAM_BROWN_CLUSTER_NORMALIZATION = "doBrownNormalization";
-    @ConfigurationParameter(name = PARAM_BROWN_CLUSTER_NORMALIZATION, mandatory = true, defaultValue = "true")
+    public static final String PARAM_USE_NORMALIZATION = "doBrownNormalization";
+    @ConfigurationParameter(name = PARAM_USE_NORMALIZATION, mandatory = true, defaultValue = "true")
     Boolean normalize;
 
-    public static final String PARAM_LOWER_CASE = "doBrownLowerCase";
-    @ConfigurationParameter(name = PARAM_LOWER_CASE, mandatory = true, defaultValue = "true")
+    public static final String PARAM_USE_LOWER_CASE = "doBrownLowerCase";
+    @ConfigurationParameter(name = PARAM_USE_LOWER_CASE, mandatory = true, defaultValue = "true")
     Boolean lowerCase;
 
     private HashMap<String, String> map = null;

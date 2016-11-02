@@ -68,7 +68,7 @@ public class ExampleTrainStore
         // and only use the here specified features will be used.
         TcFeatureSet features = DefaultFeatures.getDefaultFeatures(Classifier.CRFSUITE);
         features.add(TcFeatureFactory.create(BrownCluster.class,
-                BrownCluster.PARAM_BROWN_CLUSTER_LOCATION, DemoConstants.BROWN_CLUSTER));
+                BrownCluster.PARAM_RESOURCE_LOCATION, DemoConstants.BROWN_CLUSTER));
         flex.setFeatures(features);
 
         flex.execute();

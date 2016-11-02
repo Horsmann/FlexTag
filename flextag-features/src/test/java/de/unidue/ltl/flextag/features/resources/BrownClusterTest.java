@@ -57,11 +57,11 @@ public class BrownClusterTest
     public void testFirstToken()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
-                "src/test/resources/dummyBrownCluster.txt.gz",
-                BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
-                true));
+        BrownCluster featureExtractor = FeatureUtil.createResource(
+                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                        "src/test/resources/dummyBrownCluster.txt.gz",
+                        BrownCluster.PARAM_USE_NORMALIZATION, true,
+                        BrownCluster.PARAM_USE_LOWER_CASE, true));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
         assertEquals(8, extract.size());
@@ -96,11 +96,11 @@ public class BrownClusterTest
     public void testFirstTokenNoCompressedCluster()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
-                "src/test/resources/dummyBrownCluster.txt.gz",
-                BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
-                true));
+        BrownCluster featureExtractor = FeatureUtil.createResource(
+                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                        "src/test/resources/dummyBrownCluster.txt.gz",
+                        BrownCluster.PARAM_USE_NORMALIZATION, true,
+                        BrownCluster.PARAM_USE_LOWER_CASE, true));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
         assertEquals(8, extract.size());
@@ -135,11 +135,11 @@ public class BrownClusterTest
     public void testSecondToken()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
-                "src/test/resources/dummyBrownCluster.txt.gz",
-                BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
-                true));
+        BrownCluster featureExtractor = FeatureUtil.createResource(
+                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                        "src/test/resources/dummyBrownCluster.txt.gz",
+                        BrownCluster.PARAM_USE_NORMALIZATION, true,
+                        BrownCluster.PARAM_USE_LOWER_CASE, true));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
         assertEquals(8, extract.size());
@@ -185,11 +185,11 @@ public class BrownClusterTest
     public void testNoNormalization()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
-                "src/test/resources/dummyBrownCluster.txt.gz",
-                BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, false, BrownCluster.PARAM_LOWER_CASE,
-                true));
+        BrownCluster featureExtractor = FeatureUtil.createResource(
+                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                        "src/test/resources/dummyBrownCluster.txt.gz",
+                        BrownCluster.PARAM_USE_NORMALIZATION, false,
+                        BrownCluster.PARAM_USE_LOWER_CASE, true));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
         assertEquals(8, extract.size());
@@ -224,16 +224,16 @@ public class BrownClusterTest
     public void testNoLowerCasing()
         throws Exception
     {
-        
-        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
-                BrownCluster.class, BrownCluster.PARAM_BROWN_CLUSTER_LOCATION,
-                "src/test/resources/dummyBrownCluster.txt.gz",
-                BrownCluster.PARAM_BROWN_CLUSTER_NORMALIZATION, true, BrownCluster.PARAM_LOWER_CASE,
-                false));
+
+        BrownCluster featureExtractor = FeatureUtil.createResource(
+                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                        "src/test/resources/dummyBrownCluster.txt.gz",
+                        BrownCluster.PARAM_USE_NORMALIZATION, true,
+                        BrownCluster.PARAM_USE_LOWER_CASE, false));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
         assertEquals(8, extract.size());
-        
+
         Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
         assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
 
