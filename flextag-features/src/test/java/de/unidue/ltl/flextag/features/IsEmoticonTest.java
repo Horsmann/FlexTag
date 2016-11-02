@@ -17,13 +17,74 @@
  ******************************************************************************/
 package de.unidue.ltl.flextag.features;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.uima.UIMAException;
+import org.apache.uima.fit.factory.JCasFactory;
+import org.apache.uima.jcas.JCas;
+import org.dkpro.tc.api.features.Feature;
+import org.dkpro.tc.api.features.TcFeatureFactory;
+import org.dkpro.tc.api.features.util.FeatureUtil;
+import org.dkpro.tc.api.type.TextClassificationTarget;
+import org.junit.Before;
 import org.junit.Test;
 
 public class IsEmoticonTest {
 	
+    JCas jcas;
+    TextClassificationTarget tokOne;
+    TextClassificationTarget tokTwo;
+
+    @Before
+    public void setUp()
+        throws UIMAException
+    {
+        JCas jcas = JCasFactory.createJCas();
+        jcas.setDocumentLanguage("en");
+        jcas.setDocumentText("Hi :)");
+
+        tokOne = new TextClassificationTarget(jcas, 0, 2);
+        tokOne.addToIndexes();
+
+        tokTwo = new TextClassificationTarget(jcas, 3, 5);
+        tokTwo.addToIndexes();
+    }
+
+    @Test
+    public void testFirstToken()
+        throws Exception
+    {
+        IsEmoticon featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsEmoticon.class));
+        List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
+
+        assertEquals(1, features.size());
+
+        String featureName = features.get(0).getName();
+        Object featureValue = features.get(0).getValue();
+        assertEquals(IsEmoticon.FEATURE_NAME, featureName);
+        assertEquals(0, featureValue);
+    }
+    
+    @Test
+    public void testSecondToken()
+        throws Exception
+    {
+        IsEmoticon featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(IsEmoticon.class));
+        List<Feature> features = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
+
+        assertEquals(1, features.size());
+
+        String featureName = features.get(0).getName();
+        Object featureValue = features.get(0).getValue();
+        assertEquals(IsEmoticon.FEATURE_NAME, featureName);
+        assertEquals(1, featureValue);
+    }
+    
 	@Test
 	public void noEmoticon(){
 		assertFalse(IsEmoticon.isEmoticon("."));

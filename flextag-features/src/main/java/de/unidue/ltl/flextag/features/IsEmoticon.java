@@ -33,7 +33,7 @@ public class IsEmoticon
     implements FeatureExtractor
 {
 
-    public final String FEATURE_NAME = "isSmiley";
+    public static final String FEATURE_NAME = "isSmiley";
 
     public Set<Feature> extract(JCas aView, TextClassificationTarget aClassificationUnit)
         throws TextClassificationException
