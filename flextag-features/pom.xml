@@ -75,5 +75,27 @@
 		  <artifactId>de.tudarmstadt.ukp.dkpro.core.tokit-asl</artifactId>
 		  <scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.tc</groupId>
+			<artifactId>dkpro-tc-fstore-simple</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.io.text-asl
+			</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 	</dependencies>
 </project>
