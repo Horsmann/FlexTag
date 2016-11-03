@@ -79,6 +79,10 @@ public abstract class FlexTagSetUp
         return Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
                 CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
     }
+    
+    public List<Class<? extends Report>> getReports(){
+        return reports;
+    }
 
     /**
      * Sets a new feature set
@@ -89,6 +93,13 @@ public abstract class FlexTagSetUp
     public void setFeatures(TcFeatureSet featureSet)
     {
         this.features = featureSet;
+    }
+    
+    /**
+     * Removes all reports
+     */
+    public void removeReports(){
+        this.reports = new ArrayList<>();
     }
 
     /**
@@ -121,6 +132,11 @@ public abstract class FlexTagSetUp
     {
         this.experimentName = experimentName;
     }
+    
+    public String getExperimentName()
+    {
+        return this.experimentName;
+    }
 
     public void setDKProHomeFolder(String home)
     {
@@ -141,7 +157,7 @@ public abstract class FlexTagSetUp
                 dimClassificationArgs);
     }
 
-    protected Class<? extends TCMachineLearningAdapter> getClassifier()
+    public Class<? extends TCMachineLearningAdapter> getClassifier()
     {
         switch (classifier) {
         case CRFSUITE:
@@ -160,6 +176,10 @@ public abstract class FlexTagSetUp
         }
 
     }
+    
+    public TcFeatureSet getFeatures(){
+        return this.features;
+    }
 
     @SuppressWarnings("unchecked")
     public void setClassifier(Classifier classifier, List<Object> dimClassificationArgs)
@@ -168,7 +188,7 @@ public abstract class FlexTagSetUp
         this.dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS,
                 dimClassificationArgs);
     }
-
+    
     /**
      * @param useCoarse
      *            The POS tags are automatically mapped to their coarse value if this is set to true
@@ -176,7 +196,7 @@ public abstract class FlexTagSetUp
      * @throws ResourceInitializationException
      *             for erroneous configurations
      */
-    protected AnalysisEngineDescription getPreprocessing(boolean useCoarse)
+    public AnalysisEngineDescription getPreprocessing(boolean useCoarse)
         throws ResourceInitializationException
     {
         List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
