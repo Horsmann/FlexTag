@@ -27,7 +27,7 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
 
 import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
-import de.unidue.ltl.flextag.core.FlexTagUseModel;
+import de.unidue.ltl.flextag.core.UseModelFlexTag;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
 import de.unidue.ltl.flextag.examples.util.LineTokenTagReader;
 import de.unidue.ltl.flextag.features.resources.BrownCluster;
@@ -44,14 +44,14 @@ public class ExampleUseModel
         new ExampleUseModel().run();
     }
 
-    public void run()
+    public List<String> run()
         throws Exception
     {
         String modelFolder = "target/theModel";
         // train the model we will use later
         trainModel(modelFolder);
 
-        FlexTagUseModel useModel = new FlexTagUseModel(modelFolder, "en");
+        UseModelFlexTag useModel = new UseModelFlexTag(modelFolder, "en");
 
         // We expect as input a list of tokens that shall be tagged
         List<String> sentence = Arrays.asList(new String[] { "I", "go", "to", "sleep", "!" });
@@ -65,6 +65,7 @@ public class ExampleUseModel
                 System.out.print(" ");
             }
         }
+        return posTags;
     }
 
     private static void trainModel(String folder)

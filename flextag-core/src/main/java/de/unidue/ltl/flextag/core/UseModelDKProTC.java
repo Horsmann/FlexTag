@@ -32,11 +32,16 @@ import org.dkpro.tc.ml.uima.TcAnnotator;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 
-public class FlexTag
+/**
+ * This classes directly calls the underlying DKPro Text Classification framework. The class shows a
+ * few more details about the internal implementation of FlexTag in a minimal fashion for those who
+ * require more direct access to the technical details.
+ */
+public class UseModelDKProTC
 {
     private AnalysisEngine flexTagEngine;
 
-    public FlexTag(String modelLocation)
+    public UseModelDKProTC(String modelLocation)
         throws Exception
     {
         flexTagEngine = AnalysisEngineFactory.createEngine(TcAnnotator.class,

@@ -18,6 +18,10 @@
  */
 package de.unidue.ltl.flextag.examples;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
 import org.junit.Test;
 
 public class ExampleUseModelTest
@@ -26,7 +30,13 @@ public class ExampleUseModelTest
     public void runExample()
         throws Exception
     {
-        new ExampleUseModel().run();
+        List<String> tags = new ExampleUseModel().run();
+        assertEquals(5, tags.size());
+        assertEquals("IN", tags.get(0));
+        assertEquals("VBG", tags.get(1));
+        assertEquals("IN", tags.get(2));
+        assertEquals("NN", tags.get(3));
+        assertEquals(".", tags.get(4));
     }
 
 }

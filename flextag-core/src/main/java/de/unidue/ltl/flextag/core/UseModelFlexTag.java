@@ -36,11 +36,11 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unidue.ltl.flextag.core.uima.FlexTagUima;
 
-public class FlexTagUseModel
+public class UseModelFlexTag
 {
     AnalysisEngine engine;
 
-    public FlexTagUseModel(String filePathToFolderContainingModel, String language)
+    public UseModelFlexTag(String filePathToFolderContainingModel, String language)
         throws ResourceInitializationException
     {
         engine = AnalysisEngineFactory.createEngine(FlexTagUima.class, FlexTagUima.PARAM_LANGUAGE,
