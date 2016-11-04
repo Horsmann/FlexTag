@@ -25,10 +25,10 @@ import java.util.List;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.dkpro.tc.api.features.TcFeatureFactory;
-import org.dkpro.tc.features.length.NrOfChars;
 import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
 
 import de.unidue.ltl.flextag.core.Classifier;
+import de.unidue.ltl.flextag.core.DefaultFeatures;
 import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
 import de.unidue.ltl.flextag.core.reports.adapter.cv.CvLibLinearSvmAvgKnownUnknownAccuracyReport;
 import de.unidue.ltl.flextag.examples.util.DemoConstants;
@@ -63,8 +63,8 @@ public class ExampleLibsvmCrossValidation
         }
         flex.setExperimentName("LibsvmCrossValidationDemo");
 
-        flex.setFeatures(TcFeatureFactory.create(NrOfChars.class),
-                TcFeatureFactory.create(Word2VecEmbeddings.class,
+        flex.setFeatures(DefaultFeatures.getDefaultFeatures(Classifier.LIBSVM));
+        flex.setFeatures(TcFeatureFactory.create(Word2VecEmbeddings.class,
                         Word2VecEmbeddings.PARAM_RESOURCE_LOCATION, DemoConstants.WORD_EMBEDDINGS));
 
         List<Object> configuration = asList(

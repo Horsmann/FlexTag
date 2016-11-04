@@ -16,17 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples.config;
+package de.unidue.ltl.flextag.examples.classifier.traintest;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierCrfsuiteTrainTest;
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierWekaTrainTest;
 
-public class ExampleClassifierCrfsuiteTest
+public class ExampleClassifierWekaTest
 {
     @Test
-    public void testCrfsuite() throws Exception
+    public void testWekaSimple() throws Exception
     {
-        new ExampleClassifierCrfsuiteTrainTest().run();
+        new ExampleClassifierWekaTrainTest().runSimple();
     }
+    
+    @Test
+    public void testWekaComplex() throws Exception
+    {
+        new ExampleClassifierWekaTrainTest().runComplex();
+    }
+
 }
