@@ -44,6 +44,8 @@ public class FlexTagTrainSaveModel
     public void execute()
         throws Exception
     {
+        checkFeatureSpace();
+        
         Map<String, Object> dimReaders = new HashMap<String, Object>();
         dimReaders.put(DIM_READER_TRAIN, reader);
 
@@ -54,7 +56,7 @@ public class FlexTagTrainSaveModel
                 modelOutputFolder);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(getPreprocessing(useCoarse));
+        batch.setPreprocessing(getPreprocessing());
 
         Lab.getInstance().run(batch);
     }

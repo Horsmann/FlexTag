@@ -79,8 +79,9 @@ public abstract class FlexTagSetUp
         return Dimension.create(DIM_CLASSIFICATION_ARGS, asList(new String[] {
                 CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
     }
-    
-    public List<Class<? extends Report>> getReports(){
+
+    public List<Class<? extends Report>> getReports()
+    {
         return reports;
     }
 
@@ -94,11 +95,12 @@ public abstract class FlexTagSetUp
     {
         this.features = featureSet;
     }
-    
+
     /**
      * Removes all reports
      */
-    public void removeReports(){
+    public void removeReports()
+    {
         this.reports = new ArrayList<>();
     }
 
@@ -132,7 +134,7 @@ public abstract class FlexTagSetUp
     {
         this.experimentName = experimentName;
     }
-    
+
     public String getExperimentName()
     {
         return this.experimentName;
@@ -176,8 +178,9 @@ public abstract class FlexTagSetUp
         }
 
     }
-    
-    public TcFeatureSet getFeatures(){
+
+    public TcFeatureSet getFeatures()
+    {
         return this.features;
     }
 
@@ -188,15 +191,14 @@ public abstract class FlexTagSetUp
         this.dimClassificationArgs = Dimension.create(DIM_CLASSIFICATION_ARGS,
                 dimClassificationArgs);
     }
-    
+
     /**
-     * @param useCoarse
-     *            The POS tags are automatically mapped to their coarse value if this is set to true
-     * @return Preprocessing pipeline
+     * Gets the current pre-processing set up
+     * @return Pre-processing pipeline
      * @throws ResourceInitializationException
      *             for erroneous configurations
      */
-    public AnalysisEngineDescription getPreprocessing(boolean useCoarse)
+    public AnalysisEngineDescription getPreprocessing()
         throws ResourceInitializationException
     {
         List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
@@ -227,10 +229,10 @@ public abstract class FlexTagSetUp
         reports.add(report);
     }
 
-    protected void addReports(List<Class<? extends Report>> r)
+    public void addReports(List<Class<? extends Report>> r)
     {
-        for (Class<? extends Report> c : reports) {
-            batch.addReport(c);
+        for (Class<? extends Report> c : r) {
+            reports.add(c);
         }
     }
 

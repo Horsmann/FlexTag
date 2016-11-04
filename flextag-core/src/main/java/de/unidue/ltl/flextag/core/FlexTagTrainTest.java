@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
-import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
@@ -37,7 +36,6 @@ import org.dkpro.tc.ml.report.BatchTrainTestReport;
 
 import de.unidue.ltl.flextag.core.reports.TtAccuracyPerWordClassReport;
 import de.unidue.ltl.flextag.core.reports.TtAccuracyReport;
-import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public class FlexTagTrainTest
     extends FlexTagSetUp
@@ -89,7 +87,8 @@ public class FlexTagTrainTest
     public void execute()
         throws Exception
     {
-
+        checkFeatureSpace();
+        
         Map<String, Object> dimReaders = wrapReaders();
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
 
@@ -99,9 +98,7 @@ public class FlexTagTrainTest
         batch = new ExperimentTrainTest(experimentName, getClassifier());
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(
-                AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
-                        TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+        batch.setPreprocessing(getPreprocessing());
         addReports(reports);
 
         Lab.getInstance().run(batch);
