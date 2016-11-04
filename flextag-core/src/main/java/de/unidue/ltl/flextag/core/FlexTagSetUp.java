@@ -28,6 +28,7 @@ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
@@ -64,6 +65,7 @@ public abstract class FlexTagSetUp
 
     protected List<Class<? extends Report>> reports;
     boolean useCoarse = false;
+    boolean didWire = false;
 
     public FlexTagSetUp(CollectionReaderDescription reader)
     {
@@ -243,6 +245,17 @@ public abstract class FlexTagSetUp
         }
     }
 
-    public abstract void execute()
+    public abstract void wire()
         throws Exception;
+    
+    Experiment_ImplBase getLabTask(){
+        return batch;
+    }
+    
+    public void execute() throws Exception{
+        if(!didWire){
+            wire();
+        }
+        Lab.getInstance().run(batch);
+    }
 }

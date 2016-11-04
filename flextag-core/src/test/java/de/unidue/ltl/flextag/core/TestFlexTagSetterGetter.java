@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package de.unidue.flextag.core;
+package de.unidue.ltl.flextag.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,9 +35,11 @@ import org.apache.uima.resource.ResourceSpecifier;
 import org.apache.uima.util.InvalidXMLException;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.reporting.ReportBase;
+import org.dkpro.lab.task.ParameterSpace;
 import org.dkpro.tc.api.exception.TextClassificationException;
 import org.dkpro.tc.api.features.TcFeature;
 import org.dkpro.tc.api.features.TcFeatureSet;
+import org.dkpro.tc.ml.Experiment_ImplBase;
 import org.dkpro.tc.ml.crfsuite.CRFSuiteAdapter;
 import org.dkpro.tc.ml.liblinear.LiblinearAdapter;
 import org.dkpro.tc.ml.libsvm.LibsvmAdapter;
@@ -46,10 +49,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import de.tudarmstadt.ukp.dkpro.core.tokit.BreakIteratorSegmenter;
-import de.unidue.ltl.flextag.core.Classifier;
-import de.unidue.ltl.flextag.core.FlexTagCrossValidation;
-import de.unidue.ltl.flextag.core.FlexTagTrainSaveModel;
-import de.unidue.ltl.flextag.core.FlexTagTrainTest;
 import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public class TestFlexTagSetterGetter
@@ -239,5 +238,112 @@ public class TestFlexTagSetterGetter
         assertEquals(4, cv.getReports().size());
         cv.removeReports();
         assertEquals(0, cv.getReports().size());
+    }
+    
+    @Test
+    public void testWiringTrainTest() throws Exception{
+        CollectionReaderDescription train = Mockito.mock(CollectionReaderDescription.class);
+        CollectionReaderDescription test = Mockito.mock(CollectionReaderDescription.class);
+        FlexTagTrainTest tt = new FlexTagTrainTest(train, test);
+        tt.setFeatures(Mockito.mock(TcFeature.class));
+        tt.setFeatures(Mockito.mock(TcFeature.class));
+        tt.wire();
+        
+        Experiment_ImplBase labTask = tt.getLabTask();
+        ParameterSpace parameterSpace = labTask.getParameterSpace();
+        Iterator<Map<String, Object>> iterator = parameterSpace.iterator();
+        
+        Set<String> expectedDimensions = new HashSet<>();
+        expectedDimensions.add("readerTrain");
+        expectedDimensions.add("readerTest");
+        expectedDimensions.add("featureSet");
+        
+        while(iterator.hasNext()){
+            Map<String, Object> next = iterator.next();
+            for(String k : next.keySet()){
+                if(k.equals("readerTrain")){
+                    expectedDimensions.remove("readerTrain");
+                }
+                if(k.equals("readerTest")){
+                    expectedDimensions.remove("readerTest");
+                }
+                if(k.equals("featureSet")){
+                    expectedDimensions.remove("featureSet");
+                    TcFeatureSet object = (TcFeatureSet) next.get(k);
+                    assertEquals(2, object.size());
+                }
+            }
+        }
+        
+        assertTrue(expectedDimensions.isEmpty());
+        assertEquals(3, labTask.getReports().size());
+    }
+    
+    @Test
+    public void testWiringCrossValidation() throws Exception{
+        CollectionReaderDescription train = Mockito.mock(CollectionReaderDescription.class);
+        FlexTagCrossValidation cv = new FlexTagCrossValidation(train, 2);
+        cv.setFeatures(Mockito.mock(TcFeature.class));
+        cv.setFeatures(Mockito.mock(TcFeature.class));
+        cv.wire();
+        
+        Experiment_ImplBase labTask = cv.getLabTask();
+        ParameterSpace parameterSpace = labTask.getParameterSpace();
+        Iterator<Map<String, Object>> iterator = parameterSpace.iterator();
+        
+        Set<String> expectedDimensions = new HashSet<>();
+        expectedDimensions.add("readerTrain");
+        expectedDimensions.add("featureSet");
+        
+        while(iterator.hasNext()){
+            Map<String, Object> next = iterator.next();
+            for(String k : next.keySet()){
+                if(k.equals("readerTrain")){
+                    expectedDimensions.remove("readerTrain");
+                }
+                if(k.equals("featureSet")){
+                    expectedDimensions.remove("featureSet");
+                    TcFeatureSet object = (TcFeatureSet) next.get(k);
+                    assertEquals(2, object.size());
+                }
+            }
+        }
+        
+        assertTrue(expectedDimensions.isEmpty());
+        assertEquals(3, labTask.getReports().size());
+    }
+    
+    @Test
+    public void testWiringSaveModel() throws Exception{
+        CollectionReaderDescription train = Mockito.mock(CollectionReaderDescription.class);
+        FlexTagTrainSaveModel ts = new FlexTagTrainSaveModel(train, new File("target"));
+        ts.setFeatures(Mockito.mock(TcFeature.class));
+        ts.setFeatures(Mockito.mock(TcFeature.class));
+        ts.wire();
+        
+        Experiment_ImplBase labTask = ts.getLabTask();
+        ParameterSpace parameterSpace = labTask.getParameterSpace();
+        Iterator<Map<String, Object>> iterator = parameterSpace.iterator();
+        
+        Set<String> expectedDimensions = new HashSet<>();
+        expectedDimensions.add("readerTrain");
+        expectedDimensions.add("featureSet");
+        
+        while(iterator.hasNext()){
+            Map<String, Object> next = iterator.next();
+            for(String k : next.keySet()){
+                if(k.equals("readerTrain")){
+                    expectedDimensions.remove("readerTrain");
+                }
+                if(k.equals("featureSet")){
+                    expectedDimensions.remove("featureSet");
+                    TcFeatureSet object = (TcFeatureSet) next.get(k);
+                    assertEquals(2, object.size());
+                }
+            }
+        }
+        
+        assertTrue(expectedDimensions.isEmpty());
+        assertEquals(0, labTask.getReports().size());
     }
 }

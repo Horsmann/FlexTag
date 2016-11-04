@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
-import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
@@ -71,15 +70,8 @@ public class FlexTagCrossValidation
         innerReports = new ArrayList<>();
     }
 
-    private void addInnerReports()
-    {
-        for (Class<? extends Report> r : innerReports) {
-            batch.addInnerReport(r);
-        }
-    }
-
     @Override
-    public void execute()
+    public void wire()
         throws Exception
     {
         checkFeatureSpace();
@@ -94,10 +86,14 @@ public class FlexTagCrossValidation
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
         batch.setPreprocessing(getPreprocessing());
 
-        addReports(reports);
-        addInnerReports();
+        for(Class<? extends Report> r : reports){
+            batch.addReport(r);
+        }
+        for (Class<? extends Report> r : innerReports) {
+            batch.addInnerReport(r);
+        }
 
-        Lab.getInstance().run(batch);
+        didWire = true;
     }
 
 }

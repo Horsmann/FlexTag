@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
@@ -84,7 +83,7 @@ public class FlexTagTrainTest
     }
 
     @Override
-    public void execute()
+    public void wire()
         throws Exception
     {
         checkFeatureSpace();
@@ -99,10 +98,12 @@ public class FlexTagTrainTest
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
         batch.setPreprocessing(getPreprocessing());
-        addReports(reports);
-
-        Lab.getInstance().run(batch);
-
+        
+        for(Class<? extends Report> r : reports){
+            batch.addReport(r);
+        }
+        
+        didWire = true;
     }
 
 }
