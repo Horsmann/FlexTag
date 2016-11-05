@@ -49,12 +49,10 @@ public class BrownCluster
     private File inputFile;
 
     /**
-     * Defines in which sizes the bit string information is set as feature
-     * for instance bit string 1111000 
-     * - granularity 1 will set set following feature values {1,11,111,1111,11110, ...}
-     * - granularity 2 will set set following feature values {11,1111,111100, ...}
-     * - granularity 3 will set set following feature values {111,111100, ...}
-     * default is 2
+     * Defines in which sizes the bit string information is set as feature for instance bit string
+     * 1111000 - granularity 1 will set set following feature values {1,11,111,1111,11110, ...} -
+     * granularity 2 will set set following feature values {11,1111,111100, ...} - granularity 3
+     * will set set following feature values {111,111100, ...} default is 2
      */
     public static final String PARAM_CODE_GRANULARITY = "brownGranularity";
     @ConfigurationParameter(name = PARAM_CODE_GRANULARITY, mandatory = true, defaultValue = "2")
@@ -125,14 +123,25 @@ public class BrownCluster
         }
 
         for (int i = 0; i < maxClustLength; i = i + stepSize) {
+            boolean dummy=false;
             String subCode = null;
+            //the bit code is to short
             if (bitCode.length() < i + stepSize) {
-                subCode = bitCode;
+                
+                //a few bits are new but not full step size so use the string as is
+                if (i <= bitCode.length()) {
+                    subCode = bitCode;
+                }
+                else {
+                    // not new information, set dummy value
+                    subCode = NOT_SET;
+                    dummy = true;
+                }
             }
             else {
                 subCode = bitCode.substring(0, i + stepSize);
             }
-            features.add(new Feature(FEATURE_NAME + (i + stepSize), subCode));
+            features.add(new Feature(FEATURE_NAME + (i + stepSize), subCode, dummy));
             // System.out.println(subCode);
         }
 
