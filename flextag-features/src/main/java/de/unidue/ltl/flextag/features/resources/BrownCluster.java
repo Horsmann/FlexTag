@@ -48,6 +48,14 @@ public class BrownCluster
     @ConfigurationParameter(name = PARAM_RESOURCE_LOCATION, mandatory = true)
     private File inputFile;
 
+    /**
+     * Defines in which sizes the bit string information is set as feature
+     * for instance bit string 1111000 
+     * - granularity 1 will set set following feature values {1,11,111,1111,11110, ...}
+     * - granularity 2 will set set following feature values {11,1111,111100, ...}
+     * - granularity 3 will set set following feature values {111,111100, ...}
+     * default is 2
+     */
     public static final String PARAM_CODE_GRANULARITY = "brownGranularity";
     @ConfigurationParameter(name = PARAM_CODE_GRANULARITY, mandatory = true, defaultValue = "2")
     private int stepSize;
