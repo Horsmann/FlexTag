@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
-import org.dkpro.lab.Lab;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
@@ -41,22 +40,24 @@ public class FlexTagTrainSaveModel
     }
 
     @Override
-    public void execute()
+    public void wire()
         throws Exception
     {
+        checkFeatureSpace();
+
         Map<String, Object> dimReaders = new HashMap<String, Object>();
         dimReaders.put(DIM_READER_TRAIN, reader);
 
         Dimension<TcFeatureSet> dimFeatureSets = wrapFeatures();
         ParameterSpace pSpace = assembleParameterSpace(dimReaders, dimFeatureSets);
 
-        ExperimentSaveModel batch = new ExperimentSaveModel(experimentName, getClassifier(),
+        batch = new ExperimentSaveModel(experimentName, getClassifier(),
                 modelOutputFolder);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(getPreprocessing(useCoarse));
+        batch.setPreprocessing(getPreprocessing());
 
-        Lab.getInstance().run(batch);
+        didWire = true;
     }
 
 }

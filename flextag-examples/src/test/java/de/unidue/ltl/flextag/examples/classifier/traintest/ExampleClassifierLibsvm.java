@@ -16,17 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples.config;
+package de.unidue.ltl.flextag.examples.classifier.traintest;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierSvmHmmTrainTest;
+import de.unidue.ltl.flextag.examples.tt.ExampleClassifierLibsvmTrainTest;
 
-public class ExampleClassifierSvmHmmTest
+public class ExampleClassifierLibsvm
 {
     @Test
-    public void testSvmHmm() throws Exception
+    public void testSimple() throws Exception
     {
-        new ExampleClassifierSvmHmmTrainTest().run();
+        new ExampleClassifierLibsvmTrainTest().runSimple();
     }
+    
+    @Test
+    public void testComplex() throws Exception
+    {
+        new ExampleClassifierLibsvmTrainTest().runComplex();
+    }
+
 }

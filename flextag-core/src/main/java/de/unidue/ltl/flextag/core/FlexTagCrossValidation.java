@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.uima.collection.CollectionReaderDescription;
-import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.BatchTask.ExecutionPolicy;
 import org.dkpro.lab.task.Dimension;
@@ -36,7 +34,6 @@ import org.dkpro.tc.ml.report.BatchCrossValidationReport;
 
 import de.unidue.ltl.flextag.core.reports.CvAvgAccuracyReport;
 import de.unidue.ltl.flextag.core.reports.CvAvgPerWordClassReport;
-import de.unidue.ltl.flextag.core.uima.TcPosTaggingWrapper;
 
 public class FlexTagCrossValidation
     extends FlexTagSetUp
@@ -73,19 +70,11 @@ public class FlexTagCrossValidation
         innerReports = new ArrayList<>();
     }
 
-    private void addInnerReports()
-    {
-        for (Class<? extends Report> r : innerReports) {
-            batch.addInnerReport(r);
-        }
-    }
-
     @Override
-    public void execute()
+    public void wire()
         throws Exception
     {
         checkFeatureSpace();
-
         Map<String, Object> dimReaders = new HashMap<>();
 
         dimReaders.put(DIM_READER_TRAIN, reader);
@@ -95,14 +84,16 @@ public class FlexTagCrossValidation
         batch = new ExperimentCrossValidation(experimentName, getClassifier(), numberOfFolds);
         batch.setParameterSpace(pSpace);
         batch.setExecutionPolicy(ExecutionPolicy.RUN_AGAIN);
-        batch.setPreprocessing(
-                AnalysisEngineFactory.createEngineDescription(TcPosTaggingWrapper.class,
-                        TcPosTaggingWrapper.PARAM_USE_COARSE_GRAINED, useCoarse));
+        batch.setPreprocessing(getPreprocessing());
 
-        addReports(reports);
-        addInnerReports();
+        for(Class<? extends Report> r : reports){
+            batch.addReport(r);
+        }
+        for (Class<? extends Report> r : innerReports) {
+            batch.addInnerReport(r);
+        }
 
-        Lab.getInstance().run(batch);
+        didWire = true;
     }
 
 }

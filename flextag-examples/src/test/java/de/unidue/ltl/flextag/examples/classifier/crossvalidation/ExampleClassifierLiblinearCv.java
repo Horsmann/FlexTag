@@ -16,24 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package de.unidue.ltl.flextag.examples.config;
+package de.unidue.ltl.flextag.examples.classifier.crossvalidation;
 
 import org.junit.Test;
 
-import de.unidue.ltl.flextag.examples.tt.ExampleClassifierWekaTrainTest;
+import de.unidue.ltl.flextag.examples.cv.ExampleLibsvmCrossValidation;
 
-public class ExampleClassifierWekaTest
+public class ExampleClassifierLiblinearCv
 {
     @Test
-    public void testWekaSimple() throws Exception
+    public void run() throws Exception
     {
-        new ExampleClassifierWekaTrainTest().runSimple();
+        new ExampleLibsvmCrossValidation().run();
     }
-    
-    @Test
-    public void testWekaComplex() throws Exception
-    {
-        new ExampleClassifierWekaTrainTest().runComplex();
-    }
-
 }

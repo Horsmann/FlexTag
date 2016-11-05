@@ -28,6 +28,7 @@ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.dkpro.lab.Lab;
 import org.dkpro.lab.reporting.Report;
 import org.dkpro.lab.task.Dimension;
 import org.dkpro.lab.task.ParameterSpace;
@@ -64,6 +65,7 @@ public abstract class FlexTagSetUp
 
     protected List<Class<? extends Report>> reports;
     boolean useCoarse = false;
+    boolean didWire = false;
 
     public FlexTagSetUp(CollectionReaderDescription reader)
     {
@@ -80,6 +82,11 @@ public abstract class FlexTagSetUp
                 CRFSuiteAdapter.ALGORITHM_ADAPTIVE_REGULARIZATION_OF_WEIGHT_VECTOR }));
     }
 
+    public List<Class<? extends Report>> getReports()
+    {
+        return reports;
+    }
+
     /**
      * Sets a new feature set
      *
@@ -89,6 +96,14 @@ public abstract class FlexTagSetUp
     public void setFeatures(TcFeatureSet featureSet)
     {
         this.features = featureSet;
+    }
+
+    /**
+     * Removes all reports
+     */
+    public void removeReports()
+    {
+        this.reports = new ArrayList<>();
     }
 
     /**
@@ -122,6 +137,11 @@ public abstract class FlexTagSetUp
         this.experimentName = experimentName;
     }
 
+    public String getExperimentName()
+    {
+        return this.experimentName;
+    }
+
     public void setDKProHomeFolder(String home)
     {
         System.setProperty("DKPRO_HOME", home);
@@ -141,7 +161,7 @@ public abstract class FlexTagSetUp
                 dimClassificationArgs);
     }
 
-    protected Class<? extends TCMachineLearningAdapter> getClassifier()
+    public Class<? extends TCMachineLearningAdapter> getClassifier()
     {
         switch (classifier) {
         case CRFSUITE:
@@ -161,6 +181,11 @@ public abstract class FlexTagSetUp
 
     }
 
+    public TcFeatureSet getFeatures()
+    {
+        return this.features;
+    }
+
     @SuppressWarnings("unchecked")
     public void setClassifier(Classifier classifier, List<Object> dimClassificationArgs)
     {
@@ -170,13 +195,12 @@ public abstract class FlexTagSetUp
     }
 
     /**
-     * @param useCoarse
-     *            The POS tags are automatically mapped to their coarse value if this is set to true
-     * @return Preprocessing pipeline
+     * Gets the current pre-processing set up
+     * @return Pre-processing pipeline
      * @throws ResourceInitializationException
      *             for erroneous configurations
      */
-    protected AnalysisEngineDescription getPreprocessing(boolean useCoarse)
+    public AnalysisEngineDescription getPreprocessing()
         throws ResourceInitializationException
     {
         List<AnalysisEngineDescription> preprocessing = new ArrayList<>();
@@ -207,10 +231,10 @@ public abstract class FlexTagSetUp
         reports.add(report);
     }
 
-    protected void addReports(List<Class<? extends Report>> r)
+    public void addReports(List<Class<? extends Report>> r)
     {
-        for (Class<? extends Report> c : reports) {
-            batch.addReport(c);
+        for (Class<? extends Report> c : r) {
+            reports.add(c);
         }
     }
 
@@ -221,6 +245,17 @@ public abstract class FlexTagSetUp
         }
     }
 
-    public abstract void execute()
+    public abstract void wire()
         throws Exception;
+    
+    Experiment_ImplBase getLabTask(){
+        return batch;
+    }
+    
+    public void execute() throws Exception{
+        if(!didWire){
+            wire();
+        }
+        Lab.getInstance().run(batch);
+    }
 }
