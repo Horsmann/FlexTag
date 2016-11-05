@@ -35,6 +35,8 @@ public class ExampleUseModelTest
     public void setup(){
         tags.add("IN");
         tags.add("VBG");
+        tags.add("PRP");
+        tags.add("RB");
         tags.add("NN");
         tags.add("NNP");
         tags.add(".");
