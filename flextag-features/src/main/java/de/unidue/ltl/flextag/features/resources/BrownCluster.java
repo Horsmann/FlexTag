@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipException;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
@@ -38,38 +36,33 @@ import org.dkpro.tc.api.features.FeatureExtractor;
 import org.dkpro.tc.api.features.FeatureExtractorResource_ImplBase;
 import org.dkpro.tc.api.type.TextClassificationTarget;
 
-/**
- * A feature extractor that uses a Brown cluster resource. We take the format of the resource as
- * created by this implementation as reference: https://github.com/percyliang/brown-cluster.git
- */
 public class BrownCluster
     extends FeatureExtractorResource_ImplBase
     implements FeatureExtractor
 {
-    static final String FEATURE_NAME_16 = "brown16_";
-    static final String FEATURE_NAME_14 = "brown14_";
-    static final String FEATURE_NAME_12 = "brown12_";
-    static final String FEATURE_NAME_10 = "brown10_";
-    static final String FEATURE_NAME_08 = "brown08_";
-    static final String FEATURE_NAME_06 = "brown06_";
-    static final String FEATURE_NAME_04 = "brown04_";
-    static final String FEATURE_NAME_02 = "brown02_";
+    public static final String NOT_SET = "*";
 
-    static final String FEATURE_NOVALUE = "*";
+    public static final String FEATURE_NAME = "brown_";
 
-    public static final String PARAM_RESOURCE_LOCATION = "brownLocation";
+    public static final String PARAM_RESOURCE_LOCATION = "brownClusterLocations";
     @ConfigurationParameter(name = PARAM_RESOURCE_LOCATION, mandatory = true)
-    File inputFile;
+    private File inputFile;
 
-    public static final String PARAM_USE_NORMALIZATION = "doBrownNormalization";
-    @ConfigurationParameter(name = PARAM_USE_NORMALIZATION, mandatory = true, defaultValue = "true")
-    Boolean normalize;
+    public static final String PARAM_CODE_GRANULARITY = "brownGranularity";
+    @ConfigurationParameter(name = PARAM_CODE_GRANULARITY, mandatory = true, defaultValue = "2")
+    private int stepSize;
 
-    public static final String PARAM_USE_LOWER_CASE = "doBrownLowerCase";
-    @ConfigurationParameter(name = PARAM_USE_LOWER_CASE, mandatory = true, defaultValue = "true")
-    Boolean lowerCase;
+    public static final String PARAM_LOWER_CASE = "doBrownLowerCase";
+    @ConfigurationParameter(name = PARAM_LOWER_CASE, mandatory = true, defaultValue = "true")
+    boolean lowerCase;
+
+    public static final String PARAM_NORMALIZATION = "doBrownNormalization";
+    @ConfigurationParameter(name = PARAM_NORMALIZATION, mandatory = true, defaultValue = "true")
+    boolean normalize;
 
     private HashMap<String, String> map = null;
+
+    int maxClustLength = 0;
 
     @Override
     public boolean initialize(ResourceSpecifier aSpecifier, Map<String, Object> aAdditionalParams)
@@ -88,20 +81,21 @@ public class BrownCluster
         return true;
     }
 
-    public Set<Feature> extract(JCas aJcas, TextClassificationTarget aTarget)
+    public Set<Feature> extract(JCas aJcas, TextClassificationTarget aClassificationUnit)
         throws TextClassificationException
     {
-        String unit = aTarget.getCoveredText();
+        String unit = aClassificationUnit.getCoveredText();
 
         if (lowerCase) {
             unit = unit.toLowerCase();
         }
 
         if (normalize) {
-            unit = normalizeUrls(unit, "<URL>");
-            unit = normalizeEmails(unit, "<EMAIL>");
-            unit = normalizeAtMentions(unit, "<ATMENTION>");
-            unit = normalizeHashTags(unit, "<HASHTAG>");
+            String workingCopy = normalizeUrls(unit, "<URL>");
+            workingCopy = normalizeEmails(workingCopy, "<EMAIL>");
+            workingCopy = normalizeAtMentions(workingCopy, "<ATMENTION>");
+            workingCopy = normalizeHashTags(workingCopy, "<HASHTAG>");
+            unit = workingCopy;
         }
 
         Set<Feature> features = createFeatures(unit);
@@ -115,30 +109,24 @@ public class BrownCluster
 
         String bitCode = map.get(unit);
 
-        features.add(new Feature(FEATURE_NAME_16,
-                bitCode != null && bitCode.length() >= 16 ? bitCode.substring(0, 16)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_14,
-                bitCode != null && bitCode.length() >= 14 ? bitCode.substring(0, 14)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_12,
-                bitCode != null && bitCode.length() >= 12 ? bitCode.substring(0, 12)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_10,
-                bitCode != null && bitCode.length() >= 10 ? bitCode.substring(0, 10)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_08,
-                bitCode != null && bitCode.length() >= 8 ? bitCode.substring(0, 8)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_06,
-                bitCode != null && bitCode.length() >= 6 ? bitCode.substring(0, 6)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_04,
-                bitCode != null && bitCode.length() >= 4 ? bitCode.substring(0, 4)
-                        : FEATURE_NOVALUE));
-        features.add(new Feature(FEATURE_NAME_02,
-                bitCode != null && bitCode.length() >= 2 ? bitCode.substring(0, 2)
-                        : FEATURE_NOVALUE));
+        if (bitCode == null) {
+            for (int i = 0; i < maxClustLength; i = i + stepSize) {
+                features.add(new Feature(FEATURE_NAME + (i + stepSize), NOT_SET, true));
+            }
+            return features;
+        }
+
+        for (int i = 0; i < maxClustLength; i = i + stepSize) {
+            String subCode = null;
+            if (bitCode.length() < i + stepSize) {
+                subCode = bitCode;
+            }
+            else {
+                subCode = bitCode.substring(0, i + stepSize);
+            }
+            features.add(new Feature(FEATURE_NAME + (i + stepSize), subCode));
+            // System.out.println(subCode);
+        }
 
         return features;
     }
@@ -158,6 +146,11 @@ public class BrownCluster
             String line = null;
             while ((line = bf.readLine()) != null) {
                 String[] split = line.split("\t");
+
+                if (split[0].length() > maxClustLength) {
+                    maxClustLength = split[0].length();
+                }
+
                 map.put(split[1], split[0]);
             }
 
@@ -170,27 +163,29 @@ public class BrownCluster
     private BufferedReader openFile()
         throws Exception
     {
-        InputStreamReader isr = null;
-
-        try {
-            isr = new InputStreamReader(new GZIPInputStream(new FileInputStream(inputFile)),
-                    "UTF-8");
-        }
-        catch (ZipException ze) {
-            isr = new InputStreamReader(new FileInputStream(inputFile), "UTF-8");
-        }
-
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(inputFile), "UTF-8");
         return new BufferedReader(isr);
     }
 
-    private String normalizeHashTags(String input, String replacement)
+    public static String replaceTwitterPhenomenons(String input, String replacement)
+    {
+        /* Email and atmention are sensitive to order of execution */
+        String workingCopy = input;
+        workingCopy = normalizeUrls(workingCopy, replacement);
+        workingCopy = normalizeEmails(workingCopy, replacement);
+        workingCopy = normalizeAtMentions(workingCopy, replacement);
+        workingCopy = normalizeHashTags(workingCopy, replacement);
+        return workingCopy;
+    }
+
+    public static String normalizeHashTags(String input, String replacement)
     {
         String HASHTAG = "#[a-zA-Z0-9-_]+";
         String normalized = input.replaceAll(HASHTAG, replacement);
         return normalized;
     }
 
-    private String normalizeEmails(String input, String replacement)
+    public static String normalizeEmails(String input, String replacement)
     {
         String PREFIX = "[a-zA-Z0-9-_\\.]+";
         String SUFFIX = "[a-zA-Z0-9-_]+";
@@ -200,14 +195,14 @@ public class BrownCluster
         return normalize;
     }
 
-    private String normalizeAtMentions(String input, String replacement)
+    public static String normalizeAtMentions(String input, String replacement)
     {
         String AT_MENTION_REGEX = "@[a-zA-Z0-9_-]+";
         String normalize = input.replaceAll(AT_MENTION_REGEX, replacement);
         return normalize;
     }
 
-    private String normalizeUrls(String input, String replacement)
+    public static String normalizeUrls(String input, String replacement)
     {
         String URL_CORE_REGEX = "[\\/\\\\.a-zA-Z0-9-_]+";
 
@@ -216,6 +211,16 @@ public class BrownCluster
         normalized = normalized.replaceAll("www\\." + URL_CORE_REGEX, replacement);
 
         return normalized;
+    }
+
+    public int getStepSize()
+    {
+        return stepSize;
+    }
+
+    public int getMaxLength()
+    {
+        return maxClustLength;
     }
 
 }

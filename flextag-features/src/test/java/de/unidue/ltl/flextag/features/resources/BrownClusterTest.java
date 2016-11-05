@@ -19,9 +19,12 @@ package de.unidue.ltl.flextag.features.resources;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.uima.UIMAException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
@@ -44,7 +47,7 @@ public class BrownClusterTest
     {
         JCas jcas = JCasFactory.createJCas();
         jcas.setDocumentLanguage("en");
-        jcas.setDocumentText("@I Gonna");
+        jcas.setDocumentText("fd Gonna");
 
         tokOne = new TextClassificationTarget(jcas, 0, 2);
         tokOne.addToIndexes();
@@ -57,117 +60,97 @@ public class BrownClusterTest
     public void testFirstToken()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(
-                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
-                        "src/test/resources/dummyBrownCluster.txt.gz",
-                        BrownCluster.PARAM_USE_NORMALIZATION, true,
-                        BrownCluster.PARAM_USE_LOWER_CASE, true));
+        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
+                BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                "src/test/resources/dummyBrownCluster.txt", BrownCluster.PARAM_NORMALIZATION, true,
+                BrownCluster.PARAM_LOWER_CASE, true));
 
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
-        assertEquals(8, extract.size());
+        assertEquals(4, extract.size());
 
-        Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
+        int maxLen = getMaxLengthPath("src/test/resources/dummyBrownCluster.txt");
 
-        Feature brown14 = getFeature(extract, BrownCluster.FEATURE_NAME_14);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown14.getValue());
+        Feature brown07 = getFeature(extract, BrownCluster.FEATURE_NAME + maxLen);
+        assertEquals(BrownCluster.NOT_SET, brown07.getValue());
 
-        Feature brown12 = getFeature(extract, BrownCluster.FEATURE_NAME_12);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown12.getValue());
+        Feature brown06 = getFeature(extract,
+                BrownCluster.FEATURE_NAME + (maxLen - featureExtractor.getStepSize()));
+        assertEquals(BrownCluster.NOT_SET, brown06.getValue());
 
-        Feature brown10 = getFeature(extract, BrownCluster.FEATURE_NAME_10);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown10.getValue());
+        Feature brown04 = getFeature(extract,
+                BrownCluster.FEATURE_NAME + (maxLen - (featureExtractor.getStepSize() * 2)));
+        assertEquals(BrownCluster.NOT_SET, brown04.getValue());
 
-        Feature brown08 = getFeature(extract, BrownCluster.FEATURE_NAME_08);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown08.getValue());
-
-        Feature brown06 = getFeature(extract, BrownCluster.FEATURE_NAME_06);
-        assertEquals("111110", brown06.getValue());
-
-        Feature brown04 = getFeature(extract, BrownCluster.FEATURE_NAME_04);
-        assertEquals("1111", brown04.getValue());
-
-        Feature brown02 = getFeature(extract, BrownCluster.FEATURE_NAME_02);
-        assertEquals("11", brown02.getValue());
+        Feature brown02 = getFeature(extract,
+                BrownCluster.FEATURE_NAME + (maxLen - (featureExtractor.getStepSize() * 3)));
+        assertEquals(BrownCluster.NOT_SET, brown02.getValue());
 
     }
 
-    @Test
-    public void testFirstTokenNoCompressedCluster()
-        throws Exception
+    private int getMaxLengthPath(String string) throws IOException
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(
-                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
-                        "src/test/resources/dummyBrownCluster.txt.gz",
-                        BrownCluster.PARAM_USE_NORMALIZATION, true,
-                        BrownCluster.PARAM_USE_LOWER_CASE, true));
-
-        List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
-        assertEquals(8, extract.size());
-
-        Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
-
-        Feature brown14 = getFeature(extract, BrownCluster.FEATURE_NAME_14);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown14.getValue());
-
-        Feature brown12 = getFeature(extract, BrownCluster.FEATURE_NAME_12);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown12.getValue());
-
-        Feature brown10 = getFeature(extract, BrownCluster.FEATURE_NAME_10);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown10.getValue());
-
-        Feature brown08 = getFeature(extract, BrownCluster.FEATURE_NAME_08);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown08.getValue());
-
-        Feature brown06 = getFeature(extract, BrownCluster.FEATURE_NAME_06);
-        assertEquals("111110", brown06.getValue());
-
-        Feature brown04 = getFeature(extract, BrownCluster.FEATURE_NAME_04);
-        assertEquals("1111", brown04.getValue());
-
-        Feature brown02 = getFeature(extract, BrownCluster.FEATURE_NAME_02);
-        assertEquals("11", brown02.getValue());
-
+        int max=0;
+        List<String> readLines = FileUtils.readLines(new File(string), "utf-8");
+        for (String s : readLines) {
+            String[] split = s.split("\t");
+            if(split[0].length() > max){
+                max = split[0].length();
+            }
+        }
+        
+        if(max % 2 != 0){
+            return max +1;
+        }
+        
+        return max;
     }
 
     @Test
     public void testSecondToken()
         throws Exception
     {
-        BrownCluster featureExtractor = FeatureUtil.createResource(
-                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
-                        "src/test/resources/dummyBrownCluster.txt.gz",
-                        BrownCluster.PARAM_USE_NORMALIZATION, true,
-                        BrownCluster.PARAM_USE_LOWER_CASE, true));
-
+        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
+                BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                "src/test/resources/dummyBrownCluster.txt", BrownCluster.PARAM_NORMALIZATION,
+                true, BrownCluster.PARAM_LOWER_CASE, true));
+        
         List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
-        assertEquals(8, extract.size());
+        assertEquals(4, extract.size());
+        
+        Feature brown = getFeature(extract, BrownCluster.FEATURE_NAME + 8);
+        assertEquals("0011000", brown.getValue());
+        
+        brown = getFeature(extract, BrownCluster.FEATURE_NAME + 6);
+        assertEquals("001100", brown.getValue());
+        
+        brown = getFeature(extract, BrownCluster.FEATURE_NAME + 4);
+        assertEquals("0011", brown.getValue());
 
-        Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
+        brown = getFeature(extract, BrownCluster.FEATURE_NAME + 2);
+        assertEquals("00", brown.getValue());
+    }
+    
+    @Test
+    public void testSecondTokenStepSize()
+        throws Exception
+    {
+        BrownCluster featureExtractor = FeatureUtil.createResource(TcFeatureFactory.create(
+                BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
+                "src/test/resources/dummyBrownCluster.txt", BrownCluster.PARAM_NORMALIZATION,
+                true, BrownCluster.PARAM_LOWER_CASE, true,
+                BrownCluster.PARAM_CODE_GRANULARITY, 3));
+        
+        List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
+        assertEquals(3, extract.size());
+        
+        Feature brown = getFeature(extract, BrownCluster.FEATURE_NAME + 9);
+        assertEquals("0011000", brown.getValue());
+        
+        brown = getFeature(extract, BrownCluster.FEATURE_NAME + 6);
+        assertEquals("001100", brown.getValue());
 
-        Feature brown14 = getFeature(extract, BrownCluster.FEATURE_NAME_14);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown14.getValue());
-
-        Feature brown12 = getFeature(extract, BrownCluster.FEATURE_NAME_12);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown12.getValue());
-
-        Feature brown10 = getFeature(extract, BrownCluster.FEATURE_NAME_10);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown10.getValue());
-
-        Feature brown08 = getFeature(extract, BrownCluster.FEATURE_NAME_08);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown08.getValue());
-
-        Feature brown06 = getFeature(extract, BrownCluster.FEATURE_NAME_06);
-        assertEquals("001100", brown06.getValue());
-
-        Feature brown04 = getFeature(extract, BrownCluster.FEATURE_NAME_04);
-        assertEquals("0011", brown04.getValue());
-
-        Feature brown02 = getFeature(extract, BrownCluster.FEATURE_NAME_02);
-        assertEquals("00", brown02.getValue());
-
+        brown = getFeature(extract, BrownCluster.FEATURE_NAME + 3);
+        assertEquals("001", brown.getValue());
     }
 
     private Feature getFeature(List<Feature> extract, String featureName)
@@ -179,85 +162,6 @@ public class BrownClusterTest
         }
 
         return null;
-    }
-
-    @Test
-    public void testNoNormalization()
-        throws Exception
-    {
-        BrownCluster featureExtractor = FeatureUtil.createResource(
-                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
-                        "src/test/resources/dummyBrownCluster.txt.gz",
-                        BrownCluster.PARAM_USE_NORMALIZATION, false,
-                        BrownCluster.PARAM_USE_LOWER_CASE, true));
-
-        List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokOne));
-        assertEquals(8, extract.size());
-
-        Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
-
-        Feature brown14 = getFeature(extract, BrownCluster.FEATURE_NAME_14);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown14.getValue());
-
-        Feature brown12 = getFeature(extract, BrownCluster.FEATURE_NAME_12);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown12.getValue());
-
-        Feature brown10 = getFeature(extract, BrownCluster.FEATURE_NAME_10);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown10.getValue());
-
-        Feature brown08 = getFeature(extract, BrownCluster.FEATURE_NAME_08);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown08.getValue());
-
-        Feature brown06 = getFeature(extract, BrownCluster.FEATURE_NAME_06);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown06.getValue());
-
-        Feature brown04 = getFeature(extract, BrownCluster.FEATURE_NAME_04);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown04.getValue());
-
-        Feature brown02 = getFeature(extract, BrownCluster.FEATURE_NAME_02);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown02.getValue());
-
-    }
-
-    @Test
-    public void testNoLowerCasing()
-        throws Exception
-    {
-
-        BrownCluster featureExtractor = FeatureUtil.createResource(
-                TcFeatureFactory.create(BrownCluster.class, BrownCluster.PARAM_RESOURCE_LOCATION,
-                        "src/test/resources/dummyBrownCluster.txt.gz",
-                        BrownCluster.PARAM_USE_NORMALIZATION, true,
-                        BrownCluster.PARAM_USE_LOWER_CASE, false));
-
-        List<Feature> extract = new ArrayList<Feature>(featureExtractor.extract(jcas, tokTwo));
-        assertEquals(8, extract.size());
-
-        Feature brown16 = getFeature(extract, BrownCluster.FEATURE_NAME_16);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown16.getValue());
-
-        Feature brown14 = getFeature(extract, BrownCluster.FEATURE_NAME_14);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown14.getValue());
-
-        Feature brown12 = getFeature(extract, BrownCluster.FEATURE_NAME_12);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown12.getValue());
-
-        Feature brown10 = getFeature(extract, BrownCluster.FEATURE_NAME_10);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown10.getValue());
-
-        Feature brown08 = getFeature(extract, BrownCluster.FEATURE_NAME_08);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown08.getValue());
-
-        Feature brown06 = getFeature(extract, BrownCluster.FEATURE_NAME_06);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown06.getValue());
-
-        Feature brown04 = getFeature(extract, BrownCluster.FEATURE_NAME_04);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown04.getValue());
-
-        Feature brown02 = getFeature(extract, BrownCluster.FEATURE_NAME_02);
-        assertEquals(BrownCluster.FEATURE_NOVALUE, brown02.getValue());
-
     }
 
 }
