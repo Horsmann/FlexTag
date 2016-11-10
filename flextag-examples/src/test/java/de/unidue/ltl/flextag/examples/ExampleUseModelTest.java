@@ -38,6 +38,7 @@ public class ExampleUseModelTest
         tags.add("PRP");
         tags.add("RB");
         tags.add("NN");
+        tags.add("NNS");
         tags.add("NNP");
         tags.add(".");
         tags.add(",");
