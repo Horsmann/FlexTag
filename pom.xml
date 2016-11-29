@@ -12,7 +12,7 @@
 	<groupId>de.unidue.ltl.flextag</groupId>
 	<artifactId>flextag</artifactId>
 	<packaging>pom</packaging>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<name>FlexTag</name>
 	<description>FlexTag is a highly flexible part of speech tagger based on DKPro TC</description> <!-- The description tag must be present for antrun to work!! -->
 	<url>https://github.com/Horsmann/FlexTag.git</url>
@@ -458,12 +458,12 @@
 			<dependency>
 				<groupId>de.unidue.ltl.flextag</groupId>
 				<artifactId>flextag-core</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>de.unidue.ltl.flextag</groupId>
 				<artifactId>flextag-features</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.2.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -475,7 +475,7 @@
 		<developerConnection>scm:git:git@github.com:horsmann/flextag.git</developerConnection>
 		<url>https://github.com/horsmann/flextag</url>
 		<connection>scm:git:git://github.com/horsmann/flextag</connection>
-	  <tag>HEAD</tag>
+	  <tag>flextag-0.2.0</tag>
   </scm>
 	<properties>
 		<dkpro.tc.version>0.9.0</dkpro.tc.version>
