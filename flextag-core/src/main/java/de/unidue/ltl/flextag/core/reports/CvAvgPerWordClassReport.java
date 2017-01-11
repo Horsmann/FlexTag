@@ -75,7 +75,7 @@ public class CvAvgPerWordClassReport
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.append(String.format("%20s\t%8s\t%5s\n", "PoS", "Occr.", "Acc"));
+                sb.append(String.format("%20s\t%8s\t%5s%n", "PoS", "Occr.", "Acc"));
 
                 List<String> keySet = new ArrayList<>(map.keySet());
                 Collections.sort(keySet);

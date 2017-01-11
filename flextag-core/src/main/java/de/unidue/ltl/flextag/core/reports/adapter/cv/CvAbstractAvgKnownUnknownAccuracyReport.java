@@ -101,7 +101,7 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
         double avgKnownAcc = averageDouble(inVocab);
         int avgKnownInstances = averageInt(inVocabCount);
         Map<String, String> known = new HashMap<>();
-        known.put(ACCURACY, new Double(avgKnownAcc).toString());
+        known.put(ACCURACY, Double.toString(avgKnownAcc));
         known.put(NUM_INSTANCES, Integer.toString(avgKnownInstances));
         FileOutputStream fos = new FileOutputStream(new File(outputFolder, KNOWN_WORDS));
         PropertiesAdapter adapter = new PropertiesAdapter(known, "Results on known tokens");
@@ -111,7 +111,7 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
         double avgUnknownAcc = averageDouble(outVocab);
         int avgUnknownInstances = averageInt(outVocabCount);
         Map<String, String> unknown = new HashMap<>();
-        unknown.put(ACCURACY, new Double(avgUnknownAcc).toString());
+        unknown.put(ACCURACY, Double.toString(avgUnknownAcc));
         unknown.put(NUM_INSTANCES, Integer.toString(avgUnknownInstances));
 
         try {

@@ -54,7 +54,6 @@ public abstract class FlexTagSetUp
 
     protected CollectionReaderDescription reader;
 
-    protected String posMappingLocation;
     protected AnalysisEngineDescription[] userPreprocessing;
 
     protected Classifier classifier;

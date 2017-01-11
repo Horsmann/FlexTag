@@ -73,8 +73,7 @@ public class TtAccuracyPerWordClassReport
             double accuracy = wc.getCorrect() / wc.getN() * 100;
 
             sb.append(String.format("%10s", k) + "\t" + String.format("%5d", wc.getN().intValue())
-                    + "\t" + String.format("%5.1f", accuracy));
-            sb.append("\n");
+                    + "\t" + String.format("%5.1f%n", accuracy));
         }
 
         return sb.toString();

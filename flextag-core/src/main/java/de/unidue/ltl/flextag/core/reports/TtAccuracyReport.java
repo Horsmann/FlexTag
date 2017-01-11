@@ -59,8 +59,7 @@ public class TtAccuracyReport
                 Map<String, Double> results = createEvaluator.calculateEvaluationMeasures();
                 Double accuracy = results.get(Accuracy.class.getSimpleName());
 
-                System.out.println(
-                        "\n\nAccuracy: " + String.format("%.1f percent%n", accuracy * 100));
+                System.out.println(String.format("%n%nAccuracy: %.1f percent%n", accuracy * 100));
             }
         }
     }
