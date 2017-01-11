@@ -48,12 +48,12 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
     private static final String ACCURACY = "ACC";
     private static final String NUM_INSTANCES = "NumInstances";
 
-    String featureFile = null;
-    String predictionFile = null;
-    File outputFolder = null;
-    String trainContextId = null;
-    String testContextId = null;
-    String predictionContextId = null;
+    protected String featureFile = null;
+    protected String predictionFile = null;
+    protected File outputFolder = null;
+    protected String trainContextId = null;
+    protected String testContextId = null;
+    protected String predictionContextId = null;
 
     double invocabAccuracy = 0;
     double outvocabAccuracy = 0;
@@ -191,7 +191,7 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
     {
         Map<String,String> known = new HashMap<>();
         known.put(ACCURACY, new Double(invocabAccuracy * 100).toString());
-        known.put(NUM_INSTANCES, new Integer(knownInstances).toString());
+        known.put(NUM_INSTANCES, Integer.toString(knownInstances));
         FileOutputStream fos = new FileOutputStream(new File(outputFolder, KNOWN_WORDS));
         PropertiesAdapter adapter = new PropertiesAdapter(known, "Results on known tokens");
         adapter.write(fos);
@@ -199,7 +199,7 @@ public abstract class TtAbstractKnownUnknownWordAccuracyReport
 
         Map<String,String> unknown = new HashMap<>();
         unknown.put(ACCURACY, new Double(outvocabAccuracy * 100).toString());
-        unknown.put(NUM_INSTANCES, new Integer(unknownInstances).toString());
+        unknown.put(NUM_INSTANCES, Integer.toString(unknownInstances));
         fos = new FileOutputStream(new File(outputFolder, UNKNOWN_WORDS));
         adapter = new PropertiesAdapter(unknown, "Results on unkown tokens");
         adapter.write(fos);

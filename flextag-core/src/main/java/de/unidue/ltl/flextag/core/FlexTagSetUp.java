@@ -49,13 +49,10 @@ public abstract class FlexTagSetUp
     implements Constants
 {
     protected String experimentName = "FlexTag";
-    protected String language;
     protected TcFeatureSet features;
     protected Experiment_ImplBase batch;
 
     protected CollectionReaderDescription reader;
-    protected String dataFolder;
-    protected String fileSuffix;
 
     protected String posMappingLocation;
     protected AnalysisEngineDescription[] userPreprocessing;

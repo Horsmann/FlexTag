@@ -67,7 +67,7 @@ public class TtAccuracyPerWordClassReport
         List<String> keySet = new ArrayList<String>(wcp.keySet());
         Collections.sort(keySet);
 
-        sb.append(String.format("#%10s\t%5s\t%5s\n", "Class", "Occr", "Accr"));
+        sb.append(String.format("#%10s\t%5s\t%5s%n", "Class", "Occr", "Accr"));
         for (String k : keySet) {
             WordClass wc = wcp.get(k);
             double accuracy = wc.getCorrect() / wc.getN() * 100;

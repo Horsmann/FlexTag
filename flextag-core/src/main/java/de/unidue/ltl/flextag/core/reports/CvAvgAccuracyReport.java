@@ -73,7 +73,7 @@ public class CvAvgAccuracyReport
                 Double average = sumAcc / foldersOfSingleRuns.size();
 
                 System.out.println("\nAverage accuracy over all folds: "
-                        + String.format("%.1f percent\n", average * 100));
+                        + String.format("%.1f percent", average * 100));
 
                 File locateKey = storageService.locateKey(subcontext.getId(), OUTPUT_FILE);
                 FileUtils.writeStringToFile(locateKey,

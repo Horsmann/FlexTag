@@ -55,7 +55,7 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
     List<Integer> outVocabCount = new ArrayList<>();
 
     protected String featureFile;
-    
+
     String trainContext = null;
     String testContext = null;
     String mlAdapterContext = null;
@@ -91,7 +91,8 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
         }
     }
 
-    protected abstract void processIteration() throws Exception;
+    protected abstract void processIteration()
+        throws Exception;
 
     private void writeResults(File outputFolder, List<Double> inVocab, List<Double> outVocab,
             List<Integer> inVocabCount, List<Integer> outVocabCount)
@@ -101,7 +102,7 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
         int avgKnownInstances = averageInt(inVocabCount);
         Map<String, String> known = new HashMap<>();
         known.put(ACCURACY, new Double(avgKnownAcc).toString());
-        known.put(NUM_INSTANCES, new Integer(avgKnownInstances).toString());
+        known.put(NUM_INSTANCES, Integer.toString(avgKnownInstances));
         FileOutputStream fos = new FileOutputStream(new File(outputFolder, KNOWN_WORDS));
         PropertiesAdapter adapter = new PropertiesAdapter(known, "Results on known tokens");
         adapter.write(fos);
@@ -111,20 +112,25 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
         int avgUnknownInstances = averageInt(outVocabCount);
         Map<String, String> unknown = new HashMap<>();
         unknown.put(ACCURACY, new Double(avgUnknownAcc).toString());
-        unknown.put(NUM_INSTANCES, new Integer(avgUnknownInstances).toString());
-        fos = new FileOutputStream(new File(outputFolder, UNKNOWN_WORDS));
-        adapter = new PropertiesAdapter(unknown, "Results on unknown tokens");
-        adapter.write(fos);
-        fos.close();
+        unknown.put(NUM_INSTANCES, Integer.toString(avgUnknownInstances));
+
+        try {
+            fos = new FileOutputStream(new File(outputFolder, UNKNOWN_WORDS));
+            adapter = new PropertiesAdapter(unknown, "Results on unknown tokens");
+            adapter.write(fos);
+        }
+        finally {
+            fos.close();
+        }
     }
 
     protected int averageInt(List<Integer> data)
     {
-        double avg=0;
-        for(Integer i : data){
-            avg+=i;
+        double avg = 0;
+        for (Integer i : data) {
+            avg += i;
         }
-        
+
         return (int) (avg / data.size());
     }
 
@@ -249,13 +255,13 @@ public abstract class CvAbstractAvgKnownUnknownAccuracyReport
             if (l.startsWith("#")) {
                 continue;
             }
-            if(l.trim().isEmpty()){
+            if (l.trim().isEmpty()) {
                 continue;
             }
             int lastIndexOf = l.lastIndexOf("=");
-            String v = l.substring(lastIndexOf+1);
+            String v = l.substring(lastIndexOf + 1);
             String[] split2 = v.split(";");
-            
+
             String g = mapping.get(split2[0]);
             String p = mapping.get(split2[1]);
             out.add(g + " " + p);

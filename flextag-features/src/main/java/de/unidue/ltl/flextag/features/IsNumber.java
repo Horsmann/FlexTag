@@ -31,7 +31,7 @@ public class IsNumber
     extends FeatureExtractorResource_ImplBase
     implements FeatureExtractor
 {
-    private final String FEATURE_NAME = "isNum";
+    private static final String FEATURE_NAME = "isNum";
 
     public Set<Feature> extract(JCas aView, TextClassificationTarget aClassificationUnit)
         throws TextClassificationException
