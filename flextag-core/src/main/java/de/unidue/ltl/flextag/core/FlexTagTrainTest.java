@@ -33,7 +33,7 @@ import org.dkpro.tc.api.features.TcFeatureSet;
 import org.dkpro.tc.ml.ExperimentTrainTest;
 import org.dkpro.tc.ml.report.BatchTrainTestReport;
 
-import de.unidue.ltl.flextag.core.reports.TtAccuracyPerWordClassReport;
+import de.unidue.ltl.flextag.core.reports.TtPoSTagPrecisionRecallF1;
 import de.unidue.ltl.flextag.core.reports.TtAccuracyReport;
 
 public class FlexTagTrainTest
@@ -56,7 +56,7 @@ public class FlexTagTrainTest
         List<Class<? extends Report>> r = new ArrayList<>();
         r.add(BatchTrainTestReport.class);
         r.add(TtAccuracyReport.class);
-        r.add(TtAccuracyPerWordClassReport.class);
+        r.add(TtPoSTagPrecisionRecallF1.class);
         return r;
     }
 

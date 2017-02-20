@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 /**
  * Determines the accuracy for each word class
  */
-public class CvAvgPerWordClassReport
+public class CvAvgPosTagPrecisionRecallF1
     extends BatchReportBase
     implements Constants
 {
@@ -75,25 +76,34 @@ public class CvAvgPerWordClassReport
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.append(String.format("%20s\t%8s\t%5s%n", "PoS", "Occr.", "Acc"));
+                sb.append(String.format("#%10s\t%5s\t%5s\t%5s\t%5s%n", "Class", "Occr", "Prec.", "Reca.",
+                        "F1"));
 
                 List<String> keySet = new ArrayList<>(map.keySet());
                 Collections.sort(keySet);
                 for (String k : keySet) {
                     List<WordClass> list = map.get(k);
 
-                    Double N = new Double(0);
-                    double acc = 0;
+                    long N = 0;
+                    double precision = 0;
+                    double recall = 0;
+                    double f1 = 0;
 
                     for (WordClass wc : list) {
-                        N += wc.getN();
-                        acc += (wc.getCorrect() / wc.getN());
+                        N += wc.frequency;
+                        precision = wc.precision;
+                        recall = wc.recall;
+                        f1 = wc.f1;
                     }
                     N /= list.size();
-                    acc /= list.size();
+                    precision /= list.size();
+                    recall /= list.size();
+                    f1 /= list.size();
 
-                    sb.append(String.format("%20s\t%8d\t%5s\n", k, N.intValue(),
-                            String.format("%3.1f", acc * 100)));
+                    sb.append(String.format("%10s", k) + "\t" + String.format("%5d", N) + "\t"
+                            + String.format("%5.2f", precision) + "\t" + String.format("%5.2f", recall)
+                            + "\t" + String.format("%5.2f", f1) + "\n");
+                    
                 }
 
                 File locateKey = storageService.locateKey(subcontext.getId(), OUTPUT_FILE);
@@ -135,44 +145,73 @@ public class CvAvgPerWordClassReport
     }
 
     private Map<String, WordClass> getWcPerformances(File locateKey)
-        throws IOException
-    {
-        Map<String, WordClass> wcp = new HashMap<>();
+            throws IOException
+        {
+            Map<String, WordClass> wcp = new HashMap<>();
 
-        List<String> lines = FileUtils.readLines(locateKey);
-        Map<String, String> labels = getLabels(lines);
+            List<String> lines = FileUtils.readLines(locateKey);
+            Map<String, String> labels = getLabels(lines);
 
-        for (String l : lines) {
-            if (l.startsWith("#")) {
-                continue;
+            List<String> predictions = new ArrayList<>();
+            List<String> gold = new ArrayList<>();
+
+            for (String l : lines) {
+                if (l.startsWith("#")) {
+                    continue;
+                }
+                String[] entry = splitAtFirstEqualSignRightHandSide(l);
+
+                String pg = entry[1];
+                String[] split = pg.split(";");
+
+                if (split.length < 2) {
+                    System.out.println("ERROR\t" + l);
+                    continue;
+                }
+
+                String p = labels.get(split[0]);
+                String g = labels.get(split[1]);
+
+                predictions.add(p);
+                gold.add(g);
             }
-            String[] entry = splitAtFirstEqualSignRightHandSide(l);
 
-            String pg = entry[1];
-            String[] split = pg.split(";");
+            List<String> allGoldTags = new ArrayList<>(new HashSet<>(gold));
+            Collections.sort(allGoldTags);
 
-            if (split.length < 2) {
-                System.out.println("ERROR\t" + l);
-                continue;
-            }
+            for (String t : allGoldTags) {
+                double tp = 0, fp = 0, tn = 0, fn = 0;
+                long freq = 0;
+                for (int i = 0; i < gold.size(); i++) {
+                    String g = gold.get(i);
+                    String p = predictions.get(i);
 
-            String prediction = labels.get(split[0]);
-            String gold = labels.get(split[1]);
+                    if (!g.equals(t) && !p.equals(t)) {
+                        tn++;
+                    }
+                    else if (!g.equals(t) && p.equals(t)) {
+                        fp++;
+                    }
+                    else if (g.equals(t) && !p.equals(t)) {
+                        fn++;
+                    }
+                    else if (g.equals(t) && p.equals(t)) {
+                        tp++;
+                    }
 
-            WordClass wordClass = wcp.get(gold);
-            if (wordClass == null) {
-                wordClass = new WordClass();
+                    if (t.equals(g)) {
+                        freq++;
+                    }
+                }
+
+                double recall = tp / (tp + fp);
+                double precision = tp / (tp + fn);
+                double f1 = (2 * (precision * recall)) / (precision + recall);
+
+                wcp.put(t, new WordClass(precision, recall, f1, freq));
             }
-            if (gold.equals(prediction)) {
-                wordClass.incrementCorrect();
-            }
-            else {
-                wordClass.incrementIncorrect();
-            }
-            wcp.put(gold, wordClass);
+            return wcp;
         }
-        return wcp;
-    }
 
     private String[] splitAtFirstEqualSignRightHandSide(String l)
     {
@@ -210,30 +249,5 @@ public class CvAvgPerWordClassReport
         return id2label;
     }
 
-    class WordClass
-    {
-        double correct = 0;
-        double incorrect = 0;
-
-        public Double getN()
-        {
-            return correct + incorrect;
-        }
-
-        public Double getCorrect()
-        {
-            return correct;
-        }
-
-        public void incrementCorrect()
-        {
-            correct++;
-        }
-
-        public void incrementIncorrect()
-        {
-            incorrect++;
-        }
-    }
 
 }

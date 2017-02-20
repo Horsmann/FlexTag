@@ -33,7 +33,7 @@ import org.dkpro.tc.ml.ExperimentCrossValidation;
 import org.dkpro.tc.ml.report.BatchCrossValidationReport;
 
 import de.unidue.ltl.flextag.core.reports.CvAvgAccuracyReport;
-import de.unidue.ltl.flextag.core.reports.CvAvgPerWordClassReport;
+import de.unidue.ltl.flextag.core.reports.CvAvgPosTagPrecisionRecallF1;
 
 public class FlexTagCrossValidation
     extends FlexTagSetUp
@@ -55,7 +55,7 @@ public class FlexTagCrossValidation
         List<Class<? extends Report>> r = new ArrayList<>();
         r.add(BatchCrossValidationReport.class);
         r.add(CvAvgAccuracyReport.class);
-        r.add(CvAvgPerWordClassReport.class);
+        r.add(CvAvgPosTagPrecisionRecallF1.class);
         return r;
     }
 

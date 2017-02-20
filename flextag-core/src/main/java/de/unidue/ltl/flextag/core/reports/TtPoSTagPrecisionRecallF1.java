@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ import org.dkpro.tc.ml.report.TcTaskTypeUtil;
 /**
  * Determines the accuracy for each word class
  */
-public class TtAccuracyPerWordClassReport
+public class TtPoSTagPrecisionRecallF1
     extends BatchReportBase
     implements Constants
 {
@@ -67,13 +68,14 @@ public class TtAccuracyPerWordClassReport
         List<String> keySet = new ArrayList<String>(wcp.keySet());
         Collections.sort(keySet);
 
-        sb.append(String.format("#%10s\t%5s\t%5s%n", "Class", "Occr", "Accr"));
+        sb.append(String.format("#%10s\t%5s\t%5s\t%5s\t%5s%n", "Class", "Occr", "Prec.", "Reca.",
+                "F1"));
         for (String k : keySet) {
             WordClass wc = wcp.get(k);
-            double accuracy = wc.getCorrect() / wc.getN() * 100;
 
-            sb.append(String.format("%10s", k) + "\t" + String.format("%5d", wc.getN().intValue())
-                    + "\t" + String.format("%5.1f%n", accuracy));
+            sb.append(String.format("%10s", k) + "\t" + String.format("%5d", wc.frequency) + "\t"
+                    + String.format("%5.2f", wc.precision) + "\t" + String.format("%5.2f", wc.recall)
+                    + "\t" + String.format("%5.2f", wc.f1) + "\n");
         }
 
         return sb.toString();
@@ -87,6 +89,9 @@ public class TtAccuracyPerWordClassReport
 
         List<String> lines = FileUtils.readLines(locateKey);
         Map<String, String> labels = getLabels(lines);
+
+        List<String> predictions = new ArrayList<>();
+        List<String> gold = new ArrayList<>();
 
         for (String l : lines) {
             if (l.startsWith("#")) {
@@ -102,20 +107,46 @@ public class TtAccuracyPerWordClassReport
                 continue;
             }
 
-            String prediction = labels.get(split[0]);
-            String gold = labels.get(split[1]);
+            String p = labels.get(split[0]);
+            String g = labels.get(split[1]);
 
-            WordClass wordClass = wcp.get(gold);
-            if (wordClass == null) {
-                wordClass = new WordClass();
+            predictions.add(p);
+            gold.add(g);
+        }
+
+        List<String> allGoldTags = new ArrayList<>(new HashSet<>(gold));
+        Collections.sort(allGoldTags);
+
+        for (String t : allGoldTags) {
+            double tp = 0, fp = 0, tn = 0, fn = 0;
+            long freq = 0;
+            for (int i = 0; i < gold.size(); i++) {
+                String g = gold.get(i);
+                String p = predictions.get(i);
+
+                if (!g.equals(t) && !p.equals(t)) {
+                    tn++;
+                }
+                else if (!g.equals(t) && p.equals(t)) {
+                    fp++;
+                }
+                else if (g.equals(t) && !p.equals(t)) {
+                    fn++;
+                }
+                else if (g.equals(t) && p.equals(t)) {
+                    tp++;
+                }
+
+                if (t.equals(g)) {
+                    freq++;
+                }
             }
-            if (gold.equals(prediction)) {
-                wordClass.incrementCorrect();
-            }
-            else {
-                wordClass.incrementIncorrect();
-            }
-            wcp.put(gold, wordClass);
+
+            double recall = tp / (tp + fp);
+            double precision = tp / (tp + fn);
+            double f1 = (2 * (precision * recall)) / (precision + recall);
+
+            wcp.put(t, new WordClass(precision, recall, f1, freq));
         }
         return wcp;
     }
@@ -156,30 +187,5 @@ public class TtAccuracyPerWordClassReport
         return id2label;
     }
 
-    class WordClass
-    {
-        double correct = 0;
-        double incorrect = 0;
-
-        public Double getN()
-        {
-            return correct + incorrect;
-        }
-
-        public Double getCorrect()
-        {
-            return correct;
-        }
-
-        public void incrementCorrect()
-        {
-            correct++;
-        }
-
-        public void incrementIncorrect()
-        {
-            incorrect++;
-        }
-    }
 
 }
