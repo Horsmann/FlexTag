@@ -142,8 +142,8 @@ public class TtPoSTagPrecisionRecallF1
                 }
             }
 
-            double recall = tp / (tp + fp);
-            double precision = tp / (tp + fn);
+            double precision = tp / (tp + fp);
+            double recall = tp / (tp + fn);
             double f1 = (2 * (precision * recall)) / (precision + recall);
 
             wcp.put(t, new WordClass(precision, recall, f1, freq));
